@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,12 +29,14 @@ public class PostsRespositoryTest {
     @Test
     public void get_Posts() {
         //given
-        boolean completed = true;
-        String content = "Haha take that. I am ahead";
+        LocalDate date = LocalDate.now();
+        Boolean isCompleted = true;
+        String comment = "Haha take that. I am ahead";
 
         postsRepository.save(Posts.builder()
-                .completed(completed)
-                .content(content)
+                .date(LocalDate.now())
+                .isCompleted(isCompleted)
+                .comment(comment)
                 .author("binchoi16@gmail.com")
                 .build());
 
@@ -41,8 +44,11 @@ public class PostsRespositoryTest {
         List<Posts> postsList = postsRepository.findAll();
 
         //then
-        Posts firstPost = postsList.get(0);
-//        assertThat(firstPost.getCom).isEqualTo(completed); problem with getter for completed field
+        Posts posts = postsList.get(0);
+        assertThat(posts.getDate()).isEqualTo(date);
+        assertThat(posts.getIsCompleted()).isEqualTo(isCompleted);
+        assertThat(posts.getComment()).isEqualTo(comment);
+
     }
 
 }

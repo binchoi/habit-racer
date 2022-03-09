@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 // check-in's for habits
 @Getter
@@ -12,27 +13,32 @@ import javax.persistence.*;
 @Entity
 public class Posts {
 
-    // primary key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private boolean completed;
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private Boolean isCompleted;
 
     private String author;
 
-    // optional - nullable=true
     @Column(columnDefinition = "TEXT")
-    private String content;
+    private String comment;
 
     @Builder // more explicit constructor that can help locate errors before runtime!
-    public Posts(boolean completed, String content, String author) {
-        this.completed = completed;
-        this.content = content; // may be null
+    public Posts(LocalDate date, Boolean isCompleted, String author, String comment) {
+        this.date = date;
+        this.isCompleted = isCompleted;
         this.author = author;
+        this.comment = comment;
     }
 
-
+    public void update(Boolean isCompleted, String comment) {
+        this.isCompleted = isCompleted;
+        this.comment = comment;
+    }
 
 }
