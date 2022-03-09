@@ -12,6 +12,7 @@
   * Service - which ensures the order between transactions, domain function, etc...
 
 ## Next step
+* Finish constructing the basic APIs including Put, Get, etc...
 
 ## Problems faced
 * A getter is not created for one boolean field in Posts class (i.e. completed). 
