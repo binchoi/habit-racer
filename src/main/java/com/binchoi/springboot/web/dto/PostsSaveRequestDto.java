@@ -1,7 +1,6 @@
 package com.binchoi.springboot.web.dto;
 
 import com.binchoi.springboot.domain.posts.Posts;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

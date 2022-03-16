@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,6 +50,34 @@ public class PostsRespositoryTest {
         assertThat(posts.getIsCompleted()).isEqualTo(isCompleted);
         assertThat(posts.getComment()).isEqualTo(comment);
 
+    }
+
+    @Test
+    public void BaseTimeEntity_Test() {
+        //given
+        LocalDateTime now = LocalDateTime.of(2019,6,4,0,0,0);
+        postsRepository.save(Posts.builder()
+                .author("aut")
+                .isCompleted(true)
+                .date(LocalDate.now())
+                .comment("YOLO")
+                .build());
+
+        //when
+        List<Posts> postsList = postsRepository.findAll();
+
+        //then
+        Posts posts = postsList.get(0);
+
+        System.out.println(">>>>>>>>> createDate="+posts.getCreatedDate()+", modifiedDate="+posts.getModifiedDate());
+
+        assertThat(posts.getCreatedDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
+
+        //misc
+//        assertThat(posts.getModifiedDate().getYear()).isEqualTo(LocalDateTime.now().getYear());
+//        assertThat(posts.getModifiedDate().getMonth()).isEqualTo(LocalDateTime.now().getMonth());
+//        assertThat(posts.getModifiedDate().getDayOfMonth()).isEqualTo(LocalDateTime.now().getDayOfMonth());
     }
 
 }
