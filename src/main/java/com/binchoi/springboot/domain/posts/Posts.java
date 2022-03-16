@@ -24,7 +24,7 @@ public class Posts extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean isCompleted;
 
-    private String author;
+    private String author; // replace with author id later on?
 
     @Column(columnDefinition = "TEXT")
     private String comment;

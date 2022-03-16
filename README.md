@@ -13,6 +13,7 @@
 * Constructed the save, update, get, and getAll features of the Posts API and implemented unit tests for each.
 
 ## Next step
+* DEBUG -> index.js ; the save button is currently not functional. 
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
 * Implement the Users entity class. 
 * Work on the view using mustache and Bootstrap.
@@ -33,4 +34,4 @@
   does not support List as the data in the list can't be deserialized into the appropriate type). For more information, 
   consider the following link (https://www.baeldung.com/spring-rest-template-list). 
   * To resolve, I used an array :-)
-* 
+* Problem debugging index.js. How can we print to log?
