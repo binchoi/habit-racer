@@ -11,12 +11,14 @@
   * Controller - which receives the API request
   * Service - which ensures the order between transactions, domain function, etc...
 * Constructed the save, update, get, and getAll features of the Posts API and implemented unit tests for each.
+* Built a basic race view page using mustache, bootstrap, and js that leverages the pre-constructed PostsAPI to allows for 
+  posting of new record/post and updating or deleting of posted records.
 
 ## Next step
-* DEBUG -> index.js ; the save button is currently not functional. 
+* OAuth2 set up and implement the User entity class.
+* Incorporating a cache layer such that when the post table page is shown, it doesn't have
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
-* Implement the Users entity class. 
-* Work on the view using mustache and Bootstrap.
+  to make a query unless it has been more than a couple of minutes (TTL)
 
 ## Problems faced
 * A getter is not created for one boolean field in Posts class (i.e. completed). 
@@ -34,4 +36,5 @@
   does not support List as the data in the list can't be deserialized into the appropriate type). For more information, 
   consider the following link (https://www.baeldung.com/spring-rest-template-list). 
   * To resolve, I used an array :-)
-* Problem debugging index.js. How can we print to log?
+* Problem debugging index.js.
+  * solution: ``console.log()`` -- view the log from browser's `inspect` option

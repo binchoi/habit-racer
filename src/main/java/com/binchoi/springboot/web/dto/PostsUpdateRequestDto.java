@@ -11,12 +11,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PostsUpdateRequestDto {
 
-    private Boolean isCompleted;
+    private LocalDate date;
     private String comment;
 
     @Builder
-    public PostsUpdateRequestDto(Boolean isCompleted, String comment) {
-        this.isCompleted = isCompleted;
+    public PostsUpdateRequestDto(LocalDate date, String comment) {
+        this.date = date;
         this.comment = comment;
     }
 

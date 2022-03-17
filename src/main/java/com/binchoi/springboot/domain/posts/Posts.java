@@ -37,8 +37,8 @@ public class Posts extends BaseTimeEntity {
         this.comment = comment;
     }
 
-    public void update(Boolean isCompleted, String comment) {
-        this.isCompleted = isCompleted;
+    public void update(LocalDate date, String comment) {
+        this.date = date;
         this.comment = comment;
     }
 

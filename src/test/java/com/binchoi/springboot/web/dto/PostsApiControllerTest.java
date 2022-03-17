@@ -118,11 +118,11 @@ public class PostsApiControllerTest {
 
         Long id = savedPosts.getId();
 
-        Boolean updatedIsCompleted = false;
+        LocalDate updatedDate = LocalDate.now().minusDays(1);
         String updatedComment = "I was lying lol";
 
         PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
-                .isCompleted(updatedIsCompleted)
+                .date(updatedDate)
                 .comment(updatedComment)
                 .build();
         HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
@@ -138,7 +138,7 @@ public class PostsApiControllerTest {
 
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getComment()).isEqualTo(updatedComment);
-        assertThat(all.get(0).getIsCompleted()).isEqualTo(updatedIsCompleted);
+        assertThat(all.get(0).getDate()).isEqualTo(updatedDate);
     }
 
     //misc
