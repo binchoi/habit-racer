@@ -14,7 +14,7 @@
 * Built a basic race view page using mustache, bootstrap, and js that leverages the pre-constructed PostsAPI to allows for 
   posting of new record/post and updating or deleting of posted records.
 
-## Next step
+## Next steps
 * OAuth2 set up and implement the User entity class.
 * Incorporating a cache layer such that when the post table page is shown, it doesn't have
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)

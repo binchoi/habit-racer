@@ -1,0 +1,53 @@
+{{>layout/header}}
+
+<div class="col-md-12 text-center">
+    <h1>HabitRacer</h1>
+</div>
+<div class="col-md-12">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h3>Have you completed your habit today?</h3>
+            <a href="/posts/save" role="button" class="btn btn-dark">YES</a>
+            <button type="button" class="btn btn-light" id="btn-encouragement">NO</button>
+        </div>
+    </div>
+    <br>
+    <!--  Table displaying progress  -->
+    <div class="row justify-content-around">
+        <div class="col-md-5">
+            <table class="table table-horizontal table-bordered table-striped text-center">
+                <thead class="thead-strong">
+                <tr>
+                    <th>User1</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                {{#postsUser1}}
+                    <tr>
+                        <td><a href="/posts/update/{{id}}">{{date}}</a>✅</td>
+                    </tr>
+                {{/postsUser1}}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <table class="table table-horizontal table-bordered table-striped text-center">
+                <thead class="thead-strong">
+                <tr>
+                    <th>User2</th>
+                </tr>
+                </thead>
+                <tbody id="tbody">
+                {{#postsUser2}}
+                    <tr>
+                        <td><a href="/posts/update/{{id}}">{{date}}</a>✅</td>
+                    </tr>
+                {{/postsUser2}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{{>layout/footer}}
