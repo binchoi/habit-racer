@@ -13,9 +13,13 @@
 * Constructed the save, update, get, and getAll features of the Posts API and implemented unit tests for each.
 * Built a basic race view page using mustache, bootstrap, and js that leverages the pre-constructed PostsAPI to allows for 
   posting of new record/post and updating or deleting of posted records.
+* Implemented OAuth2 social log-in (via Google)
+* Implemented the User entity class and related classes (e.g. SessionUser) 
+* Configured our program to be more annotation-based by implementing a custom parameter annotation ``@LoginUser`` that 
+  allows me to retrieve session information values from the parameter directly
 
 ## Next steps
-* OAuth2 set up and implement the User entity class.
+* Debug the testing suites to incorporate Spring Security
 * Incorporating a cache layer such that when the post table page is shown, it doesn't have
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
   to make a query unless it has been more than a couple of minutes (TTL)
