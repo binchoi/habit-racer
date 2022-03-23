@@ -19,7 +19,7 @@
   allows me to retrieve session information values from the parameter directly
 
 ## Next steps
-* Debug the testing suites to incorporate Spring Security
+* Debug the testing suites to incorporate Spring Security - mvc problem (is it localDate causing the problem? it doesn't seem like it...)
 * Incorporating a cache layer such that when the post table page is shown, it doesn't have
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
   to make a query unless it has been more than a couple of minutes (TTL)
@@ -42,3 +42,6 @@
   * To resolve, I used an array :-)
 * Problem debugging index.js.
   * solution: ``console.log()`` -- view the log from browser's `inspect` option
+* MockMvc test problem - error 400 for ``put`` and ``post`` methods.
+  * tagging ``@JsonDeserialize(using = LocalDateDeserializer.class)`` and ``@JsonSerialize(using = LocalDateSerializer.class)`` to ``date`` didn't solve
+  * requesting ``get`` works as expected with the MockMvc 
