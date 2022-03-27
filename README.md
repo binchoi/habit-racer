@@ -17,11 +17,13 @@
 * Implemented the User entity class and related classes (e.g. SessionUser) 
 * Configured our program to be more annotation-based by implementing a custom parameter annotation ``@LoginUser`` that 
   allows me to retrieve session information values from the parameter directly
+* Edited the testing suites to incorporate Spring Security
+* Created documentation for readers/users that outlines each of the important components of the project (check: `tldr-doc.md`)  
 
 ## Next steps
-* Debug the testing suites to incorporate Spring Security - mvc problem (is it localDate causing the problem? it doesn't seem like it...)
-* Incorporating a cache layer such that when the post table page is shown, it doesn't have
+* Review and update the tldr-doc for config and resources directory
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
+* Incorporating a cache layer such that when the post table page is shown, it doesn't have
   to make a query unless it has been more than a couple of minutes (TTL)
 
 ## Problems faced
@@ -45,3 +47,10 @@
 * MockMvc test problem - error 400 for ``put`` and ``post`` methods.
   * tagging ``@JsonDeserialize(using = LocalDateDeserializer.class)`` and ``@JsonSerialize(using = LocalDateSerializer.class)`` to ``date`` didn't solve
   * requesting ``get`` works as expected with the MockMvc 
+  * **\[RESOLVED\]**: problem was due to the inability to serialize LocalDate field. The resulting JSON object would not contain 
+    one key and value representing the LocalDate field (but rather a long set of key-value pairs). It should instead be serialized as ``ISO 8601`` format 
+    (e.g. "date":"2022-03-27"). To solve this there are several methods. The common way is configuring ObjectMapper to handle LocalDate in ISO 8601 format. 
+    This process can take multiple lines of code and overcomplicate the issue (but if you are curious, simply google 'jackson localdate iso 8601'). Instead, 
+    we leverage the fact that Spring has a ObjectMapper which they provide with the above configuration already made. Hence, we can simply use it by inserting the 
+    following code: ``@Autowired ObjectMapper objectMapper;`` and replacing ``new ObjectMapper().writeValueAsString(dto)`` with ``objectMapper.writeValueAsString(dto)`` 
+    (cred: Inflearn question 30590)

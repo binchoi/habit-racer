@@ -16,6 +16,7 @@ import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,9 @@ public class PostsApiControllerTest {
 
     @Autowired
     private WebApplicationContext context;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private MockMvc mvc;
 
@@ -82,8 +86,8 @@ public class PostsApiControllerTest {
         //when
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(requestDto)))
-                .andDo(print())
+                .content(objectMapper.writeValueAsString(requestDto)))
+//                .andDo(print())
                 .andExpect(status().isOk());
         //ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
 
@@ -121,8 +125,8 @@ public class PostsApiControllerTest {
         //when
         mvc.perform(get(url))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
-                .andDo(print());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+//                .andDo(print());
 //        ResponseEntity<PostsResponseDto> responseEntity2 = restTemplate.getForEntity(url,PostsResponseDto.class);
 
         //then
@@ -166,8 +170,9 @@ public class PostsApiControllerTest {
         //when
         mvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(requestDto)))
-                .andDo(print());
+                .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isOk());
+//                .andDo(print());
         //ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
 
         //then
@@ -206,9 +211,12 @@ public class PostsApiControllerTest {
         String url = "http://localhost:" + port + "/api/v1/posts/all";
 
         //when
-        mvc.perform(get(url))
+        MvcResult res = mvc.perform(get(url))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andReturn();
+
+        System.out.println(">>>>"+res.getResponse().getContentAsString());
+
         //ResponseEntity<PostsResponseDto[]> responseEntity2 = restTemplate.getForEntity(url,PostsResponseDto[].class);
 
         //then
