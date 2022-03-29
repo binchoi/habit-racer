@@ -22,11 +22,12 @@
 
 ## Next steps
 * Review and update the tldr-doc for config and resources directory
+* Consider where the security should be placed to prevent some authenticated user being able to manipulate the race of stragers by accessing through url
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
 * Incorporating a cache layer such that when the post table page is shown, it doesn't have
   to make a query unless it has been more than a couple of minutes (TTL)
 
-## Problems faced
+## Problems faced (& self-QnA)
 * A getter is not created for one boolean field in Posts class (i.e. completed). 
   * could it be about primitive vs. object reference variables?
     * Perhaps -- changing the field from boolean to Boolean immediately generated the 
@@ -54,3 +55,5 @@
     we leverage the fact that Spring has a ObjectMapper which they provide with the above configuration already made. Hence, we can simply use it by inserting the 
     following code: ``@Autowired ObjectMapper objectMapper;`` and replacing ``new ObjectMapper().writeValueAsString(dto)`` with ``objectMapper.writeValueAsString(dto)`` 
     (cred: Inflearn question 30590)
+* Q: What kinds of information can be saved in HttpSession via `setAttribute()`? What should be the primary function of `HttpSession`?
+  * A:

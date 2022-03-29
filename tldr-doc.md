@@ -145,8 +145,102 @@ _java/com/binchoi/springboot/web/dto_
 * builder: input=date, isComplicated, author, comment
 * method `toEntity()` takes the dto and builds a corresponding Post object (e.g. which can then be saved to table)
 
-&nbsp;
 ___
+## \[DIR] config
+_java/com/binchoi/springboot/config_
+* Contains all classes related to security
+  * This includes Config classes (often annotated with ``@Configuration``), custom OAuth2UserService implementations, 
+  dtos (like `OAuthAttributes` and `SessionUser`), and interfaces (e.g. `LoginUser`)
+
+#### `SecurityConfig.java`
+* A security configuration class that extends the abstract class `WebSecurityConfigurerAdapter` provided by Spring Security to 
+configure the settings surrounding URL permissions, log-in processes (& userInfoEndpoint settings), and log-out processes. 
+* `@EnableWebSecurity` activates Spring Security settings
+##### `configure()`: input=`HttpSecurity` instance; to configure the security settings of the project; output=void
+* `.csrf().disable().headers().frameOptions().disable()`: disables CSRF support (which is activated by default) and 
+frame option (of Headers) in order to support h2-console use
+* `authorizeRequests()`: marks the starting point for setting permission/privileges for each URL
+  * needs to be declared in order to use the option `antMatchers`
+* `antMatchers`: selects the target URL for which we wish to manage permission. Tagged with the following:
+  * `permitAll()`: URLs are allowed by anyone
+  * `authenticated()`: URLs are allowed by any authenticated user
+  * `hasRole(String role)`: URLs require a particular role (e.g. \"ADMIN\", \"USER\", etc...). Do not start `role` with 
+  \"ROLE_\" as it is automatically appended
+  * `access(String attribute)`: URLs are secured by an arbitrary expression; `attribute`: the expression to secure the URLs (i.e. "hasRole('ROLE_USER') and hasRole('ROLE_SUPER')")
+  * `anonymous()`: URLs are allowed by anonymous users.
+  * `denyAll()`: URLs are not allowed by anyone.
+  * `hasIpAddress(String ipaddressExpression)`: URLs requires a specific IP Address or subnet. `ipaddressExpression` – the ipaddress (i.e. 192.168.1.79) or local subnet (i.e. 192.168.0/24)
+  * `fullyAuthenticated()`: URLs are allowed by users who have authenticated and were not "remembered".
+  * `hasAnyAuthority(String authorities)`: URLs requires any of a number authorities; `authorities` – the requests require at least one of 
+  the authorities (i.e. "ROLE_USER","ROLE_ADMIN" would mean either "ROLE_USER" or "ROLE_ADMIN" is required).
+  * `rememberMe`: URLs are allowed by users that have been remembered.
+  * etc... all of the above methods returns `ExpressionUrlAuthorizationConfigurer` (which `antMatchers` can take) for further customization
+* `logout()`: entry point for setting different configurations for the log-out functionality (e.g. `logoutSuccessUrl("/")`)
+* `oauth2Login()`: entry point for setting various configurations for OAuth2 Log-in functionality
+  * `userInfoEndpoint()`: In charge of settings related to retrieving the User information after successful OAuth2 log-in
+    * `userService(userService)`: Sets the OAuth 2.0 service used for obtaining the user attributes of the End-User from the UserInfo Endpoint;
+      param `userService` – the OAuth 2.0 service used for the described tasks
+
+#### `CustomOAuth2UserService.java`
+* Our implementation of the interface `OAuth2UserService<OAuth2UserRequest, OAuth2User>`
+* Implementations of this interface are responsible for obtaining the user attributes of the End-User (Resource 
+Owner) from the UserInfo Endpoint using the Access Token granted to the Client and returning an AuthenticatedPrincipal 
+in the form of an `OAuth2User`.
+* `loadUser(OAuth2UserRequest userRequest)`: returns an OAuth2User after obtaining the user attributes of the End-User from the UserInfo Endpoint
+* In a nutshell, it extracts the important user information, saves them as `OAuthAttributes` object, (using helper method `saveOrUpdate`) saves as new user (i.e.
+  create user object, then save using userRepository) or updates the existing user's information in the user table, sets attribute "user" as
+  the corresponding SessionUser object, and returns a DefaultOAuth2User (with the appropriate authorities, attributes, and nameAttributeKey)
+  * `userRequest.getClientRegistration()`: access point for client registration attributes
+    * `getRegistrationId()`: Returns the identifier for the registration - it is useful to distinguish between the type of log-in
+    * `getClientId()`: Returns the client identifier
+    * `getClientName()`: Returns the logical name of the client or registration
+  * `userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint()`: access point for details of 
+  the UserInfo Endpoint (e.g. `nameAttributeKey` - which is the value of the \[primary\] key used in OAuth2 Log-in process)
+```
+OAuth2UserService<OAuth2UserRequest,OAuth2User> delegate = new DefaultOAuth2UserService();
+OAuth2User oAuth2User = delegate.loadUser(userRequest);
+oAuth2User.getAttributes() // map of user attributes including name, email, picture
+```
+
+#### `OAuthAttributes.java`
+* A class (dto) that contains the attributes of OAuth2User retrieved through OAuth2UserService
+* As the user returned by OAuth2User is a Map, each value must be converted and retrieved individually (as fields)
+* Behaves differently based on the social log-in type (e.g. Google, Naver, etc...)
+* static method `of()` is used to construct OAuthAttributes object by UserService
+* `toEntity()`: returns the corresponding User object 
+  * can set the default Role for users
+
+#### `SessionUser.java`
+* A class (dto) that contains the user information of verified users (no unnecessary information included)
+* Its constructor requires the corresponding User object
+* Why create SessionUser when User can be used? 
+  * User object cannot be saved to the session as it is not Serializable. (why not make it serializable you ask?)
+  * User is an ENTITY CLASS. Be careful and don't mess around with it. REMINDER: You must **NEVER** use Entity class as Request/Response Class.
+    * e.g. making User class serializable can have detrimental implications if a user object has children / one-to-many relationships
+
+#### `LoginUser.java` 
+* This script creates the parameter annotation `@LoginUser` which allows us to access and receive session value directly 
+as a method argument (annotation-based programming 😎)
+* `@Target(ElementType.PARAMETER)`: determines where this annotation can be used/created; We chose parameter
+* `@interface`: declares this file as an Annotation class
+
+#### `LoginUserArgumentResolver.java`
+* A class that implements the interface `HandlerMethodArgumentResolver`
+* `HandlerMethodArgumentResolver` provides one purpose: when conditions are met, a value (determined by the implementation 
+of HandlerMethodArgumentResolver) is passed as a parameter to a given method
+* `supportsParameter(MethodParameter parameter)`: determines whether the specific parameter of the controller method is supported and returns boolean
+* `resolveArgument(...)`: creates the object that will be passed to the parameter
+* For this resolver to be recognized within Spring, we need to add it to `WebMvcConfigurer` (i.e. `WebConfig` is our implementation)
+
+#### `WebConfig.java`
+* standard implementation of `WebMvcConfigurer`
+* `HandlerMethodArgumentResolver` must ALWAYS be added through `WebMvcConfigurer`’s `addArgumentResolvers()`
+
+#### `JpaConfig.java`
+* created to debug test error: `JPA metamodel must not be empty` and allow the use of WebMvcTest
+* We didn't want `@EnableJpaAuditing` to be scanned by `@WebMvcTest` (which it did when the annotation was attached in `Application.main`)
+* So, this config file was created to separate `@EnableJpaAuditing` and `@SpringBootApplication`
+
 ## Annotation TLDR
 #### `@Autowired`
 * provides classes with declarative way to resolve dependencies. 
@@ -166,3 +260,15 @@ ArbitraryClass arbObject = new ArbitraryClass();
 
 #### `@RestController`
 * makes the Controller one that returns JSON
+
+#### `@EnableWebSecurity`
+* activates Spring Security settings
+* applied to SecurityConfig which extends `WebSecurityConfigurerAdapter`
+
+#### `@RequiredArgsConstructor`
+* Generates a constructor with required arguments. Required arguments are final fields and fields with 
+constraints such as @NonNull.
+
+#### `@Service`
+* Indicates that an annotated class is a "Service", originally defined by Domain-Driven Design (Evans, 2003) as 
+"an operation offered as an interface that stands alone in the model, with no encapsulated state." (intelliJ)

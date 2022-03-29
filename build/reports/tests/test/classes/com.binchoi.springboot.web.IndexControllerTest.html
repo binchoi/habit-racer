@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class com.binchoi.springboot.web.IndexControllerTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class com.binchoi.springboot.web.IndexControllerTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.binchoi.springboot.web.html">com.binchoi.springboot.web</a> &gt; IndexControllerTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.248s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">main_page_loading</td>
+<td class="success">0.248s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2022-03-27 00:28:30.304  INFO 55767 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.binchoi.springboot.web.IndexControllerTest], using SpringBootContextLoader
+2022-03-27 00:28:30.305  INFO 55767 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.binchoi.springboot.web.IndexControllerTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2022-03-27 00:28:30.305  INFO 55767 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.binchoi.springboot.web.IndexControllerTest]: IndexControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2022-03-27 00:28:30.307  INFO 55767 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.binchoi.springboot.Application for test class com.binchoi.springboot.web.IndexControllerTest
+2022-03-27 00:28:30.314  INFO 55767 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener, org.springframework.security.test.context.support.ReactorContextTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+2022-03-27 00:28:30.315  INFO 55767 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@e6743e1, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@392446d1, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@2f92e305, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@7f576a77, org.springframework.test.context.support.DirtiesContextTestExecutionListener@4b1b5637, org.springframework.test.context.transaction.TransactionalTestExecutionListener@5092834b, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@68a0d897, org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener@2c600326, org.springframework.security.test.context.support.ReactorContextTestExecutionListener@3d5b5273, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@79970648, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@179d0d8d, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@3b48456b, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@5c6750bb, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@1d03b839]
+2022-03-27 00:28:30.415  INFO 55767 --- [o-auto-1-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-03-27 00:28:30.416  INFO 55767 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-03-27 00:28:30.418  INFO 55767 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+Hibernate: select posts0_.id as id1_0_, posts0_.created_date as created_2_0_, posts0_.modified_date as modified3_0_, posts0_.author as author4_0_, posts0_.comment as comment5_0_, posts0_.date as date6_0_, posts0_.is_completed as is_compl7_0_ from posts posts0_ where posts0_.author=? order by posts0_.date DESC
+Hibernate: select posts0_.id as id1_0_, posts0_.created_date as created_2_0_, posts0_.modified_date as modified3_0_, posts0_.author as author4_0_, posts0_.comment as comment5_0_, posts0_.date as date6_0_, posts0_.is_completed as is_compl7_0_ from posts posts0_ where posts0_.author=? order by posts0_.date DESC
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 4.10.2</a> at Mar 27, 2022 12:28:30 AM</p>
+</div>
+</div>
+</body>
+</html>
