@@ -12,14 +12,14 @@ import java.time.LocalDate;
 public class PostsSaveRequestDto {
     private LocalDate date;
     private Boolean isCompleted;
-    private String author;
+    private Long userId;
     private String comment;
 
     @Builder
-    public PostsSaveRequestDto(LocalDate date, Boolean isCompleted, String author, String comment) {
+    public PostsSaveRequestDto(LocalDate date, Boolean isCompleted, Long userId, String comment) {
         this.date = date;
         this.isCompleted = isCompleted;
-        this.author = author;
+        this.userId = userId;
         this.comment = comment;
     }
 
@@ -27,7 +27,7 @@ public class PostsSaveRequestDto {
         return Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
-                .author(author)
+                .userId(userId)
                 .comment(comment)
                 .build();
     }

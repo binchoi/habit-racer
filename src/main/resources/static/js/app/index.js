@@ -17,7 +17,7 @@ var main = {
     save : function () {
         var data = {
             date: $('#date').val(),
-            author: 'User1',
+            userId: $('#userId').val(),
             isCompleted: true,
             comment: $('#content').val()
         };
@@ -72,7 +72,7 @@ var main = {
         });
     },
     encouragement : function () {
-        alert('It\'s okay - everybody has those days 😊 \n\nKeep your head up, King/Queen 👑');
+        alert('Your honesty is respectable 😊 \n\nKeep your head up! 👑');
         window.location.href = '/';
     }
 

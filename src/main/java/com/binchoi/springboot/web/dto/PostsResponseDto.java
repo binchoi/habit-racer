@@ -12,7 +12,7 @@ public class PostsResponseDto {
     private Long id;
     private LocalDate date;
     private Boolean isCompleted;
-    private String author;
+    private Long userId;
     private String comment;
 
     @JsonCreator
@@ -20,7 +20,7 @@ public class PostsResponseDto {
         this.id = entity.getId();
         this.date = entity.getDate();
         this.isCompleted = entity.getIsCompleted();
-        this.author = entity.getAuthor();
+        this.userId = entity.getUserId();
         this.comment = entity.getComment();
     }
 }

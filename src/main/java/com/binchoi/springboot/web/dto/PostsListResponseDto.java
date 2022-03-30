@@ -12,7 +12,7 @@ public class PostsListResponseDto {
     private Long id;
     private LocalDate date;
     private Boolean isComplicated;
-    private String author;
+    private Long userId;
     private String comment;
     private LocalDateTime modifiedDate;
 
@@ -20,7 +20,7 @@ public class PostsListResponseDto {
         this.id = entity.getId();
         this.date = entity.getDate();
         this.isComplicated = entity.getIsCompleted();
-        this.author = entity.getAuthor();
+        this.userId = entity.getUserId();
         this.comment = entity.getComment();
         this.modifiedDate = entity.getModifiedDate();
     }

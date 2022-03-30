@@ -18,14 +18,23 @@
 * Configured our program to be more annotation-based by implementing a custom parameter annotation ``@LoginUser`` that 
   allows me to retrieve session information values from the parameter directly
 * Edited the testing suites to incorporate Spring Security
-* Created documentation for readers/users that outlines each of the important components of the project (check: `tldr-doc.md`)  
+* Created documentation for readers/users that outlines each of the important components of the project (check: `tldr-doc.md`)
+* Implemented the Race class and its Repository
+* Experimented with Test-driven development by creating the unit tests before implementing the APIs for the Race Entity class
+* Basic API for Race class constructed
 
 ## Next steps
+* Renovate the front-end and add the buttons and sites to support the creation and joining of Races
+* Think of the logic more -- it's not there yet. 
+* Update the SecurityConfig with new URI's
 * Review and update the tldr-doc for config and resources directory
+* Prevent double entry per day
+* Consider the safety implications of using hidden data fields and brainstorm how to bolster defense against malicious attacks. 
 * Consider where the security should be placed to prevent some authenticated user being able to manipulate the race of stragers by accessing through url
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
 * Incorporating a cache layer such that when the post table page is shown, it doesn't have
   to make a query unless it has been more than a couple of minutes (TTL)
+* Change center prompt "Did you complete ..." after completing the habit for the day
 
 ## Problems faced (& self-QnA)
 * A getter is not created for one boolean field in Posts class (i.e. completed). 
@@ -55,5 +64,11 @@
     we leverage the fact that Spring has a ObjectMapper which they provide with the above configuration already made. Hence, we can simply use it by inserting the 
     following code: ``@Autowired ObjectMapper objectMapper;`` and replacing ``new ObjectMapper().writeValueAsString(dto)`` with ``objectMapper.writeValueAsString(dto)`` 
     (cred: Inflearn question 30590)
-* Q: What kinds of information can be saved in HttpSession via `setAttribute()`? What should be the primary function of `HttpSession`?
-  * A:
+
+* Consider the safety implications of using hidden data fields (e.g. `userId`) in JS as means of passing values to `index.js`
+  * Upon inspection I discovered that I can edit the hidden field before pressing `save` in order to save the post under some other user's Id.
+  * I need to defend against any malicious attacks!
+
+**Q: What kinds of information should be saved in `HttpSession` via `setAttribute()`? What is the primary function of `HttpSession`?** 
+####Sessions
+* 

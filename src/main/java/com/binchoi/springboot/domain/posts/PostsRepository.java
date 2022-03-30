@@ -12,7 +12,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Query("SELECT p FROM Posts p ORDER BY p.id DESC")
     List<Posts> findAllDesc();
 
-    @Query("SELECT p FROM Posts p WHERE p.author = ?1 ORDER BY p.date DESC")
-    List<Posts> findByAuthor(String author); // author for now
+    @Query("SELECT p FROM Posts p WHERE p.userId = ?1 ORDER BY p.date DESC")
+    List<Posts> findByUserId(Long userId);
 
 }

@@ -38,7 +38,7 @@ public class PostsRespositoryTest {
                 .date(LocalDate.now())
                 .isCompleted(isCompleted)
                 .comment(comment)
-                .author("binchoi16@gmail.com")
+                .userId(33L)
                 .build());
 
         //when
@@ -57,7 +57,7 @@ public class PostsRespositoryTest {
         //given
         LocalDateTime now = LocalDateTime.of(2019,6,4,0,0,0);
         postsRepository.save(Posts.builder()
-                .author("aut")
+                .userId(3L)
                 .isCompleted(true)
                 .date(LocalDate.now())
                 .comment("YOLO")
@@ -69,7 +69,7 @@ public class PostsRespositoryTest {
         //then
         Posts posts = postsList.get(0);
 
-        System.out.println(">>>>>>>>> createDate="+posts.getCreatedDate()+", modifiedDate="+posts.getModifiedDate());
+//        System.out.println(">>>>>>>>> createDate="+posts.getCreatedDate()+", modifiedDate="+posts.getModifiedDate());
 
         assertThat(posts.getCreatedDate()).isAfter(now);
         assertThat(posts.getModifiedDate()).isAfter(now);

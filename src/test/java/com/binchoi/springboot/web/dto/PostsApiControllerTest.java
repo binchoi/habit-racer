@@ -72,11 +72,11 @@ public class PostsApiControllerTest {
         //given
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
-        String author = "author";
+        Long userId = 1L;
         String comment = "take that loser / comment";
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
                 .date(date)
-                .author(author)
+                .userId(userId)
                 .isCompleted(isCompleted)
                 .comment(comment)
                 .build();
@@ -98,7 +98,7 @@ public class PostsApiControllerTest {
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getDate()).isEqualTo(date);
         assertThat(all.get(0).getIsCompleted()).isEqualTo(isCompleted);
-        assertThat(all.get(0).getAuthor()).isEqualTo(author);
+        assertThat(all.get(0).getUserId()).isEqualTo(userId);
         assertThat(all.get(0).getComment()).isEqualTo(comment);
     }
 
@@ -108,13 +108,13 @@ public class PostsApiControllerTest {
         //given
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
-        String author = "author";
+        Long userId = 1L;
         String comment = "take that loser / comment";
 
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
-                .author(author)
+                .userId(userId)
                 .comment(comment)
                 .build());
 
@@ -143,13 +143,13 @@ public class PostsApiControllerTest {
         //given
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
-        String author = "author";
+        Long userId = 1L;
         String comment = "take that loser / comment";
 
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
-                .author(author)
+                .userId(userId)
                 .comment(comment)
                 .build());
 
@@ -191,20 +191,20 @@ public class PostsApiControllerTest {
         //given
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
-        String author = "author";
+        Long userId = 5L;
         String comment = "take that loser / comment";
 
         postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
-                .author(author)
+                .userId(userId)
                 .comment(comment)
                 .build());
 
         postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(!isCompleted)
-                .author(author)
+                .userId(userId)
                 .comment(comment+" - part 2")
                 .build());
 

@@ -56,8 +56,8 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findByAuthor(String author) {
-        return postsRepository.findByAuthor(author).stream()
+    public List<PostsListResponseDto> findByUserId(Long userId) {
+        return postsRepository.findByUserId(userId).stream()
                 .map(PostsListResponseDto::new)
                 .collect(Collectors.toList());
     }

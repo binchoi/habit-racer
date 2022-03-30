@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,17 +22,18 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
-        model.addAttribute("postsUser1", postsService.findByAuthor("User1"));
-        model.addAttribute("postsUser2", postsService.findByAuthor("User2"));
-
         if (user!=null) {
+            model.addAttribute("postsUser1", postsService.findByUserId(user.getId()));
+            model.addAttribute("postsUser2", postsService.findByUserId(24L));
             model.addAttribute("userName", user.getName());
         }
         return "index";
     }
 
     @GetMapping("/posts/save")
-    public String postsSave() {
+    public String postsSave(Model model, @LoginUser SessionUser user) {
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("today", LocalDate.now());
         return "posts-save";
     }
 
