@@ -24,6 +24,7 @@
 * Basic API for Race class constructed
 
 ## Next steps
+* Spring OAuth2 token system implementation
 * Renovate the front-end and add the buttons and sites to support the creation and joining of Races
 * Think of the logic more -- it's not there yet. 
 * Update the SecurityConfig with new URI's

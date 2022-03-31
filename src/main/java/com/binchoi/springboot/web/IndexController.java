@@ -3,7 +3,10 @@ package com.binchoi.springboot.web;
 import com.binchoi.springboot.config.auth.LoginUser;
 import com.binchoi.springboot.config.auth.dto.SessionUser;
 import com.binchoi.springboot.service.posts.PostsService;
+import com.binchoi.springboot.service.race.RaceService;
+import com.binchoi.springboot.service.user.UserService;
 import com.binchoi.springboot.web.dto.PostsResponseDto;
+import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,8 @@ import java.time.LocalDate;
 public class IndexController {
 
     private final PostsService postsService;
+    private final RaceService raceService;
+    private final UserService userService;
     private final HttpSession httpSession;
 
     @GetMapping("/")
@@ -30,7 +35,7 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/posts/save")
+    @GetMapping("/posts/save") // race/{raceId}/posts/save
     public String postsSave(Model model, @LoginUser SessionUser user) {
         model.addAttribute("userId", user.getId());
         model.addAttribute("today", LocalDate.now());
@@ -45,5 +50,25 @@ public class IndexController {
 //        }
         model.addAttribute("post", dto);
         return "posts-update";
+    }
+
+    @GetMapping("/race/{id}")
+    public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
+        if (user!=null) {
+            //check if this race is viewable by the currently logged in user
+
+            model.addAttribute("userName", user.getName());
+
+            model.addAttribute("raceName", raceService.findById(id).getRaceName());
+            model.addAttribute("raceWager", raceService.findById(id).getWager());
+            model.addAttribute("fstUserName", userService.findById(raceService.findById(id).getFstUserId()).getName());
+            model.addAttribute("sndUserName", userService.findById(raceService.findById(id).getSndUserId()).getName());
+            model.addAttribute("fstHabit", raceService.findById(id).getFstUserHabit());
+            model.addAttribute("sndHabit", raceService.findById(id).getSndUserHabit());
+
+//            model.addAttribute("postsUser1", postsService.findByUserId(user.getId()));
+//            model.addAttribute("postsUser2", postsService.findByUserId(24L));
+        }
+        return "race-overview";
     }
 }
