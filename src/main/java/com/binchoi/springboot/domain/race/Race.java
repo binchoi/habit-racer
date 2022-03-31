@@ -42,13 +42,16 @@ public class Race extends BaseTimeEntity {
     private String sndUserHabit;
 
     @Builder
-    public Race(String raceName, String wager, LocalDate startDate, LocalDate endDate, Long fstUserId, String fstUserHabit) {
+    public Race(String raceName, String wager, LocalDate startDate, LocalDate endDate, Long fstUserId,
+                String fstUserHabit, Long sndUserId, String sndUserHabit) {
         this.raceName = raceName;
         this.wager = wager;
         this.startDate = startDate;
         this.endDate = endDate;
         this.fstUserId = fstUserId;
         this.fstUserHabit = fstUserHabit;
+        this.sndUserId = sndUserId; //not provided in user scenario -> set as null
+        this.sndUserHabit = sndUserHabit; //not provided in user scenario -> set as null
     }
 
     public void update(LocalDate endDate, Long sndUserId, String sndUserHabit) {

@@ -31,6 +31,7 @@
 * Prevent double entry per day
 * Consider the safety implications of using hidden data fields and brainstorm how to bolster defense against malicious attacks. 
 * Consider where the security should be placed to prevent some authenticated user being able to manipulate the race of stragers by accessing through url
+  * How to implement an attribute/... -based access control
 * Implement the Races entity class and do everything that has been done for the Posts class (until API)
 * Incorporating a cache layer such that when the post table page is shown, it doesn't have
   to make a query unless it has been more than a couple of minutes (TTL)
@@ -64,11 +65,26 @@
     we leverage the fact that Spring has a ObjectMapper which they provide with the above configuration already made. Hence, we can simply use it by inserting the 
     following code: ``@Autowired ObjectMapper objectMapper;`` and replacing ``new ObjectMapper().writeValueAsString(dto)`` with ``objectMapper.writeValueAsString(dto)`` 
     (cred: Inflearn question 30590)
-
 * Consider the safety implications of using hidden data fields (e.g. `userId`) in JS as means of passing values to `index.js`
   * Upon inspection I discovered that I can edit the hidden field before pressing `save` in order to save the post under some other user's Id.
   * I need to defend against any malicious attacks!
+* What kinds of information should be saved in `HttpSession` via `setAttribute()`? What should the primary function of `HttpSession` be? **\[\*]**
+* MockMvc and JUnit 5 assertion error with identical field (e.g. Expected: `2022-05-30` vs. Actual: `2022-05-30`)
+  * This occurs because JsonPath operates on JSON and the LocalDate (or any type) field has been converted to a JSON string 
+  value. Hence, whenever you get a matcher error indicating that two values that look identical do not match, it is likely due to 
+  difference in type! Simply use `toString()` to resolve.
+* Spring DATA JPA @Query uses JPQL by default for query definition. However, we can also use native SQL by setting the value of `nativeQuery`
+attribute to true.
+  * note that query definition with syntax error can lead to `Failed to load ApplicationContext` error.
+```
+\\jpql
+@Query("SELECT r FROM Race r WHERE r.fstUserId = ?1 OR r.sndUserId = ?1 ORDER BY r.startDate DESC")
+List<Race> findByUserId(Long userId);
 
-**Q: What kinds of information should be saved in `HttpSession` via `setAttribute()`? What is the primary function of `HttpSession`?** 
-####Sessions
-* 
+\\sql
+@Query(
+  value = "SELECT * FROM RACE r WHERE r.fstUserId = ?1 OR r.sndUserId = ?1 ORDER BY r.startDate DESC",
+  nativeQuery = true)
+List<Race> findByUserId(Long userId);
+```
+* note: if lombok builder constructor does not use a particular parameter, its value is set as null

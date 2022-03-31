@@ -1,13 +1,17 @@
 package com.binchoi.springboot.web;
 
+import com.binchoi.springboot.config.auth.LoginUser;
+import com.binchoi.springboot.config.auth.dto.SessionUser;
 import com.binchoi.springboot.service.posts.PostsService;
 import com.binchoi.springboot.web.dto.PostsResponseDto;
 import com.binchoi.springboot.web.dto.PostsSaveRequestDto;
 import com.binchoi.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,7 +31,6 @@ public class PostsApiController {
 
     @PutMapping("/api/v1/posts/{id}")
     public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
-//        System.out.println(">>> RECEIVED DTO: " + requestDto.getComment() + "\n" + ">>> " + requestDto.getDate());
         return postsService.update(id, requestDto);
     }
 
@@ -43,4 +46,11 @@ public class PostsApiController {
         return postsService.findAll();
     }
 
+//  notes:
+//    if (!this.isUserAllowed(id,user)) { //user==null need not be checked thanks to SecurityConfig
+//        return null;
+//    }
+//    public boolean isUserAllowed(Long id, SessionUser user) {
+//        return Objects.equals(postsService.findById(id).getUserId(), user.getId());
+//    }
 }

@@ -38,8 +38,11 @@ public class IndexController {
     }
 
     @GetMapping("/posts/update/{id}")
-    public String postsUpdate(@PathVariable Long id, Model model) {
+    public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         PostsResponseDto dto = postsService.findById(id);
+//        if (dto.getUserId()!=user.getId()) { - think about where is the best place for this check
+//            return "index"; // or direct to page that says you are not allowed in
+//        }
         model.addAttribute("post", dto);
         return "posts-update";
     }

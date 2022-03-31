@@ -61,6 +61,49 @@ public class RaceRepositoryTest {
     }
 
     @Test
+    public void get_Races_by_UserId() {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long fstId = 1L;
+        Long sndId = 5L;
+        String fstHabit = "To workout at least 10 minutes every day";
+        String sndHabit = "To workout at least 45 minutes every week";
+
+        raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(fstId)
+                .fstUserHabit(fstHabit)
+                .sndUserId(sndId)
+                .sndUserHabit(sndHabit)
+                .build());
+
+        raceRepository.save(Race.builder()
+                .raceName("copy: "+raceName)
+                .wager("copy: "+wager)
+                .startDate(start.plusDays(1))
+                .endDate(end.plusDays(1))
+                .fstUserId(7L)
+                .fstUserHabit("some Habit")
+                .sndUserId(fstId)
+                .sndUserHabit(fstHabit+" COPY")
+                .build());
+
+        //when
+        List<Race> raceList = raceRepository.findByUserId(fstId);
+
+        //then
+        assert (raceList.size()==2);
+        assert (raceList.get(0).getStartDate().isAfter(raceList.get(1).getStartDate()));
+        assertThat(raceList.get(0).getFstUserHabit()).isEqualTo("some Habit");
+    }
+
+    @Test
     public void BaseTimeEntity_Test2() {
         //given
         LocalDateTime now = LocalDateTime.of(2029,6,4,0,0,0);

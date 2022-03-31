@@ -210,4 +210,64 @@ public class RaceApiControllerTest {
         assertThat(raceRepository.findAll().isEmpty());
 
     }
+
+    //common user scenario
+    @Test
+    @WithMockUser(roles = "USER")
+    public void Race_can_be_posted_updated_and_getted() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        LocalDate endRevised = end.plusMonths(1);
+        Long idSec = 2L;
+        String sndHabit = "To workout at least 60 minutes every day!";
+
+        RaceUpdateRequestDto updateRequestDto = RaceUpdateRequestDto.builder()
+                .endDate(endRevised)
+                .sndUserId(idSec)
+                .sndUserHabit(sndHabit)
+                .build();
+
+        String postUrl = "http://localhost:" + port + "/api/v1/race";
+
+        //when
+        mvc.perform(post(postUrl)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isOk());
+
+        Long raceId = raceRepository.findAll().get(0).getId();
+        String url = "http://localhost:" + port + "/api/v1/race/" + raceId;
+
+        mvc.perform(put(url)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(updateRequestDto)))
+                .andExpect(status().isOk());
+
+        mvc.perform(get(url))
+                .andDo(print())
+        //then
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(raceId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fstUserId").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.sndUserId").value(idSec))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.wager").value(wager))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fstUserHabit").value(fstHabit))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.sndUserHabit").value(sndHabit))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.endDate").value(endRevised.toString()));
+    }
 }
