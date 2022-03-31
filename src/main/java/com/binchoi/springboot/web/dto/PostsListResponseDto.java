@@ -13,6 +13,7 @@ public class PostsListResponseDto {
     private LocalDate date;
     private Boolean isComplicated;
     private Long userId;
+    private Long raceId;
     private String comment;
     private LocalDateTime modifiedDate;
 
@@ -21,6 +22,7 @@ public class PostsListResponseDto {
         this.date = entity.getDate();
         this.isComplicated = entity.getIsCompleted();
         this.userId = entity.getUserId();
+        this.raceId = entity.getRaceId();
         this.comment = entity.getComment();
         this.modifiedDate = entity.getModifiedDate();
     }

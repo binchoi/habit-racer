@@ -1,0 +1,35 @@
+{{>layout/header}}
+
+<h1>Start a new race!</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="raceName">Name your Race!</label>
+                <textarea class="form-control" id="raceName" placeholder="The ultimate battle of who is less lazy"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="wager">Set what's at stake!</label>
+                <textarea class="form-control" id="wager" placeholder="Three home-cooked meals"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" class="form-control" value="{{today}}">
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate" class="form-control" value="{{nextMonth}}">
+            </div>
+            <div class="form-group">
+                <label for="fstUserHabit">What habit are you going to build?</label>
+                <textarea class="form-control" id="fstUserHabit" placeholder="Exercising 30 minutes a day"></textarea>
+            </div>
+            <a href="/" role="button" class="btn btn-secondary">Cancel</a>
+            <button type="button" class="btn btn-primary" id="btn-save-race">Save</button>
+            <input type="hidden" id="fstUserId" value="{{fstUserId}}">
+        </form>
+    </div>
+</div>
+
+{{>layout/footer}}

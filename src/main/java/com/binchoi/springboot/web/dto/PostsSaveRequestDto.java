@@ -13,13 +13,15 @@ public class PostsSaveRequestDto {
     private LocalDate date;
     private Boolean isCompleted;
     private Long userId;
+    private Long raceId;
     private String comment;
 
     @Builder
-    public PostsSaveRequestDto(LocalDate date, Boolean isCompleted, Long userId, String comment) {
+    public PostsSaveRequestDto(LocalDate date, Boolean isCompleted, Long userId, Long raceId, String comment) {
         this.date = date;
         this.isCompleted = isCompleted;
         this.userId = userId;
+        this.raceId = raceId;
         this.comment = comment;
     }
 
@@ -28,6 +30,7 @@ public class PostsSaveRequestDto {
                 .date(date)
                 .isCompleted(isCompleted)
                 .userId(userId)
+                .raceId(raceId)
                 .comment(comment)
                 .build();
     }

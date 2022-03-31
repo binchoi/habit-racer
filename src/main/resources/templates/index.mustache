@@ -17,43 +17,37 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-            <h3>Have you completed your habit today?</h3>
-            <a href="/posts/save" role="button" class="btn btn-dark">YES</a>
-            <button type="button" class="btn btn-light" id="btn-encouragement">NO</button>
+            <h3>Are you tired of your lazy-ass self?</h3>
+            <button type="button" class="btn btn-dark" id="btn-lazy">YES</button>
+            <button type="button" class="btn btn-light" id="btn-lazy">YES</button>
+            <!--     second button doesn't work but its probably not gonna be included in final version anyways      -->
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h3>Let's get racing!</h3>
+            <a href="/race/save" class="btn btn-success active" role="button">Start a Race</a>
+<!--            <a href="/race/update" class="btn btn-success active" role="button">Join a Race</a>-->
+            <!--     second button doesn't work but its probably not gonna be included in final version anyways      -->
         </div>
     </div>
     <br>
+    <h2>Choose a race and update your progress!</h2>
     <!--  Table displaying progress  -->
     <div class="row justify-content-around">
         <div class="col-md-5">
             <table class="table table-horizontal table-bordered table-striped text-center">
                 <thead class="thead-strong">
                 <tr>
-                    <th>User1</th>
+                    <th>Ongoing Races</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
-                {{#postsUser1}}
+                {{#raceList}}
                     <tr>
-                        <td><a href="/posts/update/{{id}}">{{date}}</a>✅</td>
+                        <td><a href="/race/{{id}}">{{raceName}}</a>🔥</td>
                     </tr>
-                {{/postsUser1}}
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-5">
-            <table class="table table-horizontal table-bordered table-striped text-center">
-                <thead class="thead-strong">
-                <tr>
-                    <th>User2</th>
-                </tr>
-                </thead>
-                <tbody id="tbody">
-                {{#postsUser2}}
-                    <tr>
-                        <td><a href="/posts/update/{{id}}">{{date}}</a>✅</td>
-                    </tr>
-                {{/postsUser2}}
+                {{/raceList}}
                 </tbody>
             </table>
         </div>

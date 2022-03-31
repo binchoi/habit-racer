@@ -73,10 +73,12 @@ public class PostsApiControllerTest {
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
         Long userId = 1L;
+        Long raceId = 7L;
         String comment = "take that loser / comment";
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
                 .date(date)
                 .userId(userId)
+                .raceId(raceId)
                 .isCompleted(isCompleted)
                 .comment(comment)
                 .build();
@@ -99,6 +101,7 @@ public class PostsApiControllerTest {
         assertThat(all.get(0).getDate()).isEqualTo(date);
         assertThat(all.get(0).getIsCompleted()).isEqualTo(isCompleted);
         assertThat(all.get(0).getUserId()).isEqualTo(userId);
+        assertThat(all.get(0).getRaceId()).isEqualTo(raceId);
         assertThat(all.get(0).getComment()).isEqualTo(comment);
     }
 
@@ -109,12 +112,14 @@ public class PostsApiControllerTest {
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
         Long userId = 1L;
+        Long raceId = 7L;
         String comment = "take that loser / comment";
 
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
                 .userId(userId)
+                .raceId(raceId)
                 .comment(comment)
                 .build());
 
@@ -125,7 +130,11 @@ public class PostsApiControllerTest {
         //when
         mvc.perform(get(url))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comment").value(comment))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.isCompleted").value(isCompleted.toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(userId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.raceId").value(raceId));
 //                .andDo(print());
 //        ResponseEntity<PostsResponseDto> responseEntity2 = restTemplate.getForEntity(url,PostsResponseDto.class);
 
@@ -144,12 +153,14 @@ public class PostsApiControllerTest {
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
         Long userId = 1L;
+        Long raceId = 90L;
         String comment = "take that loser / comment";
 
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
                 .userId(userId)
+                .raceId(raceId)
                 .comment(comment)
                 .build());
 
@@ -192,12 +203,14 @@ public class PostsApiControllerTest {
         LocalDate date = LocalDate.now();
         Boolean isCompleted = true;
         Long userId = 5L;
+        Long raceId = 90L;
         String comment = "take that loser / comment";
 
         postsRepository.save(Posts.builder()
                 .date(date)
                 .isCompleted(isCompleted)
                 .userId(userId)
+                .raceId(raceId)
                 .comment(comment)
                 .build());
 
@@ -205,6 +218,7 @@ public class PostsApiControllerTest {
                 .date(date)
                 .isCompleted(!isCompleted)
                 .userId(userId)
+                .raceId(raceId)
                 .comment(comment+" - part 2")
                 .build());
 

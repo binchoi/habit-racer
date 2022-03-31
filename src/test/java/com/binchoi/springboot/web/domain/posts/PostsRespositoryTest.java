@@ -39,6 +39,7 @@ public class PostsRespositoryTest {
                 .isCompleted(isCompleted)
                 .comment(comment)
                 .userId(33L)
+                .raceId(1L)
                 .build());
 
         //when
@@ -49,7 +50,7 @@ public class PostsRespositoryTest {
         assertThat(posts.getDate()).isEqualTo(date);
         assertThat(posts.getIsCompleted()).isEqualTo(isCompleted);
         assertThat(posts.getComment()).isEqualTo(comment);
-
+        assertThat(posts.getRaceId()).isEqualTo(1L);
     }
 
     @Test
@@ -58,6 +59,7 @@ public class PostsRespositoryTest {
         LocalDateTime now = LocalDateTime.of(2019,6,4,0,0,0);
         postsRepository.save(Posts.builder()
                 .userId(3L)
+                .raceId(33L)
                 .isCompleted(true)
                 .date(LocalDate.now())
                 .comment("YOLO")
@@ -73,7 +75,7 @@ public class PostsRespositoryTest {
 
         assertThat(posts.getCreatedDate()).isAfter(now);
         assertThat(posts.getModifiedDate()).isAfter(now);
-
+        assertThat(posts.getRaceId()).isEqualTo(33L);
         //misc
 //        assertThat(posts.getModifiedDate().getYear()).isEqualTo(LocalDateTime.now().getYear());
 //        assertThat(posts.getModifiedDate().getMonth()).isEqualTo(LocalDateTime.now().getMonth());

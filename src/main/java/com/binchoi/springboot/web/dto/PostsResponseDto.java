@@ -13,6 +13,7 @@ public class PostsResponseDto {
     private LocalDate date;
     private Boolean isCompleted;
     private Long userId;
+    private Long raceId;
     private String comment;
 
     @JsonCreator
@@ -21,6 +22,7 @@ public class PostsResponseDto {
         this.date = entity.getDate();
         this.isCompleted = entity.getIsCompleted();
         this.userId = entity.getUserId();
+        this.raceId = entity.getRaceId();
         this.comment = entity.getComment();
     }
 }

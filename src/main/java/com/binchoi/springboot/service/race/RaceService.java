@@ -2,12 +2,13 @@ package com.binchoi.springboot.service.race;
 
 import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.domain.race.RaceRepository;
-import com.binchoi.springboot.web.dto.RaceResponseDto;
-import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
-import com.binchoi.springboot.web.dto.RaceUpdateRequestDto;
+import com.binchoi.springboot.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -39,6 +40,13 @@ public class RaceService {
         Race entity = raceRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("The race does not exist. id="+ id));
         raceRepository.delete(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RaceListResponseDto> findByUserId(Long userId) {
+        return raceRepository.findByUserId(userId).stream()
+                .map(RaceListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
 }

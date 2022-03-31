@@ -27,14 +27,19 @@ public class Posts extends BaseTimeEntity {
     @Column(nullable = false)
     private Long userId;
 
+    @Column(nullable = false)
+    private Long raceId;
+
     @Column(columnDefinition = "TEXT")
     private String comment;
 
+
     @Builder // more explicit constructor that can help locate errors before runtime!
-    public Posts(LocalDate date, Boolean isCompleted, Long userId, String comment) {
+    public Posts(LocalDate date, Boolean isCompleted, Long userId,  Long raceId, String comment) {
         this.date = date;
         this.isCompleted = isCompleted;
         this.userId = userId;
+        this.raceId = raceId;
         this.comment = comment;
     }
 

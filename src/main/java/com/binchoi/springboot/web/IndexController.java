@@ -28,21 +28,32 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
         if (user!=null) {
-            model.addAttribute("postsUser1", postsService.findByUserId(user.getId()));
-            model.addAttribute("postsUser2", postsService.findByUserId(24L));
+            model.addAttribute("raceList", raceService.findByUserId(user.getId()));
             model.addAttribute("userName", user.getName());
         }
         return "index";
     }
 
-    @GetMapping("/posts/save") // race/{raceId}/posts/save
-    public String postsSave(Model model, @LoginUser SessionUser user) {
+    @GetMapping("/race/save")
+    public String raceSave(Model model, @LoginUser SessionUser user) {
+        if (user!=null) {
+            model.addAttribute("fstUserId", user.getId());
+            model.addAttribute("today", LocalDate.now());
+            model.addAttribute("nextMonth", LocalDate.now().plusMonths(1));
+        } // Cannot deserialize value of type `java.lang.Long` from String
+        //error
+        return "race-save";
+    }
+
+    @GetMapping("race/{raceId}/posts/save")
+    public String postsSave(Model model, @LoginUser SessionUser user, @PathVariable Long raceId) {
         model.addAttribute("userId", user.getId());
+        model.addAttribute("raceId", raceId);
         model.addAttribute("today", LocalDate.now());
         return "posts-save";
     }
 
-    @GetMapping("/posts/update/{id}")
+    @GetMapping("race/{raceId}/posts/update/{id}") // including raceId ensures that less posts accessible by malice?
     public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         PostsResponseDto dto = postsService.findById(id);
 //        if (dto.getUserId()!=user.getId()) { - think about where is the best place for this check
