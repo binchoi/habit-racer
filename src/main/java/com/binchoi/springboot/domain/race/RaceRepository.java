@@ -11,8 +11,5 @@ public interface RaceRepository extends JpaRepository<Race, Long> {
 
     @Query("SELECT r FROM Race r WHERE r.fstUserId = ?1 OR r.sndUserId = ?1 ORDER BY r.startDate DESC")
     List<Race> findByUserId(Long userId);
-//
-//    @Query(value = "SELECT * FROM RACE r WHERE r.fstUserId = ?1 OR r.sndUserId = ?1 ORDER BY r.startDate DESC",
-//            nativeQuery = true)
-//    List<Posts> findByUserId2(Long userId);
+
 }

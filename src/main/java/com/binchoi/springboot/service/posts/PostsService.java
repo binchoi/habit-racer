@@ -62,4 +62,11 @@ public class PostsService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findByUserIdRaceId(Long userId, Long raceId) {
+        return postsRepository.findByUserIdRaceId(userId, raceId).stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 }

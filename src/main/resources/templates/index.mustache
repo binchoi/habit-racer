@@ -17,22 +17,19 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-            <h3>Are you tired of your lazy-ass self?</h3>
-            <button type="button" class="btn btn-dark" id="btn-lazy">YES</button>
-            <button type="button" class="btn btn-light" id="btn-lazy">YES</button>
-            <!--     second button doesn't work but its probably not gonna be included in final version anyways      -->
+            <h3>Let's get racing!</h3>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-            <h3>Let's get racing!</h3>
             <a href="/race/save" class="btn btn-success active" role="button">Start a Race</a>
+            <a href="/race/join" class="btn btn-info active" role="button">Join a Race</a>
 <!--            <a href="/race/update" class="btn btn-success active" role="button">Join a Race</a>-->
             <!--     second button doesn't work but its probably not gonna be included in final version anyways      -->
         </div>
     </div>
     <br>
-    <h2>Choose a race and update your progress!</h2>
+    <h2>Your races:</h2>
     <!--  Table displaying progress  -->
     <div class="row justify-content-around">
         <div class="col-md-5">
@@ -40,12 +37,14 @@
                 <thead class="thead-strong">
                 <tr>
                     <th>Ongoing Races</th>
+                    <th>RACEID</th>
                 </tr>
                 </thead>
                 <tbody id="tbody">
                 {{#raceList}}
                     <tr>
                         <td><a href="/race/{{id}}">{{raceName}}</a>🔥</td>
+                        <td>{{id}}</td>
                     </tr>
                 {{/raceList}}
                 </tbody>

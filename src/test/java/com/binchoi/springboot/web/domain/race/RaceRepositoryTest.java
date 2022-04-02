@@ -98,8 +98,9 @@ public class RaceRepositoryTest {
         List<Race> raceList = raceRepository.findByUserId(fstId);
 
         //then
-        assert (raceList.size()==2);
-        assert (raceList.get(0).getStartDate().isAfter(raceList.get(1).getStartDate()));
+        assertThat(raceList.size()).isEqualTo(2);
+        assertThat(raceList.get(0).getStartDate()).isEqualTo(start.plusDays(1));
+        assertThat(raceList.get(0).getStartDate()).isAfter(raceList.get(1).getStartDate());
         assertThat(raceList.get(0).getFstUserHabit()).isEqualTo("some Habit");
     }
 

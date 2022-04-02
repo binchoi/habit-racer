@@ -31,8 +31,14 @@ public class RaceService {
     public Long update(Long id, RaceUpdateRequestDto requestDto) {
         Race entity = raceRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("The race does not exist. id="+ id));
-        entity.update(requestDto.getEndDate(), requestDto.getSndUserId(), requestDto.getSndUserHabit());
-        return id;
+        if (entity.getSndUserId()!=null) {
+            throw new IllegalArgumentException("The race is fully occupied. id="+ id);
+        } else if (entity.getFstUserId().equals(requestDto.getSndUserId())) {
+            throw new IllegalArgumentException("You cannot race against yourself. id="+ id);
+        } else {
+            entity.update(requestDto.getEndDate(), requestDto.getSndUserId(), requestDto.getSndUserHabit());
+            return id;
+        }
     }
 
     @Transactional

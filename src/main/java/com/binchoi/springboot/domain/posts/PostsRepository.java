@@ -15,4 +15,6 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Query("SELECT p FROM Posts p WHERE p.userId = ?1 ORDER BY p.date DESC")
     List<Posts> findByUserId(Long userId);
 
+    @Query("SELECT p FROM Posts p WHERE p.userId = ?1 AND p.raceId = ?2 ORDER BY p.date DESC")
+    List<Posts> findByUserIdRaceId(Long userId, Long raceId);
 }

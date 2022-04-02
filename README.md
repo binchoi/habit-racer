@@ -22,6 +22,8 @@
 * Implemented the Race class and its Repository
 * Experimented with Test-driven development by creating the unit tests before implementing the APIs for the Race Entity class
 * Basic API for Race class constructed
+* Start a new race button and basic UI created
+* Changed URI naming to better conform with RESTful architecture principles
 
 ## Next steps
 * Spring OAuth2 token system implementation
@@ -77,6 +79,7 @@
 * Spring DATA JPA @Query uses JPQL by default for query definition. However, we can also use native SQL by setting the value of `nativeQuery`
 attribute to true.
   * note that query definition with syntax error can lead to `Failed to load ApplicationContext` error.
+* Testing for exception underneath NestedServletException (RaceApiControllerTest) by `assertThatThrownBy`
 ```
 \\jpql
 @Query("SELECT r FROM Race r WHERE r.fstUserId = ?1 OR r.sndUserId = ?1 ORDER BY r.startDate DESC")

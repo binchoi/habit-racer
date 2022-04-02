@@ -1,0 +1,41 @@
+{{>layout/header}}
+
+<h1>Joining the race: {{race.raceName}}</h1>
+<h3>Competitor: {{competitor}}</h3>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="raceName">Race Name:</label>
+                <textarea class="form-control" id="raceName" readonly>{{race.raceName}}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="wager">What's at stake?</label>
+                <textarea class="form-control" id="wager" readonly>{{race.wager}}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" class="form-control" value="{{race.startDate}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date (As you were challenged, you get the final word!)</label>
+                <input type="date" id="endDate" class="form-control" value="{{race.endDate}}">
+            </div>
+            <div class="form-group">
+                <label for="fstUserHabit">{{competitor}}'s Habit-to-Build</label>
+                <textarea class="form-control" id="fstUserHabit" readonly>{{race.fstUserHabit}}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="sndUserHabit">What habit are you going to build?</label>
+                <textarea class="form-control" id="sndUserHabit"></textarea>
+            </div>
+            <a href="/" role="button" class="btn btn-secondary">Cancel</a>
+            <button type="button" class="btn btn-primary" id="btn-join-race">Save</button>
+            <input type="hidden" id="sndUserId" value="{{sndUserId}}">
+            <input type="hidden" id="raceId" value="{{race.id}}">
+        </form>
+    </div>
+</div>
+
+{{>layout/footer}}

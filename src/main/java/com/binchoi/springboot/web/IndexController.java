@@ -2,10 +2,13 @@ package com.binchoi.springboot.web;
 
 import com.binchoi.springboot.config.auth.LoginUser;
 import com.binchoi.springboot.config.auth.dto.SessionUser;
+import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.service.posts.PostsService;
 import com.binchoi.springboot.service.race.RaceService;
 import com.binchoi.springboot.service.user.UserService;
 import com.binchoi.springboot.web.dto.PostsResponseDto;
+import com.binchoi.springboot.web.dto.RaceListResponseDto;
+import com.binchoi.springboot.web.dto.RaceResponseDto;
 import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Controller
@@ -34,52 +38,71 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/race/{id}")
+    public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
+        //check if this race is viewable by the currently logged in user - using token
+        //no need to check if user exists because this uri is not approachable by non-authenticated users
+        model.addAttribute("userName", user.getName());
+
+        RaceResponseDto race = raceService.findById(id);
+        model.addAttribute("race", race);
+
+        //make clean code later
+        Long fstUserId = race.getFstUserId(); // we don't use user.getId() because the user might be different from the race competitors (e.g. admin
+        Long sndUserId = race.getSndUserId();
+        model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
+        model.addAttribute("postsUser1", postsService.findByUserIdRaceId(fstUserId, id));
+
+        if (sndUserId!=null) {
+            model.addAttribute("sndUserName", userService.findById(sndUserId).getName());
+            model.addAttribute("sndHabit", race.getSndUserHabit());
+            model.addAttribute("postsUser2", postsService.findByUserIdRaceId(sndUserId, id));
+        } else {
+            model.addAttribute("sndUserName", "???");
+            model.addAttribute("sndHabit", "???");
+            model.addAttribute("postsUser2", new ArrayList<>());
+        }
+        return "race-overview";
+    }
+
     @GetMapping("/race/save")
     public String raceSave(Model model, @LoginUser SessionUser user) {
-        if (user!=null) {
-            model.addAttribute("fstUserId", user.getId());
-            model.addAttribute("today", LocalDate.now());
-            model.addAttribute("nextMonth", LocalDate.now().plusMonths(1));
-        } // Cannot deserialize value of type `java.lang.Long` from String
-        //error
+        model.addAttribute("fstUserId", user.getId());
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("nextMonth", LocalDate.now().plusMonths(1));
         return "race-save";
     }
 
-    @GetMapping("race/{raceId}/posts/save")
-    public String postsSave(Model model, @LoginUser SessionUser user, @PathVariable Long raceId) {
+    @GetMapping("/race/join")
+    public String raceUpdate(Model model) {
+        return "race-join-1";
+    }
+
+    @GetMapping("/race/join/{id}")
+    public String raceUpdate(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
+        RaceResponseDto race = raceService.findById(id);
+        String competitor = userService.findById(race.getFstUserId()).getName();
+        model.addAttribute("race", race);
+        model.addAttribute("competitor", competitor);
+        model.addAttribute("sndUserId", user.getId());
+        return "race-join-2";
+    }
+
+    @GetMapping("race/{id}/posts/save")
+    public String postsSave(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
         model.addAttribute("userId", user.getId());
-        model.addAttribute("raceId", raceId);
+        model.addAttribute("raceId", id);
         model.addAttribute("today", LocalDate.now());
         return "posts-save";
     }
 
-    @GetMapping("race/{raceId}/posts/update/{id}") // including raceId ensures that less posts accessible by malice?
+    @GetMapping("posts/update/{id}") // including raceId ensures that less posts accessible by malice?
     public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         PostsResponseDto dto = postsService.findById(id);
-//        if (dto.getUserId()!=user.getId()) { - think about where is the best place for this check
-//            return "index"; // or direct to page that says you are not allowed in
-//        }
         model.addAttribute("post", dto);
+        model.addAttribute("raceId", postsService.findById(id).getRaceId());
         return "posts-update";
     }
 
-    @GetMapping("/race/{id}")
-    public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-        if (user!=null) {
-            //check if this race is viewable by the currently logged in user
 
-            model.addAttribute("userName", user.getName());
-
-            model.addAttribute("raceName", raceService.findById(id).getRaceName());
-            model.addAttribute("raceWager", raceService.findById(id).getWager());
-            model.addAttribute("fstUserName", userService.findById(raceService.findById(id).getFstUserId()).getName());
-            model.addAttribute("sndUserName", userService.findById(raceService.findById(id).getSndUserId()).getName());
-            model.addAttribute("fstHabit", raceService.findById(id).getFstUserHabit());
-            model.addAttribute("sndHabit", raceService.findById(id).getSndUserHabit());
-
-//            model.addAttribute("postsUser1", postsService.findByUserId(user.getId()));
-//            model.addAttribute("postsUser2", postsService.findByUserId(24L));
-        }
-        return "race-overview";
-    }
 }

@@ -5,7 +5,9 @@ import com.binchoi.springboot.domain.race.RaceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -176,7 +179,6 @@ public class RaceApiControllerTest {
         assertThat(race.getEndDate()).isEqualTo(endRevised);
         assertThat(race.getSndUserId()).isEqualTo(idSec);
         assertThat(race.getSndUserHabit()).isEqualTo(sndHabit);
-
     }
 
     @Test
@@ -269,5 +271,107 @@ public class RaceApiControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fstUserHabit").value(fstHabit))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.sndUserHabit").value(sndHabit))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.endDate").value(endRevised.toString()));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER") //no more than two people per race
+    public void Race_can_not_be_updated_more_than_once() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build()).getId();
+
+        LocalDate endRevised = end.plusMonths(1);
+        Long idSec = 2L;
+        String sndHabit = "To workout at least 60 minutes every day!";
+
+        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
+                .endDate(endRevised)
+                .sndUserId(idSec)
+                .sndUserHabit(sndHabit)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
+
+        mvc.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto)));
+
+        LocalDate endRevised2 = end.plusMonths(1);
+        Long idSec2 = 3L;
+        String sndHabit2 = "To workout at least 60 minutes every day!";
+
+        RaceUpdateRequestDto requestDto2 = RaceUpdateRequestDto.builder()
+                .endDate(endRevised2)
+                .sndUserId(idSec2)
+                .sndUserHabit(sndHabit2)
+                .build();
+
+        //when
+        assertThatThrownBy(() -> // method to test the root of NestedServletException
+                mvc.perform(put(url).
+                        contentType(MediaType.APPLICATION_JSON_UTF8).
+                        content(objectMapper.writeValueAsString(requestDto2)))
+                //then
+        ).hasCause(new IllegalArgumentException("The race is fully occupied. id="+raceId));
+
+        Race race = raceRepository.findAll().get(0);
+        assertThat(race.getEndDate()).isEqualTo(endRevised);
+        assertThat(race.getSndUserId()).isEqualTo(idSec);
+        assertThat(race.getSndUserHabit()).isEqualTo(sndHabit);
+    }
+
+    @Test
+    @WithMockUser
+    public void race_cannot_be_joined_by_race_creator() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build()).getId();
+
+        LocalDate endRevised = end.plusMonths(1);
+        String sndHabit = fstHabit + " x 2";
+
+        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
+                .endDate(endRevised)
+                .sndUserId(id) // same id as race creating user
+                .sndUserHabit(sndHabit)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
+
+        //when
+        assertThatThrownBy(() -> // method to test the root of NestedServletException
+                mvc.perform(put(url).
+                        contentType(MediaType.APPLICATION_JSON_UTF8).
+                        content(objectMapper.writeValueAsString(requestDto)))
+        //then
+        ).hasCause(new IllegalArgumentException("You cannot race against yourself. id="+raceId));
+
+        assertThat(raceRepository.findAll().get(0).getSndUserId()).isNull();
     }
 }

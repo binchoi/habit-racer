@@ -16,8 +16,11 @@ var main = {
         $('#btn-encouragement').on('click', function () {
             _this.encouragement();
         });
-        $('#btn-lazy').on('click', function () {
-            _this.lazybutt();
+        $('#btn-redirect-to-join').on('click', function () {
+            _this.redirectToJoin();
+        });
+        $('#btn-join-race').on('click', function () {
+            _this.joinRace();
         });
     },
     save : function () {
@@ -37,7 +40,7 @@ var main = {
             data: JSON.stringify(data)
         }).done(function() {
             alert('Progress recorded ✅\n\nKeep up the great work 💪');
-            window.location.href = '/';
+            window.location.href = '/race/'+$('#raceId').val();
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -58,7 +61,7 @@ var main = {
             data: JSON.stringify(data)
         }).done(function() {
             alert('The record has been updated 👍');
-            window.location.href = '/';
+            window.location.href = '/race/'+$('#raceId').val();
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -73,7 +76,7 @@ var main = {
             contentType:'application/json; charset=utf-8'
         }).done(function () {
             alert('Record deleted 🗑️');
-            window.location.href = '/';
+            window.location.href ='/race/'+$('#raceId').val();
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -85,7 +88,7 @@ var main = {
             startDate: $('#startDate').val(),
             endDate: $('#endDate').val(),
             fstUserId: $('#fstUserId').val(),
-            fstUserId: $('#fstUserHabit').val()
+            fstUserHabit: $('#fstUserHabit').val()
         };
 
         $.ajax({
@@ -95,22 +98,38 @@ var main = {
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function() {
-            alert('Race created! Your id = 1 💪');
+            alert('Race created! \n\nFind the RACEID next to the race name and share it with your competitor 💪');
             window.location.href = '/';
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
     },
-
-
-
+    redirectToJoin : function () {
+        window.location.href = '/race/join/'+$('#raceId').val();
+    },
+    joinRace : function () {
+        var data = {
+            endDate: $('#endDate').val(),
+            sndUserId: $('#sndUserId').val(),
+            sndUserHabit: $('#sndUserHabit').val()
+        }
+        var id = $('#raceId').val();
+        $.ajax({
+            type: 'PUT',
+            url: '/api/v1/race/'+id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function() {
+            alert('Race joined! 💪 Let\'s get that W 🔥');
+            window.location.href = '/';
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
     encouragement : function () {
         alert('Your honesty is respectable 😊 \n\nKeep your head up! 👑');
-        window.location.href = '/';
-    },
-    lazybutt : function () {
-        alert('I felt the same... and that\'s why I made HabitRacer!');
-        window.location.href = '/';
+        window.location.href = '/race/'+$('#raceId').val();
     }
 
 };
