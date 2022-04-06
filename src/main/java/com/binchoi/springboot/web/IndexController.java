@@ -11,8 +11,6 @@ import com.binchoi.springboot.web.dto.RaceListResponseDto;
 import com.binchoi.springboot.web.dto.RaceResponseDto;
 import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Controller
@@ -40,19 +39,16 @@ public class IndexController {
         return "index";
     }
 
-//    @PreAuthorize(hasPermission())
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-        //check if this race is viewable by the currently logged in user - using token
-        //no need to check if user exists because this uri is not approachable by non-authenticated users
-        model.addAttribute("userName", user.getName());
-
-        RaceResponseDto race = raceService.findById(id);
-        model.addAttribute("race", race);
-
         //make clean code later
-        Long fstUserId = race.getFstUserId(); // we don't use user.getId() because the user might be different from the race competitors (e.g. admin
+        RaceResponseDto race = raceService.findById(id);
+        Long fstUserId = race.getFstUserId(); // don't use user.getId() b/c user might not be from the race competitors (e.g. admin
         Long sndUserId = race.getSndUserId();
+        if (!user.getId().equals(fstUserId) && !user.getId().equals(sndUserId)) return "forbidden-page";
+
+        model.addAttribute("userName", user.getName());
+        model.addAttribute("race", race);
         model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
         model.addAttribute("postsUser1", postsService.findByUserIdRaceId(fstUserId, id));
 
@@ -93,6 +89,10 @@ public class IndexController {
 
     @GetMapping("race/{id}/posts/save")
     public String postsSave(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
+        RaceResponseDto race = raceService.findById(id);
+        Long fstUserId = race.getFstUserId();
+        Long sndUserId = race.getSndUserId();
+        if (!user.getId().equals(fstUserId) && !user.getId().equals(sndUserId)) return "forbidden-page";
         model.addAttribute("userId", user.getId());
         model.addAttribute("raceId", id);
         model.addAttribute("today", LocalDate.now());
@@ -102,6 +102,7 @@ public class IndexController {
     @GetMapping("posts/update/{id}") // including raceId ensures that less posts accessible by malice?
     public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         PostsResponseDto dto = postsService.findById(id);
+        if (!dto.getUserId().equals(user.getId())) return "forbidden-page";
         model.addAttribute("post", dto);
         model.addAttribute("raceId", postsService.findById(id).getRaceId());
         return "posts-update";

@@ -28,6 +28,7 @@
 ## Next steps
 * Implement horizontal access control (Filter vs. ACL) perhaps using PreAuthorize and Spring Security's expression-based access control
   * https://stackoverflow.com/questions/3087548/can-spring-security-use-preauthorize-on-spring-controllers-methods
+  * put on hold
 * Renovate the front-end and add the buttons and sites to support the creation and joining of Races
 * Think of the logic more -- it's not there yet. 
 * Update the SecurityConfig with new URI's
@@ -100,3 +101,10 @@ List<Race> findByUserId(Long userId);
   * Scalability: if large number of users are using the system at once, server's memory can run out (as sesisons are 
   stored on the server side)
   * cross-domain (mobile and web devices) are handled with more trouble using Session based authentication
+* It is difficult to implement `@PreAuthorize/@PostAuthorize` as most online resources are instructed from a non-OAuth2 
+context. After playing around with PermissionEvaluators and principal/authentication, I now know the following:
+  * Calling `authentication.principal` in Spring EL expressions will return `org.springframework.security.oauth2.core.user.DefaultOAuth2User`. 
+  As we know from extracting data from that class during the implementation of `SessionUser` and `@LoginUser` annotation, 
+  to go from that object to anything meaningful like `username` or `id` requires unpacking of the map referenced by its variable 
+  `attributes`. This will be adding redundancy to our operation.
+  * I am debating whether a pretty and structured but inefficient code is better than a less structured but efficient code.
