@@ -9,22 +9,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class RaceApiController {
 
     private final RaceService raceService;
 
-    @PostMapping("/api/v1/race")
+    @PostMapping("/v1/race")
     public Long save(@RequestBody RaceSaveRequestDto requestDto) {return raceService.save(requestDto);}
 
-    @GetMapping("/api/v1/race/{id}")
+    @GetMapping("/v1/race/{id}")
     public RaceResponseDto findById(@PathVariable Long id) {return raceService.findById(id);}
 
-    @PutMapping("/api/v1/race/{id}")
+    @PutMapping("/v1/race/{id}")
     public Long update(@PathVariable Long id, @RequestBody RaceUpdateRequestDto requestDto) {
         return raceService.update(id, requestDto);
     }
 
-    @DeleteMapping("/api/v1/race/{id}")
+    @DeleteMapping("/v1/race/{id}")
     public Long delete(@PathVariable Long id) {
         raceService.delete(id);
         return id;

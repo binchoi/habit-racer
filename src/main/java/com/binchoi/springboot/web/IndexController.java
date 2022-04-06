@@ -11,6 +11,8 @@ import com.binchoi.springboot.web.dto.RaceListResponseDto;
 import com.binchoi.springboot.web.dto.RaceResponseDto;
 import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,7 @@ public class IndexController {
         return "index";
     }
 
+//    @PreAuthorize(hasPermission())
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         //check if this race is viewable by the currently logged in user - using token

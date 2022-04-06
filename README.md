@@ -26,7 +26,8 @@
 * Changed URI naming to better conform with RESTful architecture principles
 
 ## Next steps
-* Spring OAuth2 token system implementation
+* Implement horizontal access control (Filter vs. ACL) perhaps using PreAuthorize and Spring Security's expression-based access control
+  * https://stackoverflow.com/questions/3087548/can-spring-security-use-preauthorize-on-spring-controllers-methods
 * Renovate the front-end and add the buttons and sites to support the creation and joining of Races
 * Think of the logic more -- it's not there yet. 
 * Update the SecurityConfig with new URI's
@@ -92,3 +93,10 @@ List<Race> findByUserId(Long userId);
 List<Race> findByUserId(Long userId);
 ```
 * note: if lombok builder constructor does not use a particular parameter, its value is set as null
+* Consideration of JWT Token based authentication vs. Session based authentication
+  * Biggest difference is that the user's state is not stored on the server when using JWT (it's stored inside the 
+  token on the client side). Most modern web applications use JWT for authentication for reasons including scalability 
+  and mobile device authentication
+  * Scalability: if large number of users are using the system at once, server's memory can run out (as sesisons are 
+  stored on the server side)
+  * cross-domain (mobile and web devices) are handled with more trouble using Session based authentication
