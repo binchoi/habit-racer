@@ -30,12 +30,12 @@ public class PostsRespositoryTest {
     @Test
     public void get_Posts() {
         //given
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2019,8,8);
         Boolean isCompleted = true;
         String comment = "Haha take that. I am ahead";
 
         postsRepository.save(Posts.builder()
-                .date(LocalDate.now())
+                .date(date)
                 .isCompleted(isCompleted)
                 .comment(comment)
                 .userId(33L)
@@ -61,7 +61,7 @@ public class PostsRespositoryTest {
                 .userId(3L)
                 .raceId(33L)
                 .isCompleted(true)
-                .date(LocalDate.now())
+                .date(LocalDate.of(2019,6,5))
                 .comment("YOLO")
                 .build());
 

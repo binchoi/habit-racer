@@ -32,8 +32,8 @@ public class RaceRepositoryTest {
         //given
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
-        LocalDate start = LocalDate.now();
-        LocalDate end = LocalDate.now().plusMonths(1);
+        LocalDate start = LocalDate.of(2020,2,2);
+        LocalDate end = LocalDate.of(2020,3,2);
         Long id = 1L;
         String fstHabit = "To workout at least 10 minutes every day";
 
@@ -65,8 +65,8 @@ public class RaceRepositoryTest {
         //given
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
-        LocalDate start = LocalDate.now();
-        LocalDate end = LocalDate.now().plusMonths(1);
+        LocalDate start = LocalDate.of(2020,2,2);
+        LocalDate end = LocalDate.of(2020,3,2);
         Long fstId = 1L;
         Long sndId = 5L;
         String fstHabit = "To workout at least 10 minutes every day";
@@ -111,8 +111,8 @@ public class RaceRepositoryTest {
 
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
-        LocalDate start = LocalDate.now();
-        LocalDate end = LocalDate.now().plusMonths(1);
+        LocalDate start = LocalDate.of(2020,2,2);
+        LocalDate end = LocalDate.of(2020,3,2);
         Long id = 1L;
         String fstHabit = "To workout at least 10 minutes every day";
 

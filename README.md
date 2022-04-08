@@ -26,9 +26,21 @@
 * Changed URI naming to better conform with RESTful architecture principles
 
 ## Next steps
+* OAuth 2.0 UserService read from here
 * Implement horizontal access control (Filter vs. ACL) perhaps using PreAuthorize and Spring Security's expression-based access control
   * https://stackoverflow.com/questions/3087548/can-spring-security-use-preauthorize-on-spring-controllers-methods
   * put on hold
+  * https://www.baeldung.com/spring-security-oauth-principal-authorities-extractor
+  * https://www.baeldung.com/spring-security-create-new-custom-security-expression
+  * is it worth it to implement principal extractor? what will the principal be? the name? how will that be useful for us?
+  * e.g. @PreAuthorize("principal?.attributes['sub'] == 'foo'") <- check this out
+  * https://hodolman.com/19
+    * is this too redundant? but then the code becomes annotation based and easier to implement security properly. 
+      * perhaps it is a sacrifice worth making
+    * authentication.getprincipal.getattributes.=> take email out and implement haspermission logic
+* https://github.com/jojoldu/blog-code/tree/master/spring-validation
+* https://docs.spring.io/spring-security/site/docs/5.2.12.RELEASE/reference/html/oauth2.html#oauth2login-advanced-custom-user
+  * override defaultoauth2user if neccessary - most likely not because we already designed the userservice around default
 * Renovate the front-end and add the buttons and sites to support the creation and joining of Races
 * Think of the logic more -- it's not there yet. 
 * Update the SecurityConfig with new URI's
@@ -108,3 +120,7 @@ context. After playing around with PermissionEvaluators and principal/authentica
   to go from that object to anything meaningful like `username` or `id` requires unpacking of the map referenced by its variable 
   `attributes`. This will be adding redundancy to our operation.
   * I am debating whether a pretty and structured but inefficient code is better than a less structured but efficient code.
+* The power of documentation and official documentation. Instead of looking at other people's posts which may contain outdated
+information and unreliable suggestions, I learned that the official documentation is most likely the best source for clear and 
+thoroughly reviewed information. https://docs.spring.io/spring-security/site/docs/5.2.12.RELEASE/reference/html/oauth2.html#oauth2login-advanced-custom-user
+* 

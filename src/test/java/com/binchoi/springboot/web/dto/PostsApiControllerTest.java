@@ -70,7 +70,7 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_posted() throws Exception {
         //given
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2020,2,19);
         Boolean isCompleted = true;
         Long userId = 1L;
         Long raceId = 7L;
@@ -109,7 +109,7 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_getted() throws Exception {
         //given
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2015, 5, 5);
         Boolean isCompleted = true;
         Long userId = 1L;
         Long raceId = 7L;
@@ -150,7 +150,7 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_updated() throws Exception {
         //given
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2020,5,4);
         Boolean isCompleted = true;
         Long userId = 1L;
         Long raceId = 90L;
@@ -166,7 +166,7 @@ public class PostsApiControllerTest {
 
         Long id = savedPosts.getId();
 
-        LocalDate updatedDate = LocalDate.now().minusDays(1);
+        LocalDate updatedDate = LocalDate.of(2020,5,3);
         String updatedComment = "I was lying lol";
 
         PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
@@ -200,7 +200,7 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_all_be_getted() throws Exception {
         //given
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2020,2,2);
         Boolean isCompleted = true;
         Long userId = 5L;
         Long raceId = 90L;

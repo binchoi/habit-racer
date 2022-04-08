@@ -20,6 +20,7 @@ public class PostsApiController {
 
     private final PostsService postsService;
 
+    // consider using postauthorize (with authentication.principal.name == returnObject)
     @PostMapping("/v1/posts")
     public Long save(@RequestBody PostsSaveRequestDto requestDto) {
         return postsService.save(requestDto);
