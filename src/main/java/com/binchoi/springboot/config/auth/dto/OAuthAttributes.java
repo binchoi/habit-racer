@@ -5,6 +5,8 @@ import com.binchoi.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -45,6 +47,18 @@ public class OAuthAttributes {
                 .picture(picture)
                 .role(Role.USER) // why guest why user why - think
                 .build();
+    }
+
+    /**
+     * Adds UserId key-value pair to attributes Map of DefaultOAuth2User. This allows direct access to userId
+     * via authentication.principal.attributes (to be confirmed) without needing to send a query to userRepository
+     */
+    public void putUserIdInAttributes(Long id) {
+        // create modifiable copy of attributes map and append userId
+        Map<String,Object> modifiableMap = new HashMap<>(attributes);
+        modifiableMap.put("userId", id);
+        // reassign attributes to new unmodifiableMap that contains userId kv-pair
+        attributes = Collections.unmodifiableMap(modifiableMap);
     }
 
 }
