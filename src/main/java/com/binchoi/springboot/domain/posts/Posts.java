@@ -30,7 +30,7 @@ public class Posts extends BaseTimeEntity {
     @Column(nullable = false)
     private Long raceId;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String comment;
 
 

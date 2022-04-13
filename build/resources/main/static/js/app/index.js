@@ -29,7 +29,7 @@ var main = {
             userId: $('#userId').val(),
             raceId: $('#raceId').val(),
             isCompleted: true,
-            comment: $('#content').val()
+            comment: $('#comment').val()
         };
 
         $.ajax({
@@ -37,18 +37,19 @@ var main = {
             url: '/api/v1/posts',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: JSON.stringify(data),
+            error: function (response) {
+                main.markErrorFields(response);
+            }
         }).done(function() {
             alert('Progress recorded ✅\n\nKeep up the great work 💪');
             window.location.href = '/race/'+$('#raceId').val();
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
         });
     },
     update : function () {
         var data = {
             date: $('#date').val(),
-            comment: $('#content').val()
+            comment: $('#comment').val()
         };
 
         var id = $('#id').val();
@@ -58,12 +59,13 @@ var main = {
             url: '/api/v1/posts/'+id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: JSON.stringify(data),
+            error: function (response) {
+                main.markErrorFields(response);
+            }
         }).done(function() {
             alert('The record has been updated 👍');
             window.location.href = '/race/'+$('#raceId').val();
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
         });
     },
     delete : function () {
@@ -96,16 +98,28 @@ var main = {
             url: '/api/v1/race',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: JSON.stringify(data),
+            error: function (response) {
+                main.markErrorFields(response);
+            }
         }).done(function() {
             alert('Race created! \n\nFind the RACEID next to the race name and share it with your competitor 💪');
             window.location.href = '/';
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
         });
+//        .fail(function (error) {
+//                    alert(JSON.stringify(error));
+//                })
     },
     redirectToJoin : function () {
-        window.location.href = '/race/join/'+$('#raceId').val();
+        $.ajax({
+            type:'GET',
+            url: '/api/v1/race/'+(($('#raceId').val()=='') ? '0': $('#raceId').val())+'/check-eligibility/'+$('#sndUserId').val(),
+            error: function (response) {
+                main.markErrorFields(response);
+            }
+        }).done(function() {
+            window.location.href = '/race/join/'+$('#raceId').val();
+        })
     },
     joinRace : function () {
         var data = {
@@ -119,13 +133,38 @@ var main = {
             url: '/api/v1/race/'+id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: JSON.stringify(data),
+            error: function (response) {
+                main.markErrorFields(response);
+            }
         }).done(function() {
             alert('Race joined! 💪 Let\'s get that W 🔥');
-            window.location.href = '/';
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
+            window.location.href = '/race/'+$('#raceId').val();
         });
+//        .fail(function (error) {
+//                    alert(JSON.stringify(error));
+//                });
+    },
+    markErrorFields : function (response) { // credit: DongUk Lee
+        const errorFields = response.responseJSON.errors;
+
+        if (!errorFields) {
+            alert(response.response.message);
+            return;
+        }
+
+        console.log('I AM HERE');
+        console.log(errorFields[0]['field']);
+        var $field, error;
+        for (var i=0, length = errorFields.length; i<length; i++) {
+            error = errorFields[i];
+            $field = $('#'+error['field']);
+
+            if ($field && $field.length>0) {
+                $field.siblings('.error-message').remove(); // remove previous error messages so they're not displayed
+                $field.after('<span class="error-message taxt-small text-danger">'+error.defaultMessage+'</span>');
+            }
+        }
     },
     encouragement : function () {
         alert('Your honesty is respectable 😊 \n\nKeep your head up! 👑');

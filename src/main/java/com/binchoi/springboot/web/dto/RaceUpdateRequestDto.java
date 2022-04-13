@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Getter
@@ -13,6 +14,8 @@ public class RaceUpdateRequestDto {
 
     private LocalDate endDate;
     private Long sndUserId;
+
+    @NotBlank(message = "Please state the habit you wish to build.")
     private String sndUserHabit;
 
     @Builder

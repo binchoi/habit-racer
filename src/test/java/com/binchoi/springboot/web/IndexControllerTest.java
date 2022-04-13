@@ -1,6 +1,8 @@
 package com.binchoi.springboot.web;
 
+import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.domain.race.RaceRepository;
+import com.binchoi.springboot.web.auth.WithMockCustomOAuth2User;
 import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
@@ -25,6 +27,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -69,9 +72,9 @@ public class IndexControllerTest {
         //then
         assertThat(body).contains("HabitRacer");
     }
-//
+
 //    @Test
-//    @WithMockUser(roles = "USER")
+//    @WithMockCustomOAuth2User(role = "ROLE_USER")
 //    public void Race_overview_page_loading() throws Exception {
 //        //given
 //        String raceName = "The epic battle of two alpha baboons";
@@ -80,7 +83,6 @@ public class IndexControllerTest {
 //        LocalDate end = LocalDate.now().plusMonths(1);
 //        Long id = 1L;
 //        String fstHabit = "To workout at least 10 minutes every day";
-//
 //
 //        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
 //                .raceName(raceName)
@@ -98,6 +100,12 @@ public class IndexControllerTest {
 ////                .with(oauth2Login()))
 //                .andExpect(status().isOk())
 //                .andReturn().getResponse().getContentAsString();
+//
+//        Race race = raceRepository.findById(Long.valueOf(raceId)).orElseThrow(()-> new IllegalArgumentException());
+//        System.out.println(race.getFstUserId());
+//        System.out.println(race.getRaceName());
+//        System.out.println(race.getFstUserHabit());
+//        System.out.println(race.getStartDate());
 //
 //        //when
 //        String urlRaceOverview = "http://localhost:"+port+"/race/"+raceId;

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Getter
@@ -14,6 +15,8 @@ public class PostsSaveRequestDto {
     private Boolean isCompleted;
     private Long userId;
     private Long raceId;
+
+    @NotBlank(message = "Please write a message to motivate your competitor.")
     private String comment;
 
     @Builder

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -21,7 +23,7 @@ public class PostsApiController {
     // consider using postAuthorize (with authentication.principal.name == returnObject)
     // one way
     @PostMapping("/v1/posts")
-    public Long save(@RequestBody PostsSaveRequestDto requestDto) {
+    public Long save(@Valid @RequestBody PostsSaveRequestDto requestDto) {
         return postsService.save(requestDto);
     }
 
@@ -32,7 +34,7 @@ public class PostsApiController {
 
 //    @PreAuthorize("hasPermission(#id, 'posts', 'write')")
     @PutMapping("/v1/posts/{id}")
-    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
+    public Long update(@PathVariable Long id, @Valid @RequestBody PostsUpdateRequestDto requestDto) {
         return postsService.update(id, requestDto);
     }
 

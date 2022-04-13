@@ -13,11 +13,11 @@
                 <input type="date" class="form-control" id="date" value="{{post.date}}">
             </div>
             <div class="form-group">
-                <label for="content">Comment</label>
-                <textarea class="form-control" id="content">{{post.comment}}</textarea>
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment">{{post.comment}}</textarea>
             </div>
         </form>
-        <a href="/" role="button" class="btn btn-light">Cancel</a>
+        <a href="/race/{{raceId}}" role="button" class="btn btn-light">Cancel</a>
         <button type="button" class="btn btn-dark" id="btn-update">Update</button>
         <button type="button" class="btn btn-danger" id="btn-delete">Delete</button>
         <input type="hidden" id="raceId" value="{{raceId}}">

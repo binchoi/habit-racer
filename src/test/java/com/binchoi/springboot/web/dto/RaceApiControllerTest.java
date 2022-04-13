@@ -1,5 +1,6 @@
 package com.binchoi.springboot.web.dto;
 
+import com.binchoi.springboot.domain.exception.CustomValidationException;
 import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.domain.race.RaceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -309,28 +311,33 @@ public class RaceApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(requestDto)));
 
-        LocalDate endRevised2 = end.plusMonths(1);
         Long idSec2 = 3L;
-        String sndHabit2 = "To workout at least 60 minutes every day!";
 
-        RaceUpdateRequestDto requestDto2 = RaceUpdateRequestDto.builder()
-                .endDate(endRevised2)
-                .sndUserId(idSec2)
-                .sndUserHabit(sndHabit2)
-                .build();
-
+        String eligibilityUrl = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+idSec2;
         //when
-        assertThatThrownBy(() -> // method to test the root of NestedServletException
-                mvc.perform(put(url).
-                        contentType(MediaType.APPLICATION_JSON_UTF8).
-                        content(objectMapper.writeValueAsString(requestDto2)))
-                //then
-        ).hasCause(new IllegalArgumentException("The race is fully occupied. id="+raceId));
+
+        mvc.perform(get(eligibilityUrl))
+                .andExpect(status().isBadRequest());
 
         Race race = raceRepository.findAll().get(0);
         assertThat(race.getEndDate()).isEqualTo(endRevised);
         assertThat(race.getSndUserId()).isEqualTo(idSec);
         assertThat(race.getSndUserHabit()).isEqualTo(sndHabit);
+
+        // Test code from before validation impl using CustomValidationException
+//        LocalDate endRevised2 = end.plusMonths(1);
+//        String sndHabit2 = "To workout at least 60 minutes every day!";
+
+//        RaceUpdateRequestDto requestDto2 = RaceUpdateRequestDto.builder()
+//                .endDate(endRevised2)
+//                .sndUserId(idSec2)
+//                .sndUserHabit(sndHabit2)
+//                .build();
+
+//        assertThatThrownBy(() -> // method to test the root of NestedServletException
+//                mvc.perform(get(eligibilityUrl))
+//                //then
+//        ).hasCause(new CustomValidationException("This race is fully occupied.", "raceId"));
     }
 
     @Test
@@ -353,25 +360,29 @@ public class RaceApiControllerTest {
                 .fstUserHabit(fstHabit)
                 .build()).getId();
 
-        LocalDate endRevised = end.plusMonths(1);
-        String sndHabit = fstHabit + " x 2";
 
-        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
-                .endDate(endRevised)
-                .sndUserId(id) // same id as race creating user
-                .sndUserHabit(sndHabit)
-                .build();
-
-        String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
-
+        String url = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+id;
         //when
-        assertThatThrownBy(() -> // method to test the root of NestedServletException
-                mvc.perform(put(url).
-                        contentType(MediaType.APPLICATION_JSON_UTF8).
-                        content(objectMapper.writeValueAsString(requestDto)))
-        //then
-        ).hasCause(new IllegalArgumentException("You cannot race against yourself. id="+raceId));
+        mvc.perform(get(url))
+                .andExpect(status().isBadRequest());
 
         assertThat(raceRepository.findAll().get(0).getSndUserId()).isNull();
+
+        // Test code from before validation impl using CustomValidationException
+//        LocalDate endRevised = end.plusMonths(1);
+//        String sndHabit = fstHabit + " x 2";
+//
+//        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
+//                .endDate(endRevised)
+//                .sndUserId(id) // same id as race creating user
+//                .sndUserHabit(sndHabit)
+//                .build();
+
+//        assertThatThrownBy(() -> // method to test the root of NestedServletException
+//                mvc.perform(put(url).
+//                        contentType(MediaType.APPLICATION_JSON_UTF8).
+//                        content(objectMapper.writeValueAsString(requestDto)))
+//        //then
+//        ).hasCause(new IllegalArgumentException("You cannot race against yourself. id="+raceId));
     }
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Getter
@@ -12,6 +13,8 @@ import java.time.LocalDate;
 public class PostsUpdateRequestDto {
 
     private LocalDate date;
+
+    @NotBlank(message = "Please write a message to motivate your competitor.")
     private String comment;
 
     @Builder

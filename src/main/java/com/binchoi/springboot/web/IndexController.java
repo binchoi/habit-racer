@@ -67,7 +67,8 @@ public class IndexController {
     }
 
     @GetMapping("/race/join")
-    public String raceUpdate(Model model) {
+    public String raceUpdate(Model model, @LoginUser SessionUser user) {
+        model.addAttribute("sndUserId", user.getId());
         return "race-join-1";
     }
 
