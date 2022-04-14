@@ -121,4 +121,5 @@ information and unreliable suggestions, I learned that the official documentatio
 thoroughly reviewed information. https://docs.spring.io/spring-security/site/docs/5.2.12.RELEASE/reference/html/oauth2.html#oauth2login-advanced-custom-user
 * ERROR: Caused by: org.springframework.aop.framework.AopConfigException: Could not generate CGLIB subclass of class com.binchoi.springboot.web.IndexController: Common causes of this problem include using a final class or a non-visible class; nested exception is java.lang.IllegalArgumentException: Failed to parse expression '#oauth2.throwOnError(hasPermission(#id, 'posts', 'write')'
   * occurred when I tried to implement hasPermission()
-  * 
+* Calling `<img src="...">` in mustache. Spring Boot file directory structure acclimatization!
+  * images, css, js all go into static folder which can be accessed directly by spring boot (i.e. `<img src="/images/race-track.png" alt="race-track" class="img-fluid">`)
