@@ -3,6 +3,8 @@ package com.binchoi.springboot.web.dto;
 import com.binchoi.springboot.domain.posts.Posts;
 import com.binchoi.springboot.domain.posts.PostsRepository;
 
+import com.binchoi.springboot.domain.race.Race;
+import com.binchoi.springboot.domain.race.RaceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -46,6 +48,9 @@ public class PostsApiControllerTest {
     private PostsRepository postsRepository;
 
     @Autowired
+    private RaceRepository raceRepository;
+
+    @Autowired
     private WebApplicationContext context;
 
     @Autowired
@@ -70,13 +75,27 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_posted() throws Exception {
         //given
-        LocalDate date = LocalDate.of(2020,2,19);
-        Boolean isCompleted = true;
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
         Long userId = 1L;
-        Long raceId = 7L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(userId)
+                .fstUserHabit(fstHabit)
+                .build()).getId();
+
+        Boolean isCompleted = true;
         String comment = "take that loser / comment";
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
-                .date(date)
+                .date(start)
                 .userId(userId)
                 .raceId(raceId)
                 .isCompleted(isCompleted)
@@ -89,7 +108,6 @@ public class PostsApiControllerTest {
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(requestDto)))
-//                .andDo(print())
                 .andExpect(status().isOk());
         //ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
 
@@ -98,7 +116,7 @@ public class PostsApiControllerTest {
         //assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
         List<Posts> all = postsRepository.findAll();
-        assertThat(all.get(0).getDate()).isEqualTo(date);
+        assertThat(all.get(0).getDate()).isEqualTo(start);
         assertThat(all.get(0).getIsCompleted()).isEqualTo(isCompleted);
         assertThat(all.get(0).getUserId()).isEqualTo(userId);
         assertThat(all.get(0).getRaceId()).isEqualTo(raceId);
@@ -150,10 +168,24 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_updated() throws Exception {
         //given
-        LocalDate date = LocalDate.of(2020,5,4);
-        Boolean isCompleted = true;
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
         Long userId = 1L;
-        Long raceId = 90L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(userId)
+                .fstUserHabit(fstHabit)
+                .build()).getId();
+
+        LocalDate date = LocalDate.now();
+        Boolean isCompleted = true;
         String comment = "take that loser / comment";
 
         Posts savedPosts = postsRepository.save(Posts.builder()
@@ -166,11 +198,10 @@ public class PostsApiControllerTest {
 
         Long id = savedPosts.getId();
 
-        LocalDate updatedDate = LocalDate.of(2020,5,3);
         String updatedComment = "I was lying lol";
 
         PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
-                .date(updatedDate)
+                .date(date)
                 .comment(updatedComment)
                 .build();
 
@@ -192,7 +223,6 @@ public class PostsApiControllerTest {
 
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getComment()).isEqualTo(updatedComment);
-        assertThat(all.get(0).getDate()).isEqualTo(updatedDate);
     }
 
     //misc

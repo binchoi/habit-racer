@@ -174,8 +174,6 @@ public class RaceApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk());
-//                .andDo(print());
-
         //then
         Race race = raceRepository.findAll().get(0);
         assertThat(race.getEndDate()).isEqualTo(endRevised);
