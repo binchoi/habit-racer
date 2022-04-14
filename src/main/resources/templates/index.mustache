@@ -28,7 +28,7 @@
                 <!-- display Log-out / Sign-in depending on status -->
                 {{#userName}}
                     <li class="nav-item ms-2 d-none d-md-inline">
-                        <a class="btn btn-secondary" href="#pricing"><i class="bi bi-person-circle"></i> Log-out</a>
+                        <a class="btn btn-secondary" href="/logout"><i class="bi bi-person-circle"></i> Log-out</a>
                     </li>
                 {{/userName}}
                 {{^userName}}
@@ -60,56 +60,98 @@
     </div>
 </section>
 
-<div class="col-md-12 text-center">
-    <h1>HabitRacer</h1>
-</div>
-<div class="col-md-12">
-    <div class="row">
-        <div class="col-md-6">
-            {{#userName}}
-                Logged in as: <span id="user">{{userName}}</span>
-                <a href="/logout" class="btn btn-info active" role="button">Logout</a>
-            {{/userName}}
+<!-- your races -->
+<section id="races" class="bg-light mt-5">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Your Races</h2>
+            <p class="lead text-muted">{{^userName}}Sign-in to compete in exciting races. {{/userName}}Choose a race and claim the pole.</p>
+        </div>
+        <div class="row my-5 align-items-center justify-content-center">
+            <!-- Display sample races for non-authenticated users -->
             {{^userName}}
-                <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+                <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body text-center py-4">
+                            <h4 class="card-title">Baboon Fight</h4>
+                            <p class="lead card-subtitle">Competitor: Jackson K</p>
+                            <p class="display-5 my-4 text-primary fw-bold">T-53</p>
+                            <p class="card-text mx-5 text-muted d-none d-lg-block">Competing for a wager of "Two tickets to Disneyland Paris in March 2022"</p>
+                            <a href="#" class="btn btn-outline-primary btn-lg mt-3">Enter Race</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body text-center py-4">
+                            <h4 class="card-title">Racing for Health</h4>
+                            <p class="lead card-subtitle">Competitor: Joseph Choi</p>
+                            <p class="display-5 my-4 text-primary fw-bold">T-49</p>
+                            <p class="card-text mx-5 text-muted d-none d-lg-block">Competing for a wager of "Three homecooked meals of the winner's favorite dish"</p>
+                            <a href="#" class="btn btn-outline-primary btn-lg mt-3">Enter Race</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body text-center py-4">
+                            <h4 class="card-title">For the Gainz</h4>
+                            <p class="lead card-subtitle">Competitor: Phyllis V</p>
+                            <p class="display-5 my-4 text-primary fw-bold">T-25</p>
+                            <p class="card-text mx-5 text-muted d-none d-lg-block">Competing for a wager of "A 200L refrigerator from Bob Vance Refrigeration"</p>
+                            <a href="#" class="btn btn-outline-primary btn-lg mt-3">Enter Race</a>
+                        </div>
+                    </div>
+                </div>
             {{/userName}}
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <h3>Let's get racing!</h3>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <a href="/race/save" class="btn btn-success active" role="button">Start a Race</a>
-            <a href="/race/join" class="btn btn-outline-success" role="button">Join a Race</a>
-        </div>
-    </div>
-    <br>
-    <h2>Your races:</h2>
-    <!--  Table displaying progress  -->
-    <div class="row justify-content-around">
-        <div class="col-md-5">
-            <table class="table table-horizontal table-bordered table-striped text-center">
-                <thead class="thead-strong">
-                <tr>
-                    <th>Ongoing Races</th>
-                    <th>RACEID</th>
-                </tr>
-                </thead>
-                <tbody id="tbody">
-                {{#raceList}}
-                    <tr>
-                        <td><a href="/race/{{id}}">{{raceName}}</a>🔥</td>
-                        <td>{{id}}</td>
-                    </tr>
-                {{/raceList}}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+            <!-- Display ongoing races for authenticated users -->
 
+            {{#raceList}}
+                <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body text-center py-4">
+                            <h4 class="card-title">{{raceName}}</h4>
+                            <p class="lead card-subtitle">Competitor: Phyllis V</p> <!-- need competitor name -->
+                            <p class="display-5 my-4 text-primary fw-bold">T-25</p> <!-- compute how many days are left -->
+                            <p class="card-text mx-5 text-muted d-none d-lg-block">Competing for a wager of "{{wager}}"</p>
+                            <a href="/race/{{id}}" class="btn btn-outline-primary btn-lg mt-3">Enter Race</a>
+                        </div>
+                    </div>
+                </div>
+            {{/raceList}}
+        </div>
+    </div>
+    <!-- divider -->
+    <div class="row align-items-center justify-content-center mb-5">
+        <div class="col-8"><hr></div>
+    </div>
+    <!-- join or start a race -->
+    <div class="container-lg">
+        <div class="text-center">
+            <p class="lead text-muted">Alternatively, begin a new race and start building habits.</p>
+        </div>
+        <div class="row text-center justify-content-center">
+            <div class="col-2">
+                <a href="/race/save" class="btn btn-outline-primary btn-lg mt-3"><i class="bi bi-speedometer"></i> Start a Race</a>
+            </div>
+            <div class="col-2">
+                <a href="/race/join" class="btn btn-outline-primary btn-lg mt-3"><i class="bi bi-speedometer2"></i> Join a Race</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- contact -->
+<section id="contact">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Get in Touch</h2>
+            <p class="lead">Questions to ask? Reach me directly through my contacts...</p>
+            <p><i class="bi bi-github"></i> binchoi</p>
+            <p><i class="bi bi-envelope-fill"></i> binchoi@u.yale-nus.edu.sg</p>
+        </div>
+    </div>
+</section>
 
 {{>layout/footer}}
