@@ -1,23 +1,45 @@
 {{>layout/header}}
 
-<h1>Record your success!</h1>
+<div class="container-lg" style="padding: 60px 0;">
+    <div class="text-center">
+        <h2>Record your Daily Success</h2>
+        <p class="lead">Document your progress and send a motivational message to your fellow racer.</p>
+    </div>
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        <form>
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" class="form-control" value="{{today}}">
-            </div>
-            <div class="form-group">
-                <label for="comment">Comment</label>
-                <textarea class="form-control" id="comment" placeholder="Write a message to your competitor!"></textarea>
-            </div>
-            <a href="/race/{{raceId}}" role="button" class="btn btn-secondary">Cancel</a>
-            <button type="button" class="btn btn-primary" id="btn-save">Save</button>
-            <input type="hidden" id="userId" value="{{userId}}">
-            <input type="hidden" id="raceId" value="{{raceId}}">
-        </form>
+    <div class="row justify-content-center my-5 mx-2">
+
+        <div class="col-lg-6">
+            <form>
+
+                <label for="date" class="form-label">Date:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="You may record your success of previous days. We trust your honesty 😊">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </span>
+                    </span>
+                    <input type="date" id="date" class="form-control" value="{{today}}">
+                </div>
+
+                <label for="comment" class="form-label">Comment/Message for your competitor:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="The message will be displayed in the race overview page.">
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
+                    </span>
+                    <textarea id="comment" class="form-control" style="height: 100px;" placeholder="e.g. It seems like I'll be going to Disneyland for free! One week left 🤩"></textarea>
+                </div>
+
+                <input type="hidden" id="userId" value="{{userId}}">
+                <input type="hidden" id="raceId" value="{{raceId}}">
+
+                <div class="mb-4 mt-1 text-center">
+                    <a href="/race/{{raceId}}" role="button" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="button" class="btn btn-secondary" id="btn-save">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
