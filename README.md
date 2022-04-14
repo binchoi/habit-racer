@@ -123,3 +123,12 @@ thoroughly reviewed information. https://docs.spring.io/spring-security/site/doc
   * occurred when I tried to implement hasPermission()
 * Calling `<img src="...">` in mustache. Spring Boot file directory structure acclimatization!
   * images, css, js all go into static folder which can be accessed directly by spring boot (i.e. `<img src="/images/race-track.png" alt="race-track" class="img-fluid">`)
+* Validation JS script that is supposed to append `'<span class="error-message taxt-small text-danger">'+error.defaultMessage+'</span>'` after 
+the error field causes the input fields to change shape because I added `input-group` divs. 
+  * solution: 
+    * first identify if the input field to mark is inside an `input-group` div by `($field.parent('.input-group').length)`
+    * because of difference in siblings structure, I had to learn more about jquery and came to this solution
+```
+\\originally 
+
+```

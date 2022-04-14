@@ -26,16 +26,16 @@
                     <a class="nav-link" href="#contact">Get in Touch</a>
                 </li>
                 <!-- display Log-out / Sign-in depending on status -->
-                {{#userName}}
+                {{#user}}
                     <li class="nav-item ms-2 d-none d-md-inline">
                         <a class="btn btn-secondary" href="/logout"><i class="bi bi-person-circle"></i> Log-out</a>
                     </li>
-                {{/userName}}
-                {{^userName}}
+                {{/user}}
+                {{^user}}
                     <li class="nav-item ms-2 d-none d-md-inline">
                         <a class="btn btn-secondary" href="/oauth2/authorization/google"><i class="bi bi-google"></i> Sign-in</a>
                     </li>
-                {{/userName}}
+                {{/user}}
             </ul>
         </div>
     </div>
@@ -65,11 +65,11 @@
     <div class="container-lg">
         <div class="text-center">
             <h2>Your Races</h2>
-            <p class="lead text-muted">{{^userName}}Sign-in to compete in exciting races. {{/userName}}Choose a race and claim the pole.</p>
+            <p class="lead text-muted">{{^user}}Sign-in to compete in exciting races. {{/user}}Choose a race and claim the pole.</p>
         </div>
         <div class="row my-5 align-items-center justify-content-center">
             <!-- Display sample races for non-authenticated users -->
-            {{^userName}}
+            {{^user}}
                 <div class="col-8 col-lg-4 col-xl-3 mb-3">
                     <div class="card border-0">
                         <div class="card-body text-center py-4">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-            {{/userName}}
+            {{/user}}
             <!-- Display ongoing races for authenticated users -->
 
             {{#raceList}}
@@ -135,12 +135,37 @@
                 <a href="/race/save" class="btn btn-outline-primary btn-lg mt-3"><i class="bi bi-speedometer"></i> Start a Race</a>
             </div>
             <div class="col-2">
-                <a href="/race/join" class="btn btn-outline-primary btn-lg mt-3"><i class="bi bi-speedometer2"></i> Join a Race</a>
+                <!-- modal trigger -->
+                <button class="btn btn-outline-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#join-race-modal"><i class="bi bi-speedometer2"></i> Join a Race</button>
             </div>
         </div>
     </div>
 </section>
 
+<!-- modal -->
+<div class="modal fade" id="join-race-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Join a Race</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Have you been challenged to a Habit Race? Enter the race code you have been provided to join the race.</p>
+                <label for="raceId" class="form-label">Race Code:</label>
+                <input type="number" id="raceId" class="form-control" placeholder="e.g. 74283">
+                {{#user}}<input type="hidden" id="sndUserId" value="{{id}}">{{/user}}
+            </div>
+            <div class="modal-footer">
+                {{#user}}<button class="btn btn-primary" id="btn-redirect-to-join">Join</button>{{/user}}
+                {{^user}}
+                    <p>Please sign-in before joining a race.</p>
+                    <a class="btn btn-secondary" href="/oauth2/authorization/google"><i class="bi bi-google"></i> Sign-in</a>
+                {{/user}}
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- contact -->
 <section id="contact">

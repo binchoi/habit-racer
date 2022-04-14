@@ -1,40 +1,85 @@
 {{>layout/header}}
 
-<h1>Joining the race: {{race.raceName}}</h1>
-<h3>Competitor: {{competitor}}</h3>
+<div class="container-lg" style="padding: 60px 0;">
+    <div class="text-center">
+        <h2>Join the Race: {{race.raceName}}</h2>
+        <h4 class="text-muted">You have been challenged by {{competitor}}</h4>
+        <p class="lead">Begin your self-development rally by filling in the following fields.</p>
+    </div>
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        <form>
-            <div class="form-group">
-                <label for="raceName">Race Name:</label>
-                <textarea class="form-control" id="raceName" readonly>{{race.raceName}}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="wager">What's at stake?</label>
-                <textarea class="form-control" id="wager" readonly>{{race.wager}}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="startDate">Start Date</label>
-                <input type="date" id="startDate" class="form-control" value="{{race.startDate}}" readonly>
-            </div>
-            <div class="form-group">
-                <label for="endDate">End Date (As you were challenged, you get the final word!)</label>
-                <input type="date" id="endDate" class="form-control" value="{{race.endDate}}">
-            </div>
-            <div class="form-group">
-                <label for="fstUserHabit">{{competitor}}'s Habit-to-Build</label>
-                <textarea class="form-control" id="fstUserHabit" readonly>{{race.fstUserHabit}}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="sndUserHabit">What habit are you going to build?</label>
-                <textarea class="form-control" id="sndUserHabit"></textarea>
-            </div>
-            <a href="/" role="button" class="btn btn-secondary">Cancel</a>
-            <button type="button" class="btn btn-primary" id="btn-join-race">Save</button>
-            <input type="hidden" id="sndUserId" value="{{sndUserId}}">
-            <input type="hidden" id="raceId" value="{{race.id}}">
-        </form>
+    <div class="row justify-content-center my-5 mx-2">
+
+        <div class="col-lg-6">
+            <form>
+                <label for="raceName" class="form-label">Race Name:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="The race name has been decided by {{competitor}}.">
+                            <i class="bi bi-trophy-fill"></i>
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" id="raceName" value="{{race.raceName}}" readonly>
+                </div>
+
+                <label for="wager" class="form-label">Wager:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="This is what is at stake. Join at your own risk.">
+                            <i class="bi bi-piggy-bank-fill"></i>
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" id="wager" value="{{race.wager}}" readonly>
+                </div>
+
+
+                <label for="startDate" class="form-label">Start Date:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="{{competitor}} decided when the race begins.">
+                            <i class="bi bi-play-fill"></i>
+                        </span>
+                    </span>
+                    <input type="date" id="startDate" class="form-control" value="{{race.startDate}}" readonly>
+                </div>
+
+
+                <label for="endDate" class="form-label">End Date:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="Your have the final say of when the race ends.">
+                            <i class="bi bi-stop-fill"></i>
+                        </span>
+                    </span>
+                    <input type="date" id="endDate" class="form-control" value="{{race.endDate}}">
+                </div>
+
+                <label for="fstUserHabit" class="form-label">{{competitor}} will be building the habit of...</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </span>
+                    <textarea id="fstUserHabit" class="form-control" style="height: 100px;" readonly>{{race.fstUserHabit}}</textarea>
+                </div>
+
+                <label for="sndUserHabit" class="form-label">What is the habit you will build?</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="Describe the habit and what you hope to accomplish each day in detail.">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </span>
+                    </span>
+                    <textarea id="sndUserHabit" class="form-control" style="height: 100px;" placeholder="Exercise at least 30 minutes a day at the fitness gym"></textarea>
+                </div>
+
+                <input type="hidden" id="sndUserId" value="{{sndUserId}}">
+                <input type="hidden" id="raceId" value="{{race.id}}">
+
+                <div class="mb-4 mt-1 text-center">
+                    <a href="/" role="button" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="button" class="btn btn-secondary" id="btn-join-race">Submit</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

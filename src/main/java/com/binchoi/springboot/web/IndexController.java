@@ -34,7 +34,7 @@ public class IndexController {
     public String index(Model model, @LoginUser SessionUser user) {
         if (user!=null) {
             model.addAttribute("raceList", raceService.findByUserId(user.getId()));
-            model.addAttribute("userName", user.getName());
+            model.addAttribute("user", user);
         }
         return "index";
     }

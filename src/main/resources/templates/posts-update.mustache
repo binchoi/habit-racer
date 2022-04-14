@@ -1,26 +1,47 @@
 {{>layout/header}}
 <h1>Edit your record</h1>
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        <form>
-            <div class="form-group">
-<!--                <label for="id">Post ID</label>-->
-                <input type="hidden" id="id" value="{{post.id}}">
-            </div>
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" value="{{post.date}}">
-            </div>
-            <div class="form-group">
-                <label for="comment">Comment</label>
-                <textarea class="form-control" id="comment">{{post.comment}}</textarea>
-            </div>
-        </form>
-        <a href="/race/{{raceId}}" role="button" class="btn btn-light">Cancel</a>
-        <button type="button" class="btn btn-dark" id="btn-update">Update</button>
-        <button type="button" class="btn btn-danger" id="btn-delete">Delete</button>
-        <input type="hidden" id="raceId" value="{{raceId}}">
+<div class="container-lg" style="padding: 60px 0;">
+    <div class="text-center">
+        <h2>Edit your Record</h2>
+        <p class="lead">Make modifications to your previous progress record.</p>
+    </div>
+
+    <div class="row justify-content-center my-5 mx-2">
+
+        <div class="col-lg-6">
+            <form>
+
+                <label for="date" class="form-label">Date:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="You may record your success of previous days. We trust your honesty 😊">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </span>
+                    </span>
+                    <input type="date" id="date" class="form-control" value="{{post.date}}">
+                </div>
+
+                <label for="comment" class="form-label">Comment/Message for your competitor:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="The message will be displayed in the race overview page.">
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </span>
+                    </span>
+                    <textarea id="comment" class="form-control" style="height: 100px;">{{post.comment}}</textarea>
+                </div>
+
+                <input type="hidden" id="id"  value="{{post.id}}">
+                <input type="hidden" id="raceId" value="{{raceId}}">
+
+                <div class="mb-4 text-center">
+                    <button type="button" class="btn btn-danger" id="btn-delete">Delete</button>
+                    <button type="button" class="btn btn-secondary" id="btn-update">Update</button>
+                    <a href="/race/{{raceId}}" role="button" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

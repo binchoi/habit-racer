@@ -42,7 +42,7 @@ var main = {
                 main.markErrorFields(response);
             }
         }).done(function() {
-            alert('Progress recorded ✅\n\nKeep up the great work 💪');
+            alert('Congratulations 🎉 Keep up the great work!');
             window.location.href = '/race/'+$('#raceId').val();
         });
     },
@@ -103,17 +103,15 @@ var main = {
                 main.markErrorFields(response);
             }
         }).done(function() {
-            alert('Race created! \n\nFind the RACEID next to the race name and share it with your competitor 💪');
+            alert('The race has been created.\n\nShare the race id with your competitor and begin racing 🏎️');
             window.location.href = '/';
         });
-//        .fail(function (error) {
-//                    alert(JSON.stringify(error));
-//                })
     },
     redirectToJoin : function () {
         $.ajax({
             type:'GET',
-            url: '/api/v1/race/'+(($('#raceId').val()=='') ? '0': $('#raceId').val())+'/check-eligibility/'+$('#sndUserId').val(),
+            url: '/api/v1/race/'+(($('#raceId').val()=='') ? '0': $('#raceId').val())+'/check-eligibility/'+
+            $('#sndUserId').val(),
             error: function (response) {
                 main.markErrorFields(response);
             }
@@ -153,16 +151,20 @@ var main = {
             return;
         }
 
-        console.log('I AM HERE');
-        console.log(errorFields[0]['field']);
         var $field, error;
         for (var i=0, length = errorFields.length; i<length; i++) {
             error = errorFields[i];
             $field = $('#'+error['field']);
-
             if ($field && $field.length>0) {
-                $field.siblings('.error-message').remove(); // remove previous error messages so they're not displayed
-                $field.after('<span class="error-message taxt-small text-danger">'+error.defaultMessage+'</span>');
+                if ($field.parent('.input-group').length) {
+                    if (i==0) {
+                        $field.parent('.input-group').siblings('.error-message').remove();
+                    }
+                    $field.parent('.input-group').after('<span class="error-message taxt-small text-danger" style="display:block; margin-top:-10px;">'+error.defaultMessage+'</span>');
+                } else {
+                    $field.siblings('.error-message').remove(); // remove previous error messages
+                    $field.after('<span class="error-message taxt-small text-danger">'+error.defaultMessage+'</span>');
+                }
             }
         }
     },
