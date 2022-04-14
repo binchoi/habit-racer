@@ -6,10 +6,7 @@ import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.service.posts.PostsService;
 import com.binchoi.springboot.service.race.RaceService;
 import com.binchoi.springboot.service.user.UserService;
-import com.binchoi.springboot.web.dto.PostsResponseDto;
-import com.binchoi.springboot.web.dto.RaceListResponseDto;
-import com.binchoi.springboot.web.dto.RaceResponseDto;
-import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
+import com.binchoi.springboot.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -42,18 +40,32 @@ public class IndexController {
     @PreAuthorize("hasPermission(#id, 'race', 'read')")
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-        RaceResponseDto race = raceService.findById(id); // throws exception if race does not exist
+//        RaceResponseDto race = raceService.findById(id);
+////        RaceSummaryDto raceSummary = raceService.findRaceSummaryById(id);
+//
+//        Long fstUserId = race.getFstUserId();
+//        Long sndUserId = race.getSndUserId();
+//        boolean sndUserExists = sndUserId!=null;
+//
+//        model.addAttribute("userName", user.getName());
+//        model.addAttribute("race", race);
+//        model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
+//        model.addAttribute("sndUserName", sndUserExists ? userService.findById(sndUserId).getName() : "???");
+//        model.addAttribute("postsUser1", postsService.findByUserIdRaceId(fstUserId, id));
+//        model.addAttribute("postsUser2", sndUserExists ? postsService.findByUserIdRaceId(sndUserId, id) : new ArrayList<>());
+//        model.addAttribute("sndHabit", sndUserExists ? race.getSndUserHabit() : "???");
+//
+//        return "race-overview";
+        RaceResponseDto race = raceService.findById(id);
         Long fstUserId = race.getFstUserId();
         Long sndUserId = race.getSndUserId();
-        boolean sndUserExists = sndUserId!=null;
+        //pass sndUserId as model such that the program can do if-else to determine. and use race to get attribtues.
+                //        List<PostsListResponseDto> fstUserPosts = postsService.findByUserIdRaceId(fstUserId, id);
+                //        List<PostsListResponseDto> sndUserPosts = sndUserId!=null ? postsService.findByUserIdRaceId(sndUserId, id) : null;
+        // give postsService(fstUserId, sndUserId, raceId) => 1. fstUserPosts 2. sndUserPosts 3. SuccessCount for both
+        // 4. success percentage 5. win likelihood
 
-        model.addAttribute("userName", user.getName());
-        model.addAttribute("race", race);
-        model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
-        model.addAttribute("sndUserName", sndUserExists ? userService.findById(sndUserId).getName() : "???");
-        model.addAttribute("postsUser1", postsService.findByUserIdRaceId(fstUserId, id));
-        model.addAttribute("postsUser2", sndUserExists ? postsService.findByUserIdRaceId(sndUserId, id) : new ArrayList<>());
-        model.addAttribute("sndHabit", sndUserExists ? race.getSndUserHabit() : "???");
+
 
         return "race-overview";
     }

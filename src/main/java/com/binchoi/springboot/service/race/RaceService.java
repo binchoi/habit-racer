@@ -68,6 +68,14 @@ public class RaceService {
         return raceId;
     }
 
+//    @Transactional
+//    public RaceSummaryDto findRaceSummaryById(Long id) {
+//        Race entity = raceRepository.findById(id)
+//                .orElseThrow(()-> new IllegalArgumentException("The race does not exist. id="+ id));
+//        RaceSummaryDto raceSummaryDto = RaceSummaryDto.of(entity);
+//        return raceSummaryDto;
+//    }
+
     private void verifyStartDate(LocalDate proposedDate) {
         if (LocalDate.now().isAfter(proposedDate)) {
             throw new CustomValidationException("The start date cannot be before today.", "startDate");

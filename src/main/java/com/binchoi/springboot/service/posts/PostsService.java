@@ -4,6 +4,7 @@ import com.binchoi.springboot.domain.exception.CustomValidationException;
 import com.binchoi.springboot.domain.posts.Posts;
 import com.binchoi.springboot.domain.posts.PostsRepository;
 import com.binchoi.springboot.domain.race.RaceRepository;
+import com.binchoi.springboot.service.race.RaceService;
 import com.binchoi.springboot.web.dto.PostsListResponseDto;
 import com.binchoi.springboot.web.dto.PostsResponseDto;
 import com.binchoi.springboot.web.dto.PostsSaveRequestDto;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostsService {
     private final PostsRepository postsRepository;
-    private final RaceRepository raceRepository;
+    private final RaceService raceService;
 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto) {
@@ -76,9 +77,7 @@ public class PostsService {
     }
 
     private void verifyDate(LocalDate dateProvided, Long raceId, Long userId, Long postId) {
-        LocalDate raceStartDate = raceRepository.findById(raceId)
-                .orElseThrow(() -> new IllegalArgumentException("The race does not exist. id=" + raceId))
-                .getStartDate();
+        LocalDate raceStartDate = raceService.findById(raceId).getStartDate();
         if (raceStartDate.isAfter(dateProvided)) {
             throw new CustomValidationException("Any records before the race start date cannot be added.", "date");
         } else if (LocalDate.now().isBefore(dateProvided)) {
