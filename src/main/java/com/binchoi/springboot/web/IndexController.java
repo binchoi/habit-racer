@@ -81,11 +81,11 @@ public class IndexController {
         return "race-save";
     }
 
-    @GetMapping("/race/join")
-    public String raceUpdate(Model model, @LoginUser SessionUser user) {
-        model.addAttribute("sndUserId", user.getId());
-        return "race-join-1";
-    }
+//    @GetMapping("/race/join")
+//    public String raceUpdate(Model model, @LoginUser SessionUser user) {
+//        model.addAttribute("sndUserId", user.getId());
+//        return "race-join-1";
+//    }
 
     @GetMapping("/race/join/{id}")
     public String raceUpdate(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
@@ -94,7 +94,7 @@ public class IndexController {
         model.addAttribute("race", race);
         model.addAttribute("competitor", competitor);
         model.addAttribute("sndUserId", user.getId());
-        return "race-join-2";
+        return "race-join";
     }
 
     @PreAuthorize("hasPermission(#id, 'race', 'write')")

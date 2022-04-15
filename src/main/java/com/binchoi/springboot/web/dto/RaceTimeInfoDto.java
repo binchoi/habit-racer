@@ -15,7 +15,7 @@ public class RaceTimeInfoDto {
 
     public RaceTimeInfoDto(RaceResponseDto raceResponseDto) {
         this.raceDuration = ChronoUnit.DAYS.between(raceResponseDto.getStartDate(), raceResponseDto.getEndDate())+1;
-        this.daysFromStart = ChronoUnit.DAYS.between(raceResponseDto.getStartDate(), LocalDate.now())+1;
+        this.daysFromStart = Math.max(ChronoUnit.DAYS.between(raceResponseDto.getStartDate(), LocalDate.now())+1, 1);
         this.daysUntilEnd = ChronoUnit.DAYS.between(LocalDate.now(), raceResponseDto.getEndDate());
     }
 }
