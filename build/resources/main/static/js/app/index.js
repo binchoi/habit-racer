@@ -136,7 +136,7 @@ var main = {
                 main.markErrorFields(response);
             }
         }).done(function() {
-            alert('Race joined! 💪 Let\'s get that W 🔥');
+            alert('You have successfully joined the race.');
             window.location.href = '/race/'+$('#raceId').val();
         });
 //        .fail(function (error) {
