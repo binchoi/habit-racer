@@ -27,12 +27,12 @@
                 </li>
                 <!-- display Log-out / Sign-in depending on status -->
                 {{#user}}
-                    <li class="nav-item ms-2 d-none d-md-inline">
+                    <li class="nav-item d-inline mt-sm-2 mt-md-0 ms-md-2">
                         <a class="btn btn-secondary" href="/logout"><i class="bi bi-person-circle"></i> Log-out</a>
                     </li>
                 {{/user}}
                 {{^user}}
-                    <li class="nav-item ms-2 d-none d-md-inline">
+                    <li class="nav-item d-inline mt-sm-2 mt-md-0 ms-md-2">
                         <a class="btn btn-secondary" href="/oauth2/authorization/google"><i class="bi bi-google"></i> Sign-in</a>
                     </li>
                 {{/user}}
@@ -111,8 +111,8 @@
                     <div class="card border-0">
                         <div class="card-body text-center py-4">
                             <h4 class="card-title">{{raceName}}</h4>
-                            <p class="lead card-subtitle">Competitor: Phyllis V</p> <!-- need competitor name -->
-                            <p class="display-5 my-4 text-primary fw-bold">T-25</p> <!-- compute how many days are left -->
+                            <p class="lead card-subtitle">Competitor: {{competitorName}}</p>
+                            <p class="display-5 my-4 text-primary fw-bold">T-{{daysUntilEnd}}</p>
                             <p class="card-text mx-5 text-muted d-none d-lg-block">Competing for a wager of "{{wager}}"</p>
                             <a href="/race/{{id}}" class="btn btn-outline-primary btn-lg mt-3">Enter Race</a>
                         </div>
@@ -172,7 +172,7 @@
     <div class="container-lg">
         <div class="text-center">
             <h2>Get in Touch</h2>
-            <p class="lead">Questions to ask? Reach me directly through my contacts...</p>
+            <p class="lead">Questions to ask? Reach me directly through my contacts.</p>
             <p><i class="bi bi-github"></i> binchoi</p>
             <p><i class="bi bi-envelope-fill"></i> binchoi@u.yale-nus.edu.sg</p>
         </div>

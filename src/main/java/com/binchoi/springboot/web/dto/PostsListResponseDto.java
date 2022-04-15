@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class PostsListResponseDto {
     private Long id;
     private LocalDate date;
-    private Boolean isComplicated;
+    private Boolean isCompleted;
     private Long userId;
     private Long raceId;
     private String comment;
@@ -20,7 +20,7 @@ public class PostsListResponseDto {
     public PostsListResponseDto(Posts entity) {
         this.id = entity.getId();
         this.date = entity.getDate();
-        this.isComplicated = entity.getIsCompleted();
+        this.isCompleted = entity.getIsCompleted();
         this.userId = entity.getUserId();
         this.raceId = entity.getRaceId();
         this.comment = entity.getComment();

@@ -4,6 +4,7 @@ import com.binchoi.springboot.domain.race.Race;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 public class RaceListResponseDto {
@@ -16,8 +17,10 @@ public class RaceListResponseDto {
     private String fstUserHabit;
     private Long sndUserId;
     private String sndUserHabit;
+    private Long daysUntilEnd;
+    private String competitorName;
 
-    public RaceListResponseDto(Race entity) {
+    public RaceListResponseDto(Race entity, String competitorName) {
         this.id = entity.getId();
         this.raceName = entity.getRaceName();
         this.wager = entity.getWager();
@@ -27,5 +30,7 @@ public class RaceListResponseDto {
         this.fstUserHabit = entity.getFstUserHabit();
         this.sndUserId = entity.getSndUserId();
         this.sndUserHabit = entity.getSndUserHabit();
+        this.daysUntilEnd = ChronoUnit.DAYS.between(LocalDate.now(), entity.getEndDate());
+        this.competitorName = competitorName;
     }
 }

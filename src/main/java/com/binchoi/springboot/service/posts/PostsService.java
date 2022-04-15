@@ -5,10 +5,8 @@ import com.binchoi.springboot.domain.posts.Posts;
 import com.binchoi.springboot.domain.posts.PostsRepository;
 import com.binchoi.springboot.domain.race.RaceRepository;
 import com.binchoi.springboot.service.race.RaceService;
-import com.binchoi.springboot.web.dto.PostsListResponseDto;
-import com.binchoi.springboot.web.dto.PostsResponseDto;
-import com.binchoi.springboot.web.dto.PostsSaveRequestDto;
-import com.binchoi.springboot.web.dto.PostsUpdateRequestDto;
+import com.binchoi.springboot.service.user.UserService;
+import com.binchoi.springboot.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +20,7 @@ import java.util.stream.Collectors;
 public class PostsService {
     private final PostsRepository postsRepository;
     private final RaceService raceService;
+    private final UserService userService; // not sure if this is best practice
 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto) {
@@ -71,8 +70,17 @@ public class PostsService {
 
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findByUserIdRaceId(Long userId, Long raceId) {
-        return postsRepository.findByUserIdRaceId(userId, raceId).stream()
+        return postsRepository.findByUserIdRaceId(userId, raceId)
+                .stream()
                 .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MessageListResponseDto> findByRaceId(Long raceId) {
+        return postsRepository.findByRaceId(raceId)
+                .stream()
+                .map(posts -> new MessageListResponseDto(posts, userService.findById(posts.getUserId()).getName()))
                 .collect(Collectors.toList());
     }
 

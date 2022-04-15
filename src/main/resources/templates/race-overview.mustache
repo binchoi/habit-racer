@@ -1,5 +1,4 @@
 {{>layout/header}}
-
 <!-- nav bar -->
 <nav class="navbar fixed-top navbar-expand-md navbar-light bg-white">
     <div class="container-xxl">
@@ -30,82 +29,177 @@
     </div>
 </nav>
 
-<div class="col-md-12">
-    <div class="row justify-content-between">
-        <div class="col-md-6">
-            {{#userName}}
-                Logged in as: <span id="user">{{userName}}</span>
-                <a href="/logout" class="btn btn-info active" role="button">Logout</a>
-            {{/userName}}
-            {{^userName}}
-                <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
-            {{/userName}}
-        </div>
-        <div class="col-md-6 text-right">
-            <h3><a href="/">HabitRacer</a></h3>
+<!-- intro and race stats section -->
+<section id="race-stats">
+    <div class="container-lg my-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-5 text-center text-md-start">
+                <h1>
+                    <!-- insert race Name -->
+                    <div class="display-5">{{race.raceName}}</div>
+                    <!-- insert userNames -->
+                    <div class="display-6 text-muted">{{fstUserName}} vs. {{sndUserName}}</div>
+                </h1>
+                <!-- insert daysUntilEnd -->
+                <p class="lead my-4 text-muted">Have you completed your habit today?</p>
+                <span class="tt" data-bs-placement="left" title="You can record previous success records which you've forgotten to add.">
+                    <a href="/race/{{race.id}}/posts/save" class="btn btn-secondary btn-lg">Record Success</a>
+                </span>
+            </div>
+            <div class="col-md-5 text-center d-none d-md-block">
+                <div class="lead" style="font-weight: bold; text-decoration: underline;">Race Stats</div>
+
+                <table class="table table-striped mt-2">
+                    <thead></thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Wager</th>
+                            <td>{{race.wager}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Days Since Starting Line</th>
+                            <td>{{raceTimeInfo.daysFromStart}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Days Until Finish Line</th>
+                            <td>{{raceTimeInfo.daysUntilEnd}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col"> </th>
+                            <th scope="col">Racer 1</th>
+                            <th scope="col">Racer 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>{{fstUserName}}</td>
+                            <td>{{sndUserName}}</td>
+                            </tr>
+                        <tr>
+                            <th scope="row">Habit-to-Build</th>
+                            <td>{{race.fstUserHabit}}</td>
+                            <td>{{sndUserHabit}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Success Count</th>
+                            <td>{{fstUserSuccessCount}} / {{raceTimeInfo.daysFromStart}}</td>
+                            <td>{{sndUserSuccessCount}} / {{raceTimeInfo.daysFromStart}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Success Percentage</th>
+                            <td>~ {{fstUserSuccessPercent}} %</td>
+                            <td>~ {{sndUserSuccessPercent}} %</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
-    <div class="col-md-12 text-center">
-        <h1>{{race.raceName}}</h1>
-        <h3>Wager: {{race.wager}}</h3>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <h3>Have you completed your habit today?</h3>
-            <a href="/race/{{race.id}}/posts/save" role="button" class="btn btn-dark">YES</a>
-            <button type="button" class="btn btn-light" id="btn-encouragement">NO</button>
+</section>
+
+<!-- the race -->
+<section id="race" class="bg-light mt-5">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>The Race</h2>
+            <p class="lead text-muted">Claim the pole position to win the wager.</p>
         </div>
-    </div>
-    <br>
-    <!--  Reminder of Habits to build  -->
-    <div class="row">
-        <div class="col-md-6">
-            <h4>⚡ Habits to build ⚡</h4>
-            🔥 {{fstUserName}} ➡️ {{race.fstUserHabit}}
-            <br>
-            🔥 {{sndUserName}} ➡️ {{sndHabit}}
-            <input type="hidden" id="raceId" value="{{race.id}}">
+        <div class="row my-5 justify-content-center flex-nowrap">
+            <div class="col col-md-3 mb-3">
+                <table class="table table-striped table-dark text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{fstUserName}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#fstUserPosts}}
+                            <tr>
+                                <td><a href="/posts/update/{{id}}">{{date}}</a></td>
+                            </tr>
+                        {{/fstUserPosts}}
+                        <tr>
+                            <td>🏎️</td>
+                        </tr>
+                        </tbody>
+                </table>
+            </div>
+            <div class="col col-md-3 mb-3">
+                <table class="table table-striped table-dark text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{sndUserName}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#sndUserPosts}}
+                            <tr>
+                                <td><a href="/posts/update/{{id}}">{{date}}</a></td>
+                            </tr>
+                        {{/sndUserPosts}}
+                        <tr>
+                            <td>🏎️</td>
+                        </tr>
+                        </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-
-    <!--  Table displaying progress  -->
-    <div class="row justify-content-around">
-        <div class="col-md-5">
-            <table class="table table-horizontal table-bordered table-striped text-center">
-                <thead class="thead-strong">
-                <tr>
-                    <th>{{fstUserName}}</th>
-                </tr>
-                </thead>
-                <tbody id="tbody">
-                {{#postsUser1}}
-                    <tr>
-                        <td><a href="/posts/update/{{id}}">{{date}}</a>✅</td>
-<!--                        should i make uri include race? idk-->
-                    </tr>
-                {{/postsUser1}}
-                </tbody>
-            </table>
+    <div class="row text-center justify-content-center mt-3">
+        <div class="col-6">
+            <!-- MODAL TRIGGER -->
+            <button class="btn btn-outline-secondary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#chat-log-modal"><i class="bi bi-mailbox2"></i> View Mailbox</button>
         </div>
-        <div class="col-md-5">
-            <table class="table table-horizontal table-bordered table-striped text-center">
-                <thead class="thead-strong">
-                <tr>
-                    <th>{{sndUserName}}</th>
-                </tr>
-                </thead>
-                <tbody id="tbody">
-                {{#postsUser2}}
-                    <tr>
-                        <td><a href="/posts/update/{{id}}">{{date}}</a>✅</td>
-                    </tr>
-                {{/postsUser2}}
-                </tbody>
-            </table>
+    </div>
+</section>
+
+<!-- modal -->
+<div class="modal fade" id="chat-log-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Mailbox</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You can view all messages sent throughout the competition.</p>
+                {{#messageListResponseDto}}
+                    <div class="container">
+                        <div class="row justify-content-between">
+                            <div class="col-9" style="padding: 0 0;"><p><strong>{{userName}}</strong>: {{comment}}</p></div>
+                            <div class="col-3 text-muted">{{createdDate}}</div>
+                        </div>
+                    </div>
+                {{/messageListResponseDto}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+            </div>
         </div>
     </div>
 </div>
+
+
+<!-- contact -->
+<section id="contact">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Get in Touch</h2>
+            <p class="lead">Questions to ask? Reach me directly through my contacts...</p>
+            <p><i class="bi bi-github"></i> binchoi</p>
+            <p><i class="bi bi-envelope-fill"></i> binchoi@u.yale-nus.edu.sg</p>
+        </div>
+
+    </div>
+</section>
 
 
 {{>layout/footer}}

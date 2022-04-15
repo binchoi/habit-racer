@@ -1,8 +1,10 @@
 package com.binchoi.springboot.service.race;
 
+import com.binchoi.springboot.config.auth.dto.SessionUser;
 import com.binchoi.springboot.domain.exception.CustomValidationException;
 import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.domain.race.RaceRepository;
+import com.binchoi.springboot.service.user.UserService;
 import com.binchoi.springboot.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class RaceService {
     private final RaceRepository raceRepository;
+    private final UserService userService; // not sure if this is best practice
 
     @Transactional
     public Long save(RaceSaveRequestDto requestDto) {
         verifyStartDate(requestDto.getStartDate());
+        verifyEndDate(requestDto.getStartDate(), requestDto.getEndDate());
         return raceRepository.save(requestDto.toEntity()).getId();
     }
 
@@ -47,9 +51,15 @@ public class RaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<RaceListResponseDto> findByUserId(Long userId) {
-        return raceRepository.findByUserId(userId).stream()
-                .map(RaceListResponseDto::new)
+    public List<RaceListResponseDto> findBySessionUser(SessionUser user) {
+        return raceRepository.findByUserId(user.getId()).stream()
+                // pass user's competitorName for each race:
+                // a. if my user id is NOT the same as my race's fstUserId, the fstUser=Competitor
+                // b. else we check if sndUser has joined the race and determine the name accordingly
+                .map(race -> new RaceListResponseDto(race,
+                        !userService.findById(race.getFstUserId()).getId().equals(user.getId()) ?
+                                (userService.findById(race.getFstUserId()).getName()) : //could reduce # of queries here
+                                (race.getSndUserId()!=null ? userService.findById(race.getSndUserId()).getName() : "TBD")))
                 .collect(Collectors.toList());
     }
 

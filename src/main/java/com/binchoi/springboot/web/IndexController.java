@@ -31,8 +31,8 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
         if (user!=null) {
-            model.addAttribute("raceList", raceService.findByUserId(user.getId()));
             model.addAttribute("user", user);
+            model.addAttribute("raceList", raceService.findBySessionUser(user));
         }
         return "index";
     }
@@ -40,33 +40,36 @@ public class IndexController {
     @PreAuthorize("hasPermission(#id, 'race', 'read')")
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-//        RaceResponseDto race = raceService.findById(id);
-////        RaceSummaryDto raceSummary = raceService.findRaceSummaryById(id);
-//
-//        Long fstUserId = race.getFstUserId();
-//        Long sndUserId = race.getSndUserId();
-//        boolean sndUserExists = sndUserId!=null;
-//
-//        model.addAttribute("userName", user.getName());
-//        model.addAttribute("race", race);
-//        model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
-//        model.addAttribute("sndUserName", sndUserExists ? userService.findById(sndUserId).getName() : "???");
-//        model.addAttribute("postsUser1", postsService.findByUserIdRaceId(fstUserId, id));
-//        model.addAttribute("postsUser2", sndUserExists ? postsService.findByUserIdRaceId(sndUserId, id) : new ArrayList<>());
-//        model.addAttribute("sndHabit", sndUserExists ? race.getSndUserHabit() : "???");
-//
-//        return "race-overview";
+        model.addAttribute("userName", user.getName());
+
         RaceResponseDto race = raceService.findById(id);
+        RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
+
         Long fstUserId = race.getFstUserId();
         Long sndUserId = race.getSndUserId();
-        //pass sndUserId as model such that the program can do if-else to determine. and use race to get attribtues.
-                //        List<PostsListResponseDto> fstUserPosts = postsService.findByUserIdRaceId(fstUserId, id);
-                //        List<PostsListResponseDto> sndUserPosts = sndUserId!=null ? postsService.findByUserIdRaceId(sndUserId, id) : null;
-        // give postsService(fstUserId, sndUserId, raceId) => 1. fstUserPosts 2. sndUserPosts 3. SuccessCount for both
-        // 4. success percentage 5. win likelihood
 
+        boolean sndUserJoined = sndUserId!=null;
 
+        List<PostsListResponseDto> fstUserPosts = postsService.findByUserIdRaceId(fstUserId, id);
+        Integer fstUserSuccessCount = fstUserPosts.size();
+        Long fstUserSuccessPercent = fstUserSuccessCount*100 / raceTimeInfo.getDaysFromStart();
+        List<PostsListResponseDto> sndUserPosts = sndUserJoined ? postsService.findByUserIdRaceId(sndUserId, id) : new ArrayList<>();
+        Integer sndUserSuccessCount = sndUserPosts.size();
+        Long sndUserSuccessPercent = sndUserSuccessCount*100 / raceTimeInfo.getDaysFromStart();
 
+        model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
+        model.addAttribute("sndUserName", sndUserJoined ? userService.findById(sndUserId).getName() : "TBD");
+        model.addAttribute("sndUserHabit", sndUserJoined ? race.getSndUserHabit() : "TBD");
+        model.addAttribute("race", race);
+        model.addAttribute("raceTimeInfo", raceTimeInfo);
+        model.addAttribute("fstUserSuccessCount", fstUserSuccessCount);
+        model.addAttribute("fstUserSuccessPercent", fstUserSuccessPercent);
+        model.addAttribute("fstUserPosts", fstUserPosts);
+        model.addAttribute("sndUserSuccessCount", sndUserSuccessCount);
+        model.addAttribute("sndUserSuccessPercent", sndUserSuccessPercent);
+        model.addAttribute("sndUserPosts", sndUserPosts);
+
+        model.addAttribute("messageListResponseDto", postsService.findByRaceId(id));
         return "race-overview";
     }
 
