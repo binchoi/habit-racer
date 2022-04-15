@@ -98,14 +98,32 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
+        {{^race.sndUserHabit}}
+        <div class="row justify-content-center">
+            <div class="col-md-5 text-center">
+                <p class="lead my-4 text-muted">Share this race code with your competitor</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 text-center">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="raceId" value="{{race.id}}" readonly>
+                    <div class="input-group-append">
+                            <span class="tt" data-bs-placement="right" title="Press to copy">
+                                <button class="btn btn-outline-secondary" type="button" onclick="copy_to_clipboard()" id="copy-btn"><i class="bi bi-clipboard"></i>‎</button>
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/race.sndUserHabit}}
     </div>
 </section>
 
 <!-- the race -->
-<section id="race" class="bg-light mt-5">
+<section id="race" class="bg-light mt-3">
     <div class="container-lg">
         <div class="text-center">
             <h2>The Race</h2>
@@ -201,5 +219,12 @@
     </div>
 </section>
 
-
+<script>
+    function copy_to_clipboard() {
+        var copyText = document.getElementById("raceId");
+        copyText.select();
+        document.execCommand("Copy");
+        alert("Race code has been copied. Share it with your competitor to begin racing. 🏎️")
+    }
+</script>
 {{>layout/footer}}
