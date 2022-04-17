@@ -9,7 +9,7 @@ cp $REPOSITORY/zip/*.jar $REPOSITORY/
 
 echo "> Check the pid of the current running application"
 
-CURRENT_PID=$(pgrep -fl habit-racer | grep jar | awk '{print $1}')
+CURRENT_PID=$(pgrep -fl habit-racer | grep java | awk '{print $1}')
 
 echo "Current application pid: $CURRENT_PID"
 
