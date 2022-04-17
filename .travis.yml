@@ -29,6 +29,17 @@ deploy:
     acl: private # zip file access is private
     local_dir: deploy # directory created by `before_deploy'
     wait-until-deployed: true
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Env variable in Travis repo setting
+    secret_access_key: $AWS_SECRET_KEY # Env variable in Travis repo setting
+    bucket: habit-racer-build # S3 bucket
+    key: habit-racer.zip
+    bundle_type: zip
+    application: habit-racer
+    deployment_group: habit-racer-group
+    region: eu-central-1
+    wait-until-deployed: true
+
 
 # When CI execution is complete, inform via email
 notifications:
