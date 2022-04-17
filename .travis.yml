@@ -14,6 +14,22 @@ cache:
 
 script: "./gradlew clean build"
 
+before_deploy:
+  - zip -r habit-racer *
+  - mkdir -p deploy
+  - mv habit-racer.zip deploy/habit-racer.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Env variable in Travis repo setting
+    secret_access_key: $AWS_SECRET_KEY # Env variable in Travis repo setting
+    bucket: habit-racer-build # S3 bucket
+    region: eu-central-1
+    skip_cleanup: true
+    acl: private # zip file access is private
+    local_dir: deploy # directory created by `before_deploy'
+    wait-until-deployed: true
+
 # When CI execution is complete, inform via email
 notifications:
   email:
