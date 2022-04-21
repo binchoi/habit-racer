@@ -132,3 +132,39 @@ the error field causes the input fields to change shape because I added `input-g
 \\originally 
 
 ```
+* zero downtime deployment - error 
+```
+[2022-04-22 00:41:18.616] [d-IR48ENC1H]LifecycleEvent - AfterInstall
+[2022-04-22 00:41:18.617] [d-IR48ENC1H]Script - stop.sh
+[2022-04-22 00:41:18.671] [d-IR48ENC1H][stdout]> Checking the application pid of the application running at port 8081
+[2022-04-22 00:41:18.714] [d-IR48ENC1H][stdout]> There is no currently running application so no application is killed
+[2022-04-22 00:41:19.675] [d-IR48ENC1H]LifecycleEvent - ApplicationStart
+[2022-04-22 00:41:19.675] [d-IR48ENC1H]Script - start.sh
+[2022-04-22 00:41:19.690] [d-IR48ENC1H][stdout]> Copy Build file
+[2022-04-22 00:41:19.691] [d-IR48ENC1H][stdout]> cp /home/ec2-user/app/step3/zip/*.jar /home/ec2-user/app/step3/
+[2022-04-22 00:41:19.749] [d-IR48ENC1H][stdout]> Deploying new application
+[2022-04-22 00:41:19.768] [d-IR48ENC1H][stdout]> JAR Name: /home/ec2-user/app/step3/habit-racer-1.0.1-SNAPSHOT-20220421214015.jar
+[2022-04-22 00:41:19.768] [d-IR48ENC1H][stdout]> add execution permission to /home/ec2-user/app/step3/habit-racer-1.0.1-SNAPSHOT-20220421214015.jar
+[2022-04-22 00:41:19.784] [d-IR48ENC1H][stdout]> Run /home/ec2-user/app/step3/habit-racer-1.0.1-SNAPSHOT-20220421214015.jar
+[2022-04-22 00:41:19.809] [d-IR48ENC1H][stdout]> Run /home/ec2-user/app/step3/habit-racer-1.0.1-SNAPSHOT-20220421214015.jar with profile=real1
+[2022-04-22 00:41:20.744] [d-IR48ENC1H]LifecycleEvent - ValidateService
+[2022-04-22 00:41:20.744] [d-IR48ENC1H]Script - health.sh
+[2022-04-22 00:41:20.791] [d-IR48ENC1H][stdout]> Health Check Start!
+[2022-04-22 00:41:20.791] [d-IR48ENC1H][stdout]> IDLE_PORT: 8081
+[2022-04-22 00:41:20.791] [d-IR48ENC1H][stdout]> curl -s http://localhost:8081/profile
+[2022-04-22 00:41:30.801] [d-IR48ENC1H][stdout]> Health check's response is either unknown or the application is not running
+[2022-04-22 00:41:30.801] [d-IR48ENC1H][stdout]> Health check:
+[2022-04-22 00:41:30.801] [d-IR48ENC1H][stdout]> Health check connection failure. Retrying...
+[2022-04-22 00:41:40.811] [d-IR48ENC1H][stdout]> Health check's response is either unknown or the application is not running
+[2022-04-22 00:41:40.811] [d-IR48ENC1H][stdout]> Health check:
+[2022-04-22 00:41:40.811] [d-IR48ENC1H][stdout]> Health check connection failure. Retrying...
+[2022-04-22 00:41:50.820] [d-IR48ENC1H][stdout]> Health check's response is either unknown or the application is not running
+[2022-04-22 00:41:50.820] [d-IR48ENC1H][stdout]> Health check:
+[2022-04-22 00:41:50.820] [d-IR48ENC1H][stdout]> Health check connection failure. Retrying...
+[2022-04-22 00:42:00.830] [d-IR48ENC1H][stdout]> Health check's response is either unknown or the application is not running
+[2022-04-22 00:42:00.830] [d-IR48ENC1H][stdout]> Health check:
+[2022-04-22 00:42:00.830] [d-IR48ENC1H][stdout]> Health check connection failure. Retrying...
+[2022-04-22 00:42:10.840] [d-IR48ENC1H][stdout]> Health check's response is either unknown or the application is not running
+[2022-04-22 00:42:10.840] [d-IR48ENC1H][stdout]> Health check:
+[2022-04-22 00:42:10.840] [d-IR48ENC1H][stdout]> Health check connection failure. Retrying...
+```
