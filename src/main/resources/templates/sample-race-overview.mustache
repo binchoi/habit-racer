@@ -1,0 +1,239 @@
+{{>layout/header}}
+<!-- nav bar -->
+<nav class="navbar fixed-top navbar-expand-md navbar-light bg-white">
+    <div class="container-xxl">
+        <a href="/" class="navbar-brand">
+                <span class="fw-bold text-secondary">
+                    HabitRacer
+                </span>
+        </a>
+        <!-- Toggle button for mobile nav -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- navbar links -->
+        <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/#races">Your Races</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#contact">Get in Touch</a>
+                </li>
+                <li class="nav-item ms-2 d-none d-md-inline">
+                    <a class="btn btn-secondary" href="/logout"><i class="bi bi-person-circle"></i> Log-out</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- intro and race stats section -->
+<section id="race-stats">
+    <div class="container-lg my-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-5 text-center text-md-start">
+                <h1>
+                    <!-- insert race Name -->
+                    <p class="lead my-1 text-muted">[sample race]</p>
+                    <div class="display-5">Racing For Health</div>
+                    <!-- insert userNames -->
+                    <div class="display-6 text-muted">Joseph Choi vs. Leo Kim</div>
+                </h1>
+                <!-- insert daysUntilEnd -->
+                <p class="lead my-4 text-muted">Have you completed your habit today?</p>
+                <span class="tt" data-bs-placement="left" title="You can record previous success records which you've forgotten to add.">
+                    <a href="#" class="btn btn-secondary btn-lg">Record Success</a>
+                </span>
+            </div>
+            <div class="col-md-5 text-center d-none d-md-block">
+                <div class="lead" style="font-weight: bold; text-decoration: underline;">Race Stats</div>
+
+                <table class="table table-striped mt-2">
+                    <thead></thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Wager</th>
+                        <td>Laundry and dish-washing duties for an entire month 😱</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Days Since Starting Line</th>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Days Until Finish Line</th>
+                        <td>49</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col"> </th>
+                        <th scope="col">Racer 1</th>
+                        <th scope="col">Racer 2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>Joseph Choi</td>
+                        <td>Leo Kim</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Habit-to-Build</th>
+                        <td>Jogging around the block for 30 minutes a day</td>
+                        <td>Consuming more than 2500 calories a day</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Success Count</th>
+                        <td>4 / 6</td>
+                        <td>5 / 6</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Success Percentage</th>
+                        <td>~ 67 %</td>
+                        <td>~ 83 %</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- the race -->
+<section id="race" class="bg-light mt-3">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>The Race</h2>
+            <p class="lead text-muted">Claim the pole position to win the wager.</p>
+        </div>
+        <div class="row my-5 justify-content-center flex-nowrap">
+            <div class="col col-md-3 mb-3">
+                <table class="table table-striped table-dark text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col">Joseph Choi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#race">2022-03-13</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-15</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-16</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-17</a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 50px;">🏎️</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col col-md-3 mb-3">
+                <table class="table table-striped table-dark text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col">Leo Kim</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="#race">2022-03-14</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-15</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-16</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-17</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#race">2022-03-18</a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 50px;">🏎️</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center justify-content-center mt-3">
+        <div class="col-6">
+            <!-- MODAL TRIGGER -->
+            <button class="btn btn-outline-secondary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#chat-log-modal"><i class="bi bi-mailbox2"></i> View Mailbox</button>
+        </div>
+    </div>
+</section>
+
+<!-- modal -->
+<div class="modal fade" id="chat-log-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Mailbox</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You can view all messages sent throughout the competition.</p>
+                <div class="container">
+                    <div class="row justify-content-between">
+                        <div class="col-9" style="padding: 0 0;"><p><strong>Joseph Choi</strong>: This is going to be an easy victory 😏😎</p></div>
+                        <div class="col-3 text-muted">2022-03-13</div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-9" style="padding: 0 0;"><p><strong>Leo Kim</strong>: You are a delusional man, Jo 😀</p></div>
+                        <div class="col-3 text-muted">2022-03-14</div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-9" style="padding: 0 0;"><p><strong>Leo Kim</strong>: See what I mean? 😎</p></div>
+                        <div class="col-3 text-muted">2022-03-15</div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-9" style="padding: 0 0;"><p><strong>Joseph Choi</strong>: Chill, brother. I am back stronger than ever 💪</p></div>
+                        <div class="col-3 text-muted">2022-03-15</div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-9" style="padding: 0 0;"><p><strong>Leo Kim</strong>: I can already hear the dirty dishes calling your name 🤣</p></div>
+                        <div class="col-3 text-muted">2022-03-16</div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-9" style="padding: 0 0;"><p><strong>Joseph Choi</strong>: This is a marathon not a sprint, my friend 🏃</p></div>
+                        <div class="col-3 text-muted">2022-03-18</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- contact -->
+<section id="contact">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Get in Touch</h2>
+            <p class="lead">Questions to ask? Reach me directly through my contacts.</p>
+            <p><a href="https://github.com/binchoi" style="color: black"><i class="bi bi-github"></i></a> binchoi</p>
+            <p><i class="bi bi-envelope-fill"></i> binchoi@u.yale-nus.edu.sg</p>
+        </div>
+    </div>
+</section>
+
+
+{{>layout/footer}}

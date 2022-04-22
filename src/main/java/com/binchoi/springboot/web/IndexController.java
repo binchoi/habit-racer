@@ -37,6 +37,11 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/race/sample")
+    public String sampleRaceView() {
+        return "sample-race-overview";
+    }
+
     @PreAuthorize("hasPermission(#id, 'race', 'read')")
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
@@ -80,12 +85,6 @@ public class IndexController {
         model.addAttribute("nextMonth", LocalDate.now().plusMonths(1));
         return "race-save";
     }
-
-//    @GetMapping("/race/join")
-//    public String raceUpdate(Model model, @LoginUser SessionUser user) {
-//        model.addAttribute("sndUserId", user.getId());
-//        return "race-join-1";
-//    }
 
     @GetMapping("/race/join/{id}")
     public String raceUpdate(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
