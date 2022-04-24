@@ -19,15 +19,6 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
     private final RaceService raceService;
 
     /**
-     * This method will not be the primary use of hasPermission()
-     */
-    @Override
-    public boolean hasPermission(Authentication auth, Object targetDomainObject, Object permission) {
-        // functions no more than basic isAuthenticated() at the moment
-        return (auth != null) && (targetDomainObject != null) && permission instanceof String;
-    }
-
-    /**
      *
      * @param auth: represents the user in question. Should not be null. It contains variable attributes -
      *                      an unmodifiableMap which stores info about the operating user like userId, name, and email
@@ -42,10 +33,8 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         if ((auth == null) || targetType == null || !(permission instanceof String)) {
             return false;
         }
-
         DefaultOAuth2User oAuth2User  = (DefaultOAuth2User) auth.getPrincipal();
         Long userId = (Long) oAuth2User.getAttributes().get("userId");
-
         switch (targetType.toLowerCase()) {
             case "race":
                 return hasRacePermission(userId, targetId, ((String) permission).toLowerCase());
@@ -57,7 +46,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
     }
 
     private boolean hasPostsPermission(Long userId, Serializable targetId, Object permission) {
-        if (permission.equals("read")) { // reading posts (by all) -> will limit to those in one race later
+        if (permission.equals("read")) {
             return true;
         } else if (permission.equals("write")) { // updating or deleting posts (only by author)
             return userId.equals(postsService.findById((Long) targetId).getUserId());
@@ -75,5 +64,14 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         } else {
             return false;
         }
+    }
+
+    /**
+     * This method will not be the primary use of hasPermission()
+     */
+    @Override
+    public boolean hasPermission(Authentication auth, Object targetDomainObject, Object permission) {
+        // functions no more than basic isAuthenticated() at the moment
+        return (auth != null) && (targetDomainObject != null) && permission instanceof String;
     }
 }

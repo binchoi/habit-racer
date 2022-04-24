@@ -86,7 +86,16 @@ custom Permission Evaluator (and setting it via `ExpressionHandler`)
 * Spring DATA JPA @Query uses JPQL by default for query definition. However, we can also use native SQL by setting the value of `nativeQuery`
 attribute to true.
   * note that query definition with syntax error can lead to `Failed to load ApplicationContext` error.
-* Testing for exception underneath NestedServletException (RaceApiControllerTest) by `assertThatThrownBy`
+* Testing for exception nested inside NestedServletException (ApiControllerTests) by `assertThatThrownBy`. Example template
+below: 
+```
+assertThatThrownBy(() ->
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto))) //then
+).hasCause(new IllegalArgumentException("The race does not exist. id="+ raceId));
+```
+
 ```
 \\jpql
 @Query("SELECT r FROM Race r WHERE r.fstUserId = ?1 OR r.sndUserId = ?1 ORDER BY r.startDate DESC")

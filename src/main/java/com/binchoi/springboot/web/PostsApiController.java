@@ -20,8 +20,6 @@ public class PostsApiController {
 
     private final PostsService postsService;
 
-    // consider using postAuthorize (with authentication.principal.name == returnObject)
-    // one way
     @PostMapping("/v1/posts")
     public Long save(@Valid @RequestBody PostsSaveRequestDto requestDto) {
         return postsService.save(requestDto);
@@ -32,13 +30,11 @@ public class PostsApiController {
         return postsService.findById(id);
     }
 
-//    @PreAuthorize("hasPermission(#id, 'posts', 'write')")
     @PutMapping("/v1/posts/{id}")
     public Long update(@PathVariable Long id, @Valid @RequestBody PostsUpdateRequestDto requestDto) {
         return postsService.update(id, requestDto);
     }
 
-//    @PreAuthorize("hasPermission(#id, 'posts', 'write'")
     @DeleteMapping("/v1/posts/{id}")
     public Long delete(@PathVariable Long id) {
         postsService.delete(id);

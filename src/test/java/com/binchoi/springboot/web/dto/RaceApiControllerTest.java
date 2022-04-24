@@ -25,8 +25,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -248,8 +249,8 @@ public class RaceApiControllerTest {
 
         //when
         mvc.perform(post(postUrl)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(requestDto)))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk());
 
         Long raceId = raceRepository.findAll().get(0).getId();
@@ -261,9 +262,7 @@ public class RaceApiControllerTest {
                 .andExpect(status().isOk());
 
         mvc.perform(get(url))
-                .andDo(print())
-        //then
-                .andExpect(status().isOk())
+                .andExpect(status().isOk()) //then
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(raceId))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fstUserId").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.sndUserId").value(idSec))
@@ -275,7 +274,176 @@ public class RaceApiControllerTest {
 
     @Test
     @WithMockUser(roles = "USER") //no more than two people per race
-    public void Race_can_not_be_updated_more_than_once() throws Exception {
+    public void Full_race_cannot_be_joined() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+        Long idSec = 2L;
+        String sndHabit = "To workout at least 60 minutes every day!";
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .sndUserId(idSec)
+                .fstUserHabit(fstHabit)
+                .sndUserHabit(sndHabit)
+                .build()).getId();
+
+        String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
+
+        Long idSec2 = 3L;
+
+        String eligibilityUrl = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+idSec2;
+        //when
+
+        mvc.perform(get(eligibilityUrl))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomValidationException));
+
+        Race race = raceRepository.findAll().get(0);
+        assertThat(race.getEndDate()).isEqualTo(end);
+        assertThat(race.getSndUserId()).isEqualTo(idSec);
+        assertThat(race.getSndUserHabit()).isEqualTo(sndHabit);
+    }
+
+    @Test
+    @WithMockUser
+    public void Race_cannot_be_joined_by_race_creator() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build()).getId();
+
+        String url = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+id;
+        //when
+        mvc.perform(get(url)) //then
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomValidationException));
+
+        assertThat(raceRepository.findAll().get(0).getSndUserId()).isNull();
+    }
+
+    @Test
+    @WithMockUser
+    public void Nonexistent_race_cannot_be_joined() throws Exception {
+        //given
+        String url = "http://localhost:"+port+"/api/v1/race/"+7+"/check-eligibility/"+1;
+
+        //when
+        mvc.perform(get(url)) //then
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CustomValidationException));
+    }
+
+    @Test
+    @WithMockUser
+    public void Race_cannot_be_posted_without_raceName() throws Exception {
+        //given
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.of(2020,2,2);
+        LocalDate end = LocalDate.of(2020,3,2);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/v1/race";
+
+        //when
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto))) //then
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException().getMessage())
+                        .contains("Please name your race."));
+    }
+
+    @Test
+    @WithMockUser
+    public void Race_cannot_be_posted_without_wager() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        LocalDate start = LocalDate.of(2020,2,2);
+        LocalDate end = LocalDate.of(2020,3,2);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/v1/race";
+
+        //when
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto))) //then
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException().getMessage())
+                        .contains("Please set a wager for the race."));
+    }
+
+    @Test
+    @WithMockUser
+    public void Race_cannot_be_posted_without_fstUserHabit() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.of(2020,2,2);
+        LocalDate end = LocalDate.of(2020,3,2);
+        Long id = 1L;
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/v1/race";
+
+        //when
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto))) //then
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException().getMessage())
+                        .contains("Please state the habit you wish to build."));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void Race_cannot_be_updated_without_sndUserHabit() throws Exception {
         //given
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
@@ -295,92 +463,24 @@ public class RaceApiControllerTest {
 
         LocalDate endRevised = end.plusMonths(1);
         Long idSec = 2L;
-        String sndHabit = "To workout at least 60 minutes every day!";
 
         RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
                 .endDate(endRevised)
                 .sndUserId(idSec)
-                .sndUserHabit(sndHabit)
                 .build();
 
         String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
 
+        //when
         mvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(requestDto)));
+                .content(objectMapper.writeValueAsString(requestDto))) //then
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException().getMessage())
+                        .contains("Please state the habit you wish to build."));
 
-        Long idSec2 = 3L;
-
-        String eligibilityUrl = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+idSec2;
-        //when
-
-        mvc.perform(get(eligibilityUrl))
-                .andExpect(status().isBadRequest());
-
-        Race race = raceRepository.findAll().get(0);
-        assertThat(race.getEndDate()).isEqualTo(endRevised);
-        assertThat(race.getSndUserId()).isEqualTo(idSec);
-        assertThat(race.getSndUserHabit()).isEqualTo(sndHabit);
-
-        // Test code from before validation impl using CustomValidationException
-//        LocalDate endRevised2 = end.plusMonths(1);
-//        String sndHabit2 = "To workout at least 60 minutes every day!";
-
-//        RaceUpdateRequestDto requestDto2 = RaceUpdateRequestDto.builder()
-//                .endDate(endRevised2)
-//                .sndUserId(idSec2)
-//                .sndUserHabit(sndHabit2)
-//                .build();
-
-//        assertThatThrownBy(() -> // method to test the root of NestedServletException
-//                mvc.perform(get(eligibilityUrl))
-//                //then
-//        ).hasCause(new CustomValidationException("This race is fully occupied.", "raceId"));
-    }
-
-    @Test
-    @WithMockUser
-    public void race_cannot_be_joined_by_race_creator() throws Exception {
-        //given
-        String raceName = "The epic battle of two alpha baboons";
-        String wager = "7 Tons of bananas and the position of alpha baboon";
-        LocalDate start = LocalDate.now();
-        LocalDate end = LocalDate.now().plusMonths(1);
-        Long id = 1L;
-        String fstHabit = "To workout at least 10 minutes every day";
-
-        Long raceId = raceRepository.save(Race.builder()
-                .raceName(raceName)
-                .wager(wager)
-                .startDate(start)
-                .endDate(end)
-                .fstUserId(id)
-                .fstUserHabit(fstHabit)
-                .build()).getId();
-
-
-        String url = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+id;
-        //when
-        mvc.perform(get(url))
-                .andExpect(status().isBadRequest());
-
-        assertThat(raceRepository.findAll().get(0).getSndUserId()).isNull();
-
-        // Test code from before validation impl using CustomValidationException
-//        LocalDate endRevised = end.plusMonths(1);
-//        String sndHabit = fstHabit + " x 2";
-//
-//        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
-//                .endDate(endRevised)
-//                .sndUserId(id) // same id as race creating user
-//                .sndUserHabit(sndHabit)
-//                .build();
-
-//        assertThatThrownBy(() -> // method to test the root of NestedServletException
-//                mvc.perform(put(url).
-//                        contentType(MediaType.APPLICATION_JSON_UTF8).
-//                        content(objectMapper.writeValueAsString(requestDto)))
-//        //then
-//        ).hasCause(new IllegalArgumentException("You cannot race against yourself. id="+raceId));
+        //Race entity = raceRepository.findById(raceId).get();
+        //assertThat(entity.getSndUserId()).isNull();
+        //assertThat(entity.getSndUserHabit()).isNull();
     }
 }

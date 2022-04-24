@@ -26,7 +26,6 @@ public class IndexController {
     private final PostsService postsService;
     private final RaceService raceService;
     private final UserService userService;
-    private final HttpSession httpSession;
 
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
@@ -42,7 +41,8 @@ public class IndexController {
         return "sample-race-overview";
     }
 
-    @PreAuthorize("hasPermission(#id, 'race', 'read')")
+    //admin can view race overview page
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'race', 'read')")
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         model.addAttribute("userName", user.getName());
@@ -106,11 +106,11 @@ public class IndexController {
         return "posts-save";
     }
 
-    @PreAuthorize("hasPermission(#id, 'posts', 'write')")
+    // admin can update/delete posts
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'posts', 'write')")
     @GetMapping("posts/update/{id}")
     public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         PostsResponseDto dto = postsService.findById(id);
-        if (!dto.getUserId().equals(user.getId())) return "forbidden-page";
         model.addAttribute("post", dto);
         model.addAttribute("raceId", postsService.findById(id).getRaceId());
         return "posts-update";
