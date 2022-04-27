@@ -26,8 +26,6 @@ IDLE_PROFILE=$(find_idle_profile)
 
 echo "> Run $JAR_NAME with profile=$IDLE_PROFILE"
 
-# /home/ec2-user/app/application-ssl.properties excluded
-
 nohup java -jar \
   -Dspring.config.location=classpath:/application.properties,classpath:/application-$IDLE_PROFILE.properties,/home/ec2-user/app/application-oauth.properties,/home/ec2-user/app/application-real-db.properties \
   -Dspring.profiles.active=$IDLE_PROFILE \

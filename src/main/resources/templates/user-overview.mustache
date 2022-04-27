@@ -1,0 +1,231 @@
+{{>layout/header}}
+<!-- nav bar -->
+<nav class="navbar fixed-top navbar-expand-md navbar-light bg-white">
+    <div class="container-xxl">
+        <a href="/" class="navbar-brand">
+                <span class="fw-bold text-secondary">
+                    HabitRacer
+                </span>
+        </a>
+        <!-- Toggle button for mobile nav -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- navbar links -->
+        <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/#topics">About HabitRacer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#races">Your Races</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/#contact">Get in Touch</a>
+                </li>
+                <li class="nav-item ms-2 d-none d-md-inline">
+                    <a class="btn btn-secondary" href="/logout"><i class="bi bi-person-circle"></i> Log-out</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- intro and race stats section -->
+<section id="race-stats">
+    <div class="container-lg my-5">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-5 text-center">
+                <h1>
+                    <img src="https://avatars.dicebear.com/api/adventurer-neutral/:{{user.name}}.svg" width="200" class="mb-3" style="border-radius: 50%">
+                    <div class="display-5">{{user.name}}</div>
+                </h1>
+            </div>
+            <div class="col-md-5 text-center d-none d-md-block">
+                <div class="lead" style="font-weight: bold; text-decoration: underline;">DRIVER STATS (WORK IN PROGRESS)</div>
+
+                <table class="table table-striped mt-2">
+                    <thead></thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Wager</th>
+                        <td>asdf</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Days Since Starting Line</th>
+                        <td>asdf</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Days Until Finish Line</th>
+                        <td>asdf</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col"> </th>
+                        <th scope="col">Racer 1</th>
+                        <th scope="col">Racer 2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>asdf</td>
+                        <td>asdf</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Habit-to-Build</th>
+                        <td>asdf</td>
+                        <td>ffd</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Success Count</th>
+                        <td>a</td>
+                        <td>c</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Success Percentage</th>
+                        <td>~ s%</td>
+                        <td>~ d%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- the race -->
+<section id="race" class="bg-light mt-3">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Your Races</h2>
+            <p class="lead text-muted">Claim the pole position to win the wager.</p>
+        </div>
+    </div>
+    <div class="row my-5 align-items-center justify-content-center">
+        <div class="col-8">
+            <table class="table table-light text-center align-items-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Race Name</th>
+                        <th scope="col">Competitor</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Wager</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#ongoingRaceList}}
+                    <tr>
+                        <td>{{raceName}}</td>
+                        <td>{{competitorName}}</td>
+                        <td>{{startDate}}</td>
+                        <td>{{endDate}}</td>
+                        <td>{{wager}}</td>
+                        <td>
+                            <a href="/race/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-eyeglasses"></i></a>
+                            <a href="/race/update/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                        </td>
+                    </tr>
+                    {{/ongoingRaceList}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Previous Races</h2>
+            <p class="lead text-muted">View, extend, or delete races that have crossed the finish line.</p>
+        </div>
+    </div>
+    <div class="row my-5 align-items-center justify-content-center">
+        <div class="col-8">
+            <table class="table table-light text-center align-items-center">
+                <thead>
+                <tr>
+                    <th scope="col">Race Name</th>
+                    <th scope="col">Competitor</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Wager</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#completeRaceList}}
+                    <tr>
+                        <td>{{raceName}}</td>
+                        <td>{{competitorName}}</td>
+                        <td>{{startDate}}</td>
+                        <td>{{endDate}}</td>
+                        <td>{{wager}}</td>
+                        <td>
+                            <a href="/race/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-eyeglasses"></i></a>
+                            <a href="/race/update/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                        </td>
+                    </tr>
+                {{/completeRaceList}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!--<section id="actions" class="bg-light">-->
+<!--    <div class="container-lg">-->
+<!--        <div class="text-center">-->
+<!--            <h2>Edit the Race</h2>-->
+<!--            <p class="lead text-muted">You may update, extend, and/or delete the race when in consensus with your competitor</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!-- modal -->
+<!--<div class="modal fade" id="chat-log-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="modal-title">Mailbox</h5>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <p>You can view all messages sent throughout the competition.</p>-->
+<!--                    <div class="container">-->
+<!--                        <div class="row justify-content-between">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!-- contact -->
+<section id="contact">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Get in Touch</h2>
+            <p class="lead">Questions to ask? Reach me directly through my contacts.</p>
+            <p><a href="https://github.com/binchoi" style="color: black"><i class="bi bi-github"></i></a> binchoi</p>
+            <p><i class="bi bi-envelope-fill"></i> binchoi@u.yale-nus.edu.sg</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    function copy_to_clipboard() {
+        var copyText = document.getElementById("raceId");
+        copyText.select();
+        document.execCommand("Copy");
+        alert("Race code has been copied. Share it with your competitor to begin racing. 🏎️")
+    }
+</script>
+{{>layout/footer}}

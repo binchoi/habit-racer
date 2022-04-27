@@ -40,6 +40,8 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
                 return hasRacePermission(userId, targetId, ((String) permission).toLowerCase());
             case "posts":
                 return hasPostsPermission(userId, targetId, ((String) permission).toLowerCase());
+            case "user":
+                return hasUserPermission(userId, targetId, ((String) permission).toLowerCase());
             default:
                 throw new UnsupportedOperationException("targetType is not supported");
         }
@@ -61,6 +63,14 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         if (permission.equals("read") || permission.equals("write")) {
             RaceResponseDto race = raceService.findById((Long) targetId);
             return (userId.equals(race.getFstUserId()) || userId.equals(race.getSndUserId()));
+        } else {
+            return false;
+        }
+    }
+
+    private boolean hasUserPermission(Long userId, Serializable targetId, Object permission) {
+        if (permission.equals("read") || permission.equals("write")) {
+            return (userId.equals(targetId));
         } else {
             return false;
         }

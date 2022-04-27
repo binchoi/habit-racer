@@ -61,13 +61,13 @@ public class RaceService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Boolean, List<RaceListResponseDto>> findBySessionUser(SessionUser user) {
-        return raceRepository.findByUserId(user.getId()).stream()
+    public Map<Boolean, List<RaceListResponseDto>> findByUserId(Long userId) {
+        return raceRepository.findByUserId(userId).stream()
                 // pass user's competitorName for each race:
                 // a. if my user id is NOT the same as my race's fstUserId, fstUser=Competitor
                 // b. else we check if sndUser has joined the race and determine the name
                 .map(race -> new RaceListResponseDto(race,
-                        !(race.getFstUserId()).equals(user.getId()) ?
+                        !(race.getFstUserId()).equals(userId) ?
                                 (userService.findById(race.getFstUserId()).getName()) :
                                 (race.getSndUserId()==null ? "TBD" : userService.findById(race.getSndUserId()).getName())))
                 .collect(Collectors.groupingBy(RaceListResponseDto::getIsComplete));

@@ -32,12 +32,11 @@ public class IndexController {
     public String index(Model model, @LoginUser SessionUser user) {
         if (user!=null) {
             model.addAttribute("user", user);
-
-            Map<Boolean, List<RaceListResponseDto>> raceMap = raceService.findBySessionUser(user);
+            Map<Boolean, List<RaceListResponseDto>> raceMap = raceService.findByUserId(user.getId());
             model.addAttribute("ongoingRaceList", raceMap.get(Boolean.FALSE));
             model.addAttribute("completeRaceList", raceMap.get(Boolean.TRUE));
-            // shortcoming of mustache (no counterpart to 'inverse selection') - verbose
-            if (raceMap.get(Boolean.TRUE)==null)  model.addAttribute("completedRacesFlag", 0);
+            // (-) of mustache (no counterpart to 'inverse selection' = verbose)
+            if (raceMap.get(Boolean.TRUE)==null) model.addAttribute("completedRacesFlag", 0);
         } else {
             model.addAttribute("completedRacesFlag", 0);
         }
@@ -97,15 +96,14 @@ public class IndexController {
     @GetMapping("/race/update/{id}")
     public String raceUpdate(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
         RaceResponseDto race = raceService.findById(id);
-        model.addAttribute("race", race);
-
         String userTitle = String.format("you (%s)",user.getName());
+
+        model.addAttribute("race", race);
         boolean isFstUser = user.getId().equals(race.getFstUserId());
         model.addAttribute("fstUserTitle", isFstUser ? userTitle : "your opponent");
         model.addAttribute("sndUserTitle", isFstUser ? "your opponent" : userTitle);
         model.addAttribute(isFstUser ? "isFstUser" : "isSndUser", 0);
         model.addAttribute("sndUserHabit", race.getSndUserId()==null ? "TBD" : race.getSndUserHabit());
-
         return "race-update";
     }
 
@@ -138,6 +136,21 @@ public class IndexController {
         model.addAttribute("raceId", postsService.findById(id).getRaceId());
         return "posts-update";
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'user', 'write')")
+    @GetMapping("user/{id}")
+    public String userView(@PathVariable Long id, Model model) {
+        UserResponseDto user = userService.findById(id);
+        Map<Boolean, List<RaceListResponseDto>> raceMap = raceService.findByUserId(id);
+        model.addAttribute("user", user);
+        model.addAttribute("ongoingRaceList", raceMap.get(Boolean.FALSE));
+        model.addAttribute("completeRaceList", raceMap.get(Boolean.TRUE));
+        return "user-overview";
+    }
+
+//    private void summary(Map<Boolean, List<RaceListResponseDto>> raceMap) {
+//
+//    }
 
 
 }
