@@ -47,7 +47,7 @@
                 </span>
             </div>
             <div class="col-md-5 text-center d-none d-md-block">
-                <div class="lead" style="font-weight: bold; text-decoration: underline;">Race Stats</div>
+                <div class="lead" style="font-weight: bold; text-decoration: underline;">RACE STATS</div>
 
                 <table class="table table-striped mt-2">
                     <thead></thead>
@@ -170,11 +170,20 @@
             </div>
         </div>
     </div>
-
     <div class="row text-center justify-content-center mt-3">
         <div class="col-6">
             <!-- MODAL TRIGGER -->
             <button class="btn btn-outline-secondary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#chat-log-modal"><i class="bi bi-mailbox2"></i> View Mailbox</button>
+        </div>
+    </div>
+</section>
+
+<section id="actions" class="bg-light">
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Edit the Race</h2>
+            <p class="lead text-muted">You may update, extend, and/or delete the race when in consensus with your competitor</p>
+            <a href="/race/update/{{race.id}}" class="btn btn-outline-secondary btn-lg mt-3"><i class="bi bi-pencil-square"></i> Edit Race</a>
         </div>
     </div>
 </section>
@@ -204,7 +213,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- contact -->
 <section id="contact">

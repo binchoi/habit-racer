@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -31,7 +32,14 @@ public class IndexController {
     public String index(Model model, @LoginUser SessionUser user) {
         if (user!=null) {
             model.addAttribute("user", user);
-            model.addAttribute("raceList", raceService.findBySessionUser(user));
+
+            Map<Boolean, List<RaceListResponseDto>> raceMap = raceService.findBySessionUser(user);
+            model.addAttribute("ongoingRaceList", raceMap.get(Boolean.FALSE));
+            model.addAttribute("completeRaceList", raceMap.get(Boolean.TRUE));
+            // shortcoming of mustache (no counterpart to 'inverse selection') - verbose
+            if (raceMap.get(Boolean.TRUE)==null)  model.addAttribute("completedRacesFlag", 0);
+        } else {
+            model.addAttribute("completedRacesFlag", 0);
         }
         return "index";
     }
@@ -86,8 +94,23 @@ public class IndexController {
         return "race-save";
     }
 
-    @GetMapping("/race/join/{id}")
+    @GetMapping("/race/update/{id}")
     public String raceUpdate(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
+        RaceResponseDto race = raceService.findById(id);
+        model.addAttribute("race", race);
+
+        String userTitle = String.format("you (%s)",user.getName());
+        boolean isFstUser = user.getId().equals(race.getFstUserId());
+        model.addAttribute("fstUserTitle", isFstUser ? userTitle : "your opponent");
+        model.addAttribute("sndUserTitle", isFstUser ? "your opponent" : userTitle);
+        model.addAttribute(isFstUser ? "isFstUser" : "isSndUser", 0);
+        model.addAttribute("sndUserHabit", race.getSndUserId()==null ? "TBD" : race.getSndUserHabit());
+
+        return "race-update";
+    }
+
+    @GetMapping("/race/join/{id}")
+    public String raceJoin(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
         RaceResponseDto race = raceService.findById(id);
         String competitor = userService.findById(race.getFstUserId()).getName();
         model.addAttribute("race", race);

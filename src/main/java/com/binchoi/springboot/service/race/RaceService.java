@@ -12,13 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class RaceService {
     private final RaceRepository raceRepository;
-    private final UserService userService; // not sure if this is best practice
+    private final UserService userService;
 
     @Transactional
     public Long save(RaceSaveRequestDto requestDto) {
@@ -37,6 +38,15 @@ public class RaceService {
     @Transactional
     public Long update(Long id, RaceUpdateRequestDto requestDto) {
         Race entity = raceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("The race does not exist. id="+ id));
+        verifyEndDate(requestDto.getStartDate(), requestDto.getEndDate());
+        entity.update(requestDto);
+        return id;
+    }
+
+    @Transactional
+    public Long join(Long id, RaceJoinRequestDto requestDto) {
+        Race entity = raceRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("The race does not exist. id="+ id));
         verifyEndDate(entity.getStartDate(), requestDto.getEndDate());
         entity.update(requestDto.getEndDate(), requestDto.getSndUserId(), requestDto.getSndUserHabit());
@@ -51,16 +61,16 @@ public class RaceService {
     }
 
     @Transactional(readOnly = true)
-    public List<RaceListResponseDto> findBySessionUser(SessionUser user) {
+    public Map<Boolean, List<RaceListResponseDto>> findBySessionUser(SessionUser user) {
         return raceRepository.findByUserId(user.getId()).stream()
                 // pass user's competitorName for each race:
-                // a. if my user id is NOT the same as my race's fstUserId, the fstUser=Competitor
-                // b. else we check if sndUser has joined the race and determine the name accordingly
+                // a. if my user id is NOT the same as my race's fstUserId, fstUser=Competitor
+                // b. else we check if sndUser has joined the race and determine the name
                 .map(race -> new RaceListResponseDto(race,
-                        !userService.findById(race.getFstUserId()).getId().equals(user.getId()) ?
-                                (userService.findById(race.getFstUserId()).getName()) : //could reduce # of queries here
-                                (race.getSndUserId()!=null ? userService.findById(race.getSndUserId()).getName() : "TBD")))
-                .collect(Collectors.toList());
+                        !(race.getFstUserId()).equals(user.getId()) ?
+                                (userService.findById(race.getFstUserId()).getName()) :
+                                (race.getSndUserId()==null ? "TBD" : userService.findById(race.getSndUserId()).getName())))
+                .collect(Collectors.groupingBy(RaceListResponseDto::getIsComplete));
     }
 
     @Transactional

@@ -106,7 +106,7 @@
             {{/user}}
             <!-- Display ongoing races for authenticated users -->
 
-            {{#raceList}}
+            {{#ongoingRaceList}}
                 <div class="col-8 col-lg-4 col-xl-3 mb-3">
                     <div class="card border-0">
                         <div class="card-body text-center py-4">
@@ -118,7 +118,7 @@
                         </div>
                     </div>
                 </div>
-            {{/raceList}}
+            {{/ongoingRaceList}}
         </div>
     </div>
     <!-- divider -->
@@ -140,6 +140,50 @@
             </div>
         </div>
     </div>
+    <!-- divider -->
+    {{^completedRacesFlag}}
+    <div class="row align-items-center justify-content-center my-5">
+        <div class="col-8"><hr></div>
+    </div>
+    <!-- Previous races -->
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>Previous Races</h2>
+            <p class="lead text-muted">Study your performance in previous races.</p>
+        </div>
+        <div class="row my-5 align-items-center justify-content-center">
+            <div class="col-8">
+                <table class="table table-light text-center align-items-center">
+                    <thead>
+                    <tr>
+                        <th scope="col">Race Name</th>
+                        <th scope="col">Competitor</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{/completedRacesFlag}}
+                    {{#completeRaceList}}
+                    <tr>
+                        <td>{{raceName}}</td>
+                        <td>{{competitorName}}</td>
+                        <td>{{startDate}}</td>
+                        <td>{{endDate}}</td>
+                        <td>
+                            <a href="/race/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-eyeglasses"></i></a>
+                            <a href="/race/update/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i></a>
+                        </td>
+                    </tr>
+                    {{/completeRaceList}}
+                    {{^completedRacesFlag}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{/completedRacesFlag}}
 </section>
 
 <!-- modal -->

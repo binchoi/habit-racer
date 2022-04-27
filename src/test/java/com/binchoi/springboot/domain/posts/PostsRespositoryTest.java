@@ -1,4 +1,4 @@
-package com.binchoi.springboot.web.domain.posts;
+package com.binchoi.springboot.domain.posts;
 
 import com.binchoi.springboot.domain.posts.Posts;
 import com.binchoi.springboot.domain.posts.PostsRepository;

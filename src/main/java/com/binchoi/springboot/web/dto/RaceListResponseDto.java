@@ -18,6 +18,7 @@ public class RaceListResponseDto {
     private Long sndUserId;
     private String sndUserHabit;
     private Long daysUntilEnd;
+    private Boolean isComplete;
     private String competitorName;
 
     public RaceListResponseDto(Race entity, String competitorName) {
@@ -31,6 +32,7 @@ public class RaceListResponseDto {
         this.sndUserId = entity.getSndUserId();
         this.sndUserHabit = entity.getSndUserHabit();
         this.daysUntilEnd = ChronoUnit.DAYS.between(LocalDate.now(), entity.getEndDate());
+        this.isComplete = this.daysUntilEnd<0;
         this.competitorName = competitorName;
     }
 }

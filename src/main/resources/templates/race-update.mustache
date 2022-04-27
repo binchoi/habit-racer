@@ -1,0 +1,101 @@
+{{>layout/header}}
+
+<div class="container-lg" style="padding: 60px 0;">
+    <div class="text-center">
+        <h2>{{race.raceName}}</h2>
+        <p class="lead">You may update, delete, or extend the race.</p>
+    </div>
+
+    <div class="row justify-content-center my-3 mx-2">
+
+        <div class="col-lg-6">
+            <form>
+                <label for="raceName" class="form-label">Race Name:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="You may modify the race name.">
+                            <i class="bi bi-trophy-fill"></i>
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" id="raceName" value="{{race.raceName}}">
+                </div>
+
+                <label for="wager" class="form-label">Wager:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="You may modify the race wager.">
+                            <i class="bi bi-piggy-bank-fill"></i>
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" id="wager" value="{{race.wager}}">
+                </div>
+
+                <label for="startDate" class="form-label">Start Date:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="You may not modify the start date.">
+                            <i class="bi bi-play-fill"></i>
+                        </span>
+                    </span>
+                    <input type="date" id="startDate" class="form-control" value="{{race.startDate}}" readonly>
+                </div>
+
+                <label for="endDate" class="form-label">End Date:</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <span class="tt" data-bs-placement="left" title="You may modify the end date.">
+                            <i class="bi bi-stop-fill"></i>
+                        </span>
+                    </span>
+                    <input type="date" id="endDate" class="form-control" value="{{race.endDate}}">
+                </div>
+
+                <label for="fstUserHabit" class="form-label">The habit {{fstUserTitle}} will be building is...</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </span>
+                    <textarea id="fstUserHabit" class="form-control" style="height: 100px;" {{^isFstUser}}readonly{{/isFstUser}}>{{race.fstUserHabit}}</textarea>
+                </div>
+
+                <label for="sndUserHabit" class="form-label">The habit {{sndUserTitle}} will be building is...</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </span>
+                    <textarea id="sndUserHabit" class="form-control" style="height: 100px;" {{^isSndUser}}readonly{{/isSndUser}}>{{sndUserHabit}}</textarea>
+                </div>
+
+                <input type="hidden" id="raceId" value="{{race.id}}">
+
+                Any modifications to this race (update, delete, extend) must be consulted and agreed upon with your competitor. <b>Deleting a race is irreversible - please practice caution.</b>
+
+                <div class="mb-4 mt-2 text-center">
+                    <a href="/" role="button" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="button" class="btn btn-secondary" id="btn-update-race">Update</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-race-modal" type="button">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- delete modal -->
+<div class="modal fade" id="delete-race-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Delete a Race</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>The race will not be recoverable after deletion. Are you sure you wish to delete this race?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="btn-delete-race">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{>layout/footer}}

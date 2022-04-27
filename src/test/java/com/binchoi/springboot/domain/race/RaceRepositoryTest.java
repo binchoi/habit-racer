@@ -1,4 +1,4 @@
-package com.binchoi.springboot.web.domain.race;
+package com.binchoi.springboot.domain.race;
 
 import com.binchoi.springboot.domain.posts.Posts;
 import com.binchoi.springboot.domain.race.Race;

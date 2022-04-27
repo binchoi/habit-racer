@@ -1,4 +1,4 @@
-In case you require another slack account that I can use: binchoi@u.yale-nus.edu.sg# habit-racer
+# habit-racer
 
 ## Progress
 * Designed and brainstormed the architecture of the web service

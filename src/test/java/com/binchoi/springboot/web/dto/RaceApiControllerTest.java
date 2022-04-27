@@ -6,15 +6,12 @@ import com.binchoi.springboot.domain.race.RaceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -140,7 +137,7 @@ public class RaceApiControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void Race_can_be_updated() throws Exception {
+    public void Race_can_be_joined() throws Exception {
         //given
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
@@ -162,13 +159,13 @@ public class RaceApiControllerTest {
         Long idSec = 2L;
         String sndHabit = "To workout at least 60 minutes every day!";
 
-        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
+        RaceJoinRequestDto requestDto = RaceJoinRequestDto.builder()
                 .endDate(endRevised)
                 .sndUserId(idSec)
                 .sndUserHabit(sndHabit)
                 .build();
 
-        String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
+        String url = "http://localhost:"+port+"/api/v1/race/join/"+raceId;
 
         //when
         mvc.perform(put(url)
@@ -217,7 +214,7 @@ public class RaceApiControllerTest {
     //common user scenario
     @Test
     @WithMockUser(roles = "USER")
-    public void Race_can_be_posted_updated_and_getted() throws Exception {
+    public void Race_can_be_posted_joined_and_getted() throws Exception {
         //given
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
@@ -239,7 +236,7 @@ public class RaceApiControllerTest {
         Long idSec = 2L;
         String sndHabit = "To workout at least 60 minutes every day!";
 
-        RaceUpdateRequestDto updateRequestDto = RaceUpdateRequestDto.builder()
+        RaceJoinRequestDto joinRequestDto = RaceJoinRequestDto.builder()
                 .endDate(endRevised)
                 .sndUserId(idSec)
                 .sndUserHabit(sndHabit)
@@ -254,14 +251,15 @@ public class RaceApiControllerTest {
                 .andExpect(status().isOk());
 
         Long raceId = raceRepository.findAll().get(0).getId();
-        String url = "http://localhost:" + port + "/api/v1/race/" + raceId;
+        String joinUrl = "http://localhost:" + port + "/api/v1/race/join/" + raceId;
 
-        mvc.perform(put(url)
+        mvc.perform(put(joinUrl)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(updateRequestDto)))
+                        .content(objectMapper.writeValueAsString(joinRequestDto)))
                 .andExpect(status().isOk());
 
-        mvc.perform(get(url))
+        String getUrl = "http://localhost:" + port + "/api/v1/race/" + raceId;
+        mvc.perform(get(getUrl))
                 .andExpect(status().isOk()) //then
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(raceId))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fstUserId").value(id))
@@ -300,7 +298,7 @@ public class RaceApiControllerTest {
 
         Long idSec2 = 3L;
 
-        String eligibilityUrl = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+idSec2;
+        String eligibilityUrl = "http://localhost:"+port+"/api/v1/race/"+raceId+"/joinable/"+idSec2;
         //when
 
         mvc.perform(get(eligibilityUrl))
@@ -333,7 +331,7 @@ public class RaceApiControllerTest {
                 .fstUserHabit(fstHabit)
                 .build()).getId();
 
-        String url = "http://localhost:"+port+"/api/v1/race/"+raceId+"/check-eligibility/"+id;
+        String url = "http://localhost:"+port+"/api/v1/race/"+raceId+"/joinable/"+id;
         //when
         mvc.perform(get(url)) //then
                 .andExpect(status().isBadRequest())
@@ -346,7 +344,7 @@ public class RaceApiControllerTest {
     @WithMockUser
     public void Nonexistent_race_cannot_be_joined() throws Exception {
         //given
-        String url = "http://localhost:"+port+"/api/v1/race/"+7+"/check-eligibility/"+1;
+        String url = "http://localhost:"+port+"/api/v1/race/"+7+"/joinable/"+1;
 
         //when
         mvc.perform(get(url)) //then
@@ -464,12 +462,12 @@ public class RaceApiControllerTest {
         LocalDate endRevised = end.plusMonths(1);
         Long idSec = 2L;
 
-        RaceUpdateRequestDto requestDto = RaceUpdateRequestDto.builder()
+        RaceJoinRequestDto requestDto = RaceJoinRequestDto.builder()
                 .endDate(endRevised)
                 .sndUserId(idSec)
                 .build();
 
-        String url = "http://localhost:"+port+"/api/v1/race/"+raceId;
+        String url = "http://localhost:"+port+"/api/v1/race/join/"+raceId;
 
         //when
         mvc.perform(put(url)

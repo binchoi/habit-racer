@@ -1,6 +1,7 @@
 package com.binchoi.springboot.web;
 
 import com.binchoi.springboot.service.race.RaceService;
+import com.binchoi.springboot.web.dto.RaceJoinRequestDto;
 import com.binchoi.springboot.web.dto.RaceResponseDto;
 import com.binchoi.springboot.web.dto.RaceSaveRequestDto;
 import com.binchoi.springboot.web.dto.RaceUpdateRequestDto;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.xml.ws.Service;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,13 +27,18 @@ public class RaceApiController {
         return raceService.update(id, requestDto);
     }
 
+    @PutMapping("/v1/race/join/{id}")
+    public Long join(@PathVariable Long id, @Valid @RequestBody RaceJoinRequestDto requestDto) {
+        return raceService.join(id, requestDto);
+    }
+
     @GetMapping("/v1/race/{id}")
     public RaceResponseDto findById(@PathVariable Long id) {
         return raceService.findById(id);
     }
 
 
-    @GetMapping("/v1/race/{raceId}/check-eligibility/{sndUserId}")
+    @GetMapping("/v1/race/{raceId}/joinable/{sndUserId}")
     public Long verifyRaceEligibility(@PathVariable Long raceId, @PathVariable Long sndUserId) {
         return raceService.verifyRaceEligibility(raceId, sndUserId);
     }

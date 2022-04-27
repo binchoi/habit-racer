@@ -22,6 +22,13 @@ var main = {
         $('#btn-join-race').on('click', function () {
             _this.joinRace();
         });
+        $('#btn-update-race').on('click', function () {
+            _this.updateRace();
+        });
+        $('#btn-delete-race').on('click', function () {
+            _this.deleteRace();
+        });
+
     },
     save : function () {
         var data = {
@@ -110,7 +117,7 @@ var main = {
     redirectToJoin : function () {
         $.ajax({
             type:'GET',
-            url: '/api/v1/race/'+(($('#raceId').val()=='') ? '0': $('#raceId').val())+'/check-eligibility/'+
+            url: '/api/v1/race/'+(($('#raceId').val()=='') ? '0': $('#raceId').val())+'/joinable/'+
             $('#sndUserId').val(),
             error: function (response) {
                 main.markErrorFields(response);
@@ -128,7 +135,7 @@ var main = {
         var id = $('#raceId').val();
         $.ajax({
             type: 'PUT',
-            url: '/api/v1/race/'+id,
+            url: '/api/v1/race/join/'+id,
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data),
@@ -139,9 +146,42 @@ var main = {
             alert('You have successfully joined the race.');
             window.location.href = '/race/'+$('#raceId').val();
         });
-//        .fail(function (error) {
-//                    alert(JSON.stringify(error));
-//                });
+    },
+    updateRace : function () {
+        var data = {
+            raceName: $('#raceName').val(),
+            wager: $('#wager').val(),
+            startDate: $('#startDate').val(),
+            endDate: $('#endDate').val(),
+            fstUserHabit: $('#fstUserHabit').val(),
+            sndUserHabit: $('#sndUserHabit').val()
+        }
+        var id = $('#raceId').val();
+        $.ajax({
+            type: 'PUT',
+            url: '/api/v1/race/'+id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            error: function (response) {
+                main.markErrorFields(response);
+            }
+        }).done(function() {
+            alert('You have successfully updated the race.');
+            window.location.href = '/race/'+$('#raceId').val();
+        });
+    },
+    deleteRace : function () {
+        var id = $('#raceId').val();
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/race/'+id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+        }).done(function() {
+            alert('You have successfully deleted the race.');
+            window.location.href = '/';
+        });
     },
     markErrorFields : function (response) { // credit: DongUk Lee
         const errorFields = response.responseJSON.errors;

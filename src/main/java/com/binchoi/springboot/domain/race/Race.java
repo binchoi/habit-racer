@@ -1,6 +1,7 @@
 package com.binchoi.springboot.domain.race;
 
 import com.binchoi.springboot.domain.BaseTimeEntity;
+import com.binchoi.springboot.web.dto.RaceUpdateRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +55,14 @@ public class Race extends BaseTimeEntity {
         this.sndUserHabit = sndUserHabit; //not provided in user scenario -> set as null
     }
 
+    public void update(RaceUpdateRequestDto requestDto) {
+        this.raceName = requestDto.getRaceName();
+        this.wager = requestDto.getWager();
+        this.startDate = requestDto.getStartDate();
+        this.endDate = requestDto.getEndDate();
+        this.fstUserHabit = requestDto.getFstUserHabit();
+        this.sndUserHabit = requestDto.getSndUserHabit();
+    }
     public void update(LocalDate endDate, Long sndUserId, String sndUserHabit) {
         this.endDate = endDate;
         this.sndUserId = sndUserId;
