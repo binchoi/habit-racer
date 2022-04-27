@@ -29,16 +29,21 @@ accessed by SpEL in `pre/postAuthorize` annotations (e.g. `@PreAuthorize("princi
   `)
 * Implemented method security (via expression-based access control) (`hasPermission`, `@PreAuthorize`, `@PostAuthorize`) by implementing my own
 custom Permission Evaluator (and setting it via `ExpressionHandler`)
+* Renovated Front-end using BootStrap 5 and javascript
+* Automated CI/CD pipeline such that a push to github master branch results in TravisCI, CodeDeploy, S3, nginx chain 
+procedure that results in automatic testing, building, and deployment all with zero downtime.
+* Bought a domain from namecheap.com and created Route53 hosted zone to connect the ec2 to the newly purchased domain
+* Implemented custom validation exception class to create a more clean experience for user when submitting forms (error displayed
+below the form field in case of invalid value)
+* Set up SSL using Let's Encrypt
+* Added previous pages table that appears when a user has one or more completed races
+* Race Update / Delete feature added
 
 ## Next steps
 * Write more tests for IndexController and APIs such that the test results can make me confident that things are working
   * figure out how to resolve the issue with mockmvc's incompatibility with OAuth2User 
     * cast error (may have to implement userdetails, may have to look into mock.mvc.perform.with (oauthlogin)
-* Renovate the front-end and add the buttons and sites to support the creation and joining of Races
-* Think of the logic more -- it's not there yet. 
-* Update the SecurityConfig with new URI's
 * Review and update the tldr-doc for config and resources directory
-* Prevent double entry per day
 * Consider the safety implications of using hidden data fields and brainstorm how to bolster defense against malicious attacks. 
 * Consider where the security should be placed to prevent some authenticated user being able to manipulate the race of stragers by accessing through url
   * How to implement an attribute/... -based access control
