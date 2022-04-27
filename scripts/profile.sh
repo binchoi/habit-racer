@@ -3,13 +3,13 @@
 # Find unoccupied profile: if real1 is being used real2 is free and vice versa
 function find_idle_profile()
 {
-  RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/profile)
+  RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://localhost/profile)
 
   if [ ${RESPONSE_CODE} -ge 400 ] # if greater than 400 (i.e. 40x/50x errors)
   then
     CURRENT_PROFILE=real2
   else
-    CURRENT_PROFILE=$(curl -s http://localhost/profile)
+    CURRENT_PROFILE=$(curl -s https://localhost/profile)
   fi
 
   if [ ${CURRENT_PROFILE} == real1 ]
