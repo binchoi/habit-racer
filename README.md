@@ -35,7 +35,7 @@ procedure that results in automatic testing, building, and deployment all with z
 * Bought a domain from namecheap.com and created Route53 hosted zone to connect the ec2 to the newly purchased domain
 * Implemented custom validation exception class to create a more clean experience for user when submitting forms (error displayed
 below the form field in case of invalid value)
-* Set up SSL using Let's Encrypt.
+* Set up SSL using Let's Encrypt. Working on it...
 * Added previous pages table that appears when a user has one or more completed races
 * Race Update / Delete feature added..
 
