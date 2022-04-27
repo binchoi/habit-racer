@@ -37,7 +37,7 @@ procedure that results in automatic testing, building, and deployment all with z
 below the form field in case of invalid value)
 * Set up SSL using Let's Encrypt
 * Added previous pages table that appears when a user has one or more completed races
-* Race Update / Delete feature added.
+* Race Update / Delete feature added..
 
 ## Next steps
 * Write more tests for IndexController and APIs such that the test results can make me confident that things are working
