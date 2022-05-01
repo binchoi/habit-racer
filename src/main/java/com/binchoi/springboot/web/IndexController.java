@@ -143,8 +143,9 @@ public class IndexController {
         UserResponseDto user = userService.findById(id);
         Map<Boolean, List<RaceListResponseDto>> raceMap = raceService.findByUserId(id);
         model.addAttribute("user", user);
-        model.addAttribute("ongoingRaceList", raceMap.get(Boolean.FALSE));
-        model.addAttribute("completeRaceList", raceMap.get(Boolean.TRUE));
+        model.addAttribute("userRaceInfoDto", new UserRaceInfoDto(id, raceMap));
+//        model.addAttribute("ongoingRaceList", raceMap.get(Boolean.FALSE));
+//        model.addAttribute("completeRaceList", raceMap.get(Boolean.TRUE));
         return "user-overview";
     }
 

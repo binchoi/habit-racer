@@ -43,54 +43,25 @@
                 </h1>
             </div>
             <div class="col-md-5 text-center d-none d-md-block">
-                <div class="lead" style="font-weight: bold; text-decoration: underline;">DRIVER STATS (WORK IN PROGRESS)</div>
-
-                <table class="table table-striped mt-2">
-                    <thead></thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">Wager</th>
-                        <td>asdf</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Days Since Starting Line</th>
-                        <td>asdf</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Days Until Finish Line</th>
-                        <td>asdf</td>
-                    </tr>
-                    </tbody>
-                </table>
-
+                <div class="lead" style="font-weight: bold; text-decoration: underline;">DRIVER STATS</div>
+                <br>
                 <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col"> </th>
-                        <th scope="col">Racer 1</th>
-                        <th scope="col">Racer 2</th>
-                    </tr>
-                    </thead>
                     <tbody>
                     <tr>
-                        <th scope="row">Name</th>
-                        <td>asdf</td>
-                        <td>asdf</td>
+                        <th scope="row">Total Race Count</th>
+                        <td>{{userRaceInfoDto.totalRaceCount}}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Habit-to-Build</th>
-                        <td>asdf</td>
-                        <td>ffd</td>
+                        <th scope="row">Ongoing Race Count</th>
+                        <td>{{userRaceInfoDto.ongoingRaceCount}}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Success Count</th>
-                        <td>a</td>
-                        <td>c</td>
+                        <th scope="row">Completed Race Count</th>
+                        <td>{{userRaceInfoDto.completeRaceCount}}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Success Percentage</th>
-                        <td>~ s%</td>
-                        <td>~ d%</td>
+                        <th scope="row">Win Percentage</th>
+                        <td>~ ? %</td>
                     </tr>
                     </tbody>
                 </table>
@@ -121,7 +92,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#ongoingRaceList}}
+                    {{#userRaceInfoDto.ongoingRaceList}}
                     <tr>
                         <td>{{raceName}}</td>
                         <td>{{competitorName}}</td>
@@ -133,7 +104,7 @@
                             <a href="/race/update/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i></a>
                         </td>
                     </tr>
-                    {{/ongoingRaceList}}
+                    {{/userRaceInfoDto.ongoingRaceList}}
                 </tbody>
             </table>
         </div>
@@ -158,7 +129,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{#completeRaceList}}
+                {{#userRaceInfoDto.completeRaceList}}
                     <tr>
                         <td>{{raceName}}</td>
                         <td>{{competitorName}}</td>
@@ -170,7 +141,7 @@
                             <a href="/race/update/{{id}}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i></a>
                         </td>
                     </tr>
-                {{/completeRaceList}}
+                {{/userRaceInfoDto.completeRaceList}}
                 </tbody>
             </table>
         </div>
