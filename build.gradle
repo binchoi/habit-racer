@@ -14,6 +14,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
 
 group 'org.example'
 version '1.0.1-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
@@ -21,6 +22,10 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.7"
 }
 
 dependencies {

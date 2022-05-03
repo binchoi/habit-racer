@@ -105,6 +105,8 @@ public class RaceService {
     private void verifyEndDate(LocalDate startDate, LocalDate proposedDate) {
         if (startDate.isAfter(proposedDate)) {
             throw new CustomValidationException("The end date must be after the start date.", "endDate");
+        } else if (LocalDate.now().isAfter(proposedDate)) {
+            throw new CustomValidationException("The end date cannot be before today.", "endDate");
         }
     }
 
