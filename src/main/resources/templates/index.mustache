@@ -16,9 +16,11 @@
         <!-- navbar links -->
         <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#about">About HabitRacer</a>
-                </li>
+                {{^user}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About HabitRacer</a>
+                    </li>
+                {{/user}}
                 <li class="nav-item">
                     <a class="nav-link" href="#races">{{^user}}Sample{{/user}}{{#user}}Your{{/user}} Races</a>
                 </li>
@@ -54,7 +56,7 @@
                     <div class="display-5 text-muted">amongst Habit Trackers</div>
                 </h1>
                 <p class="lead my-4 text-muted">Why just <em>track</em> when you can race?</p>
-                <a href="#races" class="btn btn-secondary btn-lg">Start</a>
+                <a href="{{^user}}#about{{/user}}{{#user}}#races{{/user}}" class="btn btn-secondary btn-lg">Start</a>
             </div>
             <div class="col-md-5 text-center d-none d-md-block">
                 <img src="/images/race-track.png" alt="race-track" class="img-fluid">
@@ -64,22 +66,48 @@
 </section>
 
 <!-- How it works -->
-<!--<section id="about">-->
-<!--&lt;!&ndash; see example  https://www.habitify.me/ &ndash;&gt;-->
-<!--</section>-->
+{{^user}}
+<section id="about" class="bg-light mt-3">
+    <div class="container-lg">
+        <div class="row justify-content-center align-items-center text-center">
+            <h2>How It Works?</h2>
+            <p class="lead my-2 text-muted">Fill two needs with one deed!</p>
+        </div>
+        <div class="row my-3 justify-content-center">
+            <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                <div class="text-center my-5"><i class="bi bi-stoplights" style='font-size:100px;'></i></div>
+                <h3>1. Start / Join a Race</h3>
+                <p class="lead my-2 text-muted">Define the habit you want to build and the motivation-boosting prize (or punishment, perhaps? 😁)</p>
+
+            </div>
+            <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                <div class="text-center my-5"><i class="bi bi-calendar2-check" style='font-size:100px;'></i></div>
+                <h3>2. Track your Progress</h3>
+                <p class="lead my-2 text-muted">Record your daily success on your race dashboard and interact with your competing Habit Racer! 🏎️</p>
+
+            </div>
+            <div class="col-8 col-lg-4 col-xl-3 mb-3">
+                <div class="text-center my-5"><i class="bi bi bi-trophy" style='font-size:100px;'></i></div>
+                <h3>3. Cross the Finish Line</h3>
+                <p class="lead my-2 text-muted">Your new habits and sweet rewards await you at the finish line 🏁</p>
+            </div>
+        </div>
+    </div>
+</section>
+{{/user}}
 
 <!-- your races -->
-<section id="races" class="bg-light mt-5">
+<section id="races" class="{{#user}}bg-light{{/user}} mt-2">
     <div class="container-lg">
         <div class="text-center">
             <h2>{{^user}}Sample{{/user}}{{#user}}Your{{/user}} Races</h2>
-            <p class="lead text-muted">{{^user}}Sign-in to compete in exciting races. {{/user}}{{#user}}Choose a race and claim the pole.{{/user}}</p>
+            <p class="lead text-muted">{{^user}}Sign-in to compete in exhilarating races. {{/user}}{{#user}}Choose a race and claim the pole.{{/user}}</p>
         </div>
         <div class="row my-5 align-items-center justify-content-center">
             <!-- Display sample races for non-authenticated users -->
             {{^user}}
                 <div class="col-8 col-lg-4 col-xl-3 mb-3">
-                    <div class="card border-0">
+                    <div class="card border-1">
                         <div class="card-body text-center py-4">
                             <h4 class="card-title">Sprint to Disneyland</h4>
                             <p class="lead card-subtitle">Competitor: Jackson K</p>
@@ -90,7 +118,7 @@
                     </div>
                 </div>
                 <div class="col-8 col-lg-4 col-xl-3 mb-3">
-                    <div class="card border-0">
+                    <div class="card border-1">
                         <div class="card-body text-center py-4">
                             <h4 class="card-title">Racing for Health</h4>
                             <p class="lead card-subtitle">Competitor: Joseph Choi</p>
@@ -101,7 +129,7 @@
                     </div>
                 </div>
                 <div class="col-8 col-lg-4 col-xl-3 mb-3">
-                    <div class="card border-0">
+                    <div class="card border-1">
                         <div class="card-body text-center py-4">
                             <h4 class="card-title">For the Gainz</h4>
                             <p class="lead card-subtitle">Competitor: Phyllis V</p>
@@ -136,15 +164,15 @@
     <!-- join or start a race -->
     <div class="container-lg">
         <div class="text-center">
-            <p class="lead text-muted">Alternatively, begin a new race and start building habits.</p>
+            <p class="lead text-muted">{{^user}}B{{/user}}{{#user}}Alternatively, b{{/user}}egin a new race and start building habits.</p>
         </div>
         <div class="row text-center justify-content-center">
             <div class="col-2">
-                <a href="/race/save" class="btn btn-outline-primary btn-lg mt-3"><i class="bi bi-speedometer"></i> Start a Race</a>
+                <a href="/race/save" class="btn btn-outline-primary btn-lg mt-3"><i class="bi bi-speedometer"></i> Start Race</a>
             </div>
             <div class="col-2">
                 <!-- modal trigger -->
-                <button class="btn btn-outline-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#join-race-modal"><i class="bi bi-speedometer2"></i> Join a Race</button>
+                <button class="btn btn-outline-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#join-race-modal"><i class="bi bi-speedometer2"></i> Join Race</button>
             </div>
         </div>
     </div>
@@ -220,7 +248,7 @@
 </div>
 
 <!-- contact -->
-<section id="contact">
+<section id="contact" class="{{^user}}bg-light{{/user}}">
     <div class="container-lg">
         <div class="text-center">
             <h2>Get in Touch</h2>

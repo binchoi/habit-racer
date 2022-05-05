@@ -19,7 +19,10 @@
                     <a class="nav-link" href="/#races">Your Races</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/#contact">Get in Touch</a>
+                    <a class="nav-link" href="#contact">Get in Touch</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/{{user.id}}">My Profile</a>
                 </li>
                 <li class="nav-item ms-2 d-none d-md-inline">
                     <a class="btn btn-secondary" href="/logout"><i class="bi bi-person-circle"></i> Log-out</a>
@@ -116,6 +119,7 @@
                             </span>
                     </div>
                 </div>
+                <input type="text" class="form-control" id="raceIdMessage" style='display:none' value="I challenge you to a Habit Race! Let's build habits together over a wager of '{{race.wager}}'. Join the race by entering our race code '{{race.id}}' at https://habitracer.com">
             </div>
         </div>
         {{/race.sndUserHabit}}
@@ -228,10 +232,12 @@
 
 <script>
     function copy_to_clipboard() {
-        var copyText = document.getElementById("raceId");
-        copyText.select();
+        var hidden = document.getElementById("raceIdMessage");
+        hidden.style.display='block';
+        hidden.select();
         document.execCommand("Copy");
         alert("Race code has been copied. Share it with your competitor to begin racing. 🏎️")
+        hidden.style.display='none';
     }
 </script>
 {{>layout/footer}}

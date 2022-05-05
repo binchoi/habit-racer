@@ -52,7 +52,7 @@ public class IndexController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'race', 'read')")
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-        model.addAttribute("userName", user.getName());
+        model.addAttribute("user", user);
 
         RaceResponseDto race = raceService.findById(id);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
