@@ -57,12 +57,23 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
         }
     }
 
+    // WRITE: "write a post in the race", update/delete race,
+    // READ : "view the race overview & posts of a particular race with targetId"
+    // JOIN :
+    /**
+     *
+     * Race Permission Objects:
+     * - WRITE: update / delete race; write post to race
+     * - READ : view race overview page
+     * - JOIN : join the race (i.e. display race-join page)
+     *
+     */
     private boolean hasRacePermission(Long userId, Serializable targetId, Object permission) {
-        // WRITE: "write a post in the race"
-        // READ : "view the race overview & posts of a particular race with targetId"
+        RaceResponseDto race = raceService.findById((Long) targetId);
         if (permission.equals("read") || permission.equals("write")) {
-            RaceResponseDto race = raceService.findById((Long) targetId);
             return (userId.equals(race.getFstUserId()) || userId.equals(race.getSndUserId()));
+        } else if (permission.equals("join")) {
+            return (race.getSndUserId()==null && !userId.equals(race.getFstUserId()));
         } else {
             return false;
         }
@@ -77,7 +88,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
     }
 
     /**
-     * This method will not be the primary use of hasPermission()
+     * This method will not be the primary use of hasPermission() [not used]
      */
     @Override
     public boolean hasPermission(Authentication auth, Object targetDomainObject, Object permission) {

@@ -48,40 +48,29 @@ public class IndexController {
         return "sample-race-overview";
     }
 
-    //admin can view race overview page
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'race', 'read')")
     @GetMapping("/race/{id}")
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
-        model.addAttribute("user", user);
-
         RaceResponseDto race = raceService.findById(id);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
 
         Long fstUserId = race.getFstUserId();
         Long sndUserId = race.getSndUserId();
 
-        boolean sndUserJoined = sndUserId!=null;
+        RaceOverviewDto raceOverviewDto = new RaceOverviewDto(
+                userService.findById(fstUserId).getName(),
+                sndUserId!=null ? userService.findById(sndUserId).getName() : "TBD",
+                postsService.findByUserIdRaceId(fstUserId, id),
+                sndUserId!=null ? postsService.findByUserIdRaceId(sndUserId, id) : new ArrayList<>(),
+                race,
+                raceTimeInfo.getDaysFromStart().intValue());
 
-        List<PostsListResponseDto> fstUserPosts = postsService.findByUserIdRaceId(fstUserId, id);
-        Integer fstUserSuccessCount = fstUserPosts.size();
-        Long fstUserSuccessPercent = fstUserSuccessCount*100 / raceTimeInfo.getDaysFromStart();
-        List<PostsListResponseDto> sndUserPosts = sndUserJoined ? postsService.findByUserIdRaceId(sndUserId, id) : new ArrayList<>();
-        Integer sndUserSuccessCount = sndUserPosts.size();
-        Long sndUserSuccessPercent = sndUserSuccessCount*100 / raceTimeInfo.getDaysFromStart();
+        if (raceTimeInfo.getDaysUntilEnd()==0) model.addAttribute("raceOver", 1L);
 
-        model.addAttribute("fstUserName", userService.findById(fstUserId).getName());
-        model.addAttribute("sndUserName", sndUserJoined ? userService.findById(sndUserId).getName() : "TBD");
-        model.addAttribute("sndUserHabit", sndUserJoined ? race.getSndUserHabit() : "TBD");
-        model.addAttribute("race", race);
+        model.addAttribute("user", user);
         model.addAttribute("raceTimeInfo", raceTimeInfo);
-        model.addAttribute("fstUserSuccessCount", fstUserSuccessCount);
-        model.addAttribute("fstUserSuccessPercent", fstUserSuccessPercent);
-        model.addAttribute("fstUserPosts", fstUserPosts);
-        model.addAttribute("sndUserSuccessCount", sndUserSuccessCount);
-        model.addAttribute("sndUserSuccessPercent", sndUserSuccessPercent);
-        model.addAttribute("sndUserPosts", sndUserPosts);
-
         model.addAttribute("messageListResponseDto", postsService.findByRaceId(id));
+        model.addAttribute("raceOverviewDto", raceOverviewDto);
         return "race-overview";
     }
 
@@ -93,6 +82,7 @@ public class IndexController {
         return "race-save";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'race', 'write')")
     @GetMapping("/race/update/{id}")
     public String raceUpdate(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
         RaceResponseDto race = raceService.findById(id);
@@ -107,6 +97,7 @@ public class IndexController {
         return "race-update";
     }
 
+    @PreAuthorize("hasPermission(#id, 'race', 'join')")
     @GetMapping("/race/join/{id}")
     public String raceJoin(Model model, @LoginUser SessionUser user, @PathVariable Long id) {
         RaceResponseDto race = raceService.findById(id);
@@ -127,7 +118,6 @@ public class IndexController {
         return "posts-save";
     }
 
-    // admin can update/delete posts
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasPermission(#id, 'posts', 'write')")
     @GetMapping("posts/update/{id}")
     public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
@@ -144,14 +134,8 @@ public class IndexController {
         Map<Boolean, List<RaceListResponseDto>> raceMap = raceService.findByUserId(id);
         model.addAttribute("user", user);
         model.addAttribute("userRaceInfoDto", new UserRaceInfoDto(id, raceMap));
-//        model.addAttribute("ongoingRaceList", raceMap.get(Boolean.FALSE));
-//        model.addAttribute("completeRaceList", raceMap.get(Boolean.TRUE));
         return "user-overview";
     }
-
-//    private void summary(Map<Boolean, List<RaceListResponseDto>> raceMap) {
-//
-//    }
 
 
 }

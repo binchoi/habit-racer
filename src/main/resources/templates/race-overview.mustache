@@ -32,22 +32,34 @@
     </div>
 </nav>
 
+{{#raceOver}}
+<section id="result-header" style="margin-top:60px; padding:0 0;">
+    <div class="container-lg">
+        <div class="row justify-content-center text-center" style="background-color: lightgray;">
+            <span class="display-6 text-secondary">🏁 🏁 🏁 🏁 🏁</span>
+        </div>
+    </div>
+</section>
+{{/raceOver}}
+
 <!-- intro and race stats section -->
-<section id="race-stats">
+<section id="race-stats" {{#raceOver}}style="padding-top: 0;"{{/raceOver}}>
     <div class="container-lg my-5">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-5 text-center text-md-start">
                 <h1>
                     <!-- insert race Name -->
-                    <div class="display-5">{{race.raceName}}</div>
+                    <div class="display-5">{{raceOverviewDto.raceName}}</div>
                     <!-- insert userNames -->
-                    <div class="display-6 text-muted">{{fstUserName}} vs. {{sndUserName}}</div>
+                    <div class="display-6 text-muted">{{raceOverviewDto.fstUserName}} vs. {{raceOverviewDto.sndUserName}}</div>
                 </h1>
-                <!-- insert daysUntilEnd -->
+                {{^raceOver}}
                 <p class="lead my-4 text-muted">Have you completed your habit today?</p>
                 <span class="tt" data-bs-placement="left" title="You can record previous success records which you've forgotten to add.">
-                    <a href="/race/{{race.id}}/posts/save" class="btn btn-secondary btn-lg">Record Success</a>
+                    <a href="/race/{{raceOverviewDto.id}}/posts/save" class="btn btn-secondary btn-lg">Record Success</a>
                 </span>
+                {{/raceOver}}
+                {{#raceOver}}<p class="lead my-4 text-muted">Congratulations on finishing the race! 👏</p>{{/raceOver}}
             </div>
             <div class="col-md-5 text-center d-none d-md-block">
                 <div class="lead" style="font-weight: bold; text-decoration: underline;">RACE STATS</div>
@@ -57,7 +69,7 @@
                     <tbody>
                         <tr>
                             <th scope="row">Wager</th>
-                            <td>{{race.wager}}</td>
+                            <td>{{raceOverviewDto.wager}}</td>
                         </tr>
                         <tr>
                             <th scope="row">Days Since Starting Line</th>
@@ -81,29 +93,29 @@
                     <tbody>
                         <tr>
                             <th scope="row">Name</th>
-                            <td>{{fstUserName}}</td>
-                            <td>{{sndUserName}}</td>
+                            <td>{{#raceOver}}{{#fstUserVictory}}🏆{{/fstUserVictory}}{{/raceOver}} {{raceOverviewDto.fstUserName}} {{#raceOver}}{{#fstUserVictory}}🏆{{/fstUserVictory}}{{/raceOver}}</td>
+                            <td>{{#raceOver}}{{^fstUserVictory}}🏆{{/fstUserVictory}}{{/raceOver}} {{raceOverviewDto.sndUserName}} {{#raceOver}}{{^fstUserVictory}}🏆{{/fstUserVictory}}{{/raceOver}}</td>
                             </tr>
                         <tr>
                             <th scope="row">Habit-to-Build</th>
-                            <td>{{race.fstUserHabit}}</td>
-                            <td>{{sndUserHabit}}</td>
+                            <td>{{raceOverviewDto.fstUserHabit}}</td>
+                            <td>{{raceOverviewDto.sndUserHabit}}</td>
                         </tr>
                         <tr>
                             <th scope="row">Success Count</th>
-                            <td>{{fstUserSuccessCount}} / {{raceTimeInfo.daysFromStart}}</td>
-                            <td>{{sndUserSuccessCount}} / {{raceTimeInfo.daysFromStart}}</td>
+                            <td>{{raceOverviewDto.fstUserSuccessCount}} / {{raceTimeInfo.daysFromStart}}</td>
+                            <td>{{raceOverviewDto.sndUserSuccessCount}} / {{raceTimeInfo.daysFromStart}}</td>
                         </tr>
                         <tr>
                             <th scope="row">Success Percentage</th>
-                            <td>~ {{fstUserSuccessPercent}} %</td>
-                            <td>~ {{sndUserSuccessPercent}} %</td>
+                            <td>~ {{raceOverviewDto.fstUserSuccessPercent}} %</td>
+                            <td>~ {{raceOverviewDto.sndUserSuccessPercent}} %</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        {{^race.sndUserHabit}}
+        {{^raceOverviewDto.sndUserId}}
         <div class="row justify-content-center">
             <div class="col-md-5 text-center">
                 <p class="lead my-4 text-muted">Share this race code with your competitor</p>
@@ -112,18 +124,40 @@
         <div class="row justify-content-center">
             <div class="col-3 col-md-2 text-center">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="raceId" value="{{race.id}}" readonly>
+                    <input type="text" class="form-control" id="raceId" value="{{raceOverviewDto.id}}" readonly>
                     <div class="input-group-append">
                             <span class="tt" data-bs-placement="right" title="Press to copy">
                                 <button class="btn btn-outline-secondary" type="button" onclick="copy_to_clipboard()" id="copy-btn"><i class="bi bi-clipboard"></i>‎</button>
                             </span>
                     </div>
                 </div>
-                <input type="text" class="form-control" id="raceIdMessage" style='display:none' value="I challenge you to a Habit Race! Let's build habits together over a wager of '{{race.wager}}'. Join the race by entering our race code '{{race.id}}' at https://habitracer.com">
+                <input type="text" class="form-control" id="raceIdMessage" style='display:none' value="I challenge you to a Habit Race! Let's build habits together over a wager of '{{raceOverviewDto.wager}}'. Join the race by entering our race code '{{raceOverviewDto.id}}' at https://habitracer.com">
             </div>
         </div>
-        {{/race.sndUserHabit}}
+        {{/raceOverviewDto.sndUserId}}
     </div>
+
+    <!-- result -->
+    {{#raceOver}}
+    <div class="container-lg">
+        <div class="text-center">
+            <h2>The Podium</h2>
+            <p class="lead text-muted">The furious race has come to an end.</p>
+            <div class="row justify-content-center">
+                <div class="col-10 col-lg-8 mb-3">
+                    <div class="card border-1">
+                        <div class="card-body text-center py-4">
+                            <h4 class="card-title">Post-Race Review</h4>
+                            <p class="card-text mx-5 text-muted d-none d-lg-block">"The epic battle '{{raceOverviewDto.raceName}}' between {{raceOverviewDto.fstUserName}} and {{raceOverviewDto.sndUserName}} has finally seen the checkered flag. We have witnessed a spectacular display of skill and grit from both racers. Only one came out victorious as a champion.</p>
+                            <p class="card-text text-muted d-none d-lg-block">The champion is the great, the irreplaceable <b>{{raceOverviewDto.winnerName}}</b>. {{raceOverviewDto.loserName}}, the elite racer, put up a strong fight but could not claim their position on the top podium by a difference of {{raceOverviewDto.postDifference}} records.</p>
+                            <p class="card-text text-muted d-none d-lg-block">{{raceOverviewDto.loserName}}, we applaud your sportsmanship and humility in faithfully following through with the proposed wager of "{{raceOverviewDto.wager}}"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/raceOver}}
 </section>
 
 <!-- the race -->
@@ -138,17 +172,17 @@
                 <table class="table table-striped table-dark text-center">
                     <thead>
                         <tr>
-                            <th scope="col">{{fstUserName}}</th>
+                            <th scope="col">{{raceOverviewDto.fstUserName}}</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {{#fstUserPosts}}
+                        {{#raceOverviewDto.fstUserPosts}}
                             <tr>
                                 <td><a href="/posts/update/{{id}}">{{date}}</a></td>
                             </tr>
-                        {{/fstUserPosts}}
+                        {{/raceOverviewDto.fstUserPosts}}
                         <tr>
-                            <td style="font-size: 43px;">🏎️</td>
+                            <td style="font-size: 43px;">{{#raceOver}}{{#fstUserVictory}}🎆{{/fstUserVictory}}{{/raceOver}} 🏎️ {{#raceOver}}{{#fstUserVictory}}🎆{{/fstUserVictory}}{{/raceOver}}</td>
                         </tr>
                         </tbody>
                 </table>
@@ -157,17 +191,17 @@
                 <table class="table table-striped table-dark text-center">
                     <thead>
                         <tr>
-                            <th scope="col">{{sndUserName}}</th>
+                            <th scope="col">{{raceOverviewDto.sndUserName}}</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {{#sndUserPosts}}
+                        {{#raceOverviewDto.sndUserPosts}}
                             <tr>
                                 <td><a href="/posts/update/{{id}}">{{date}}</a></td>
                             </tr>
-                        {{/sndUserPosts}}
+                        {{/raceOverviewDto.sndUserPosts}}
                         <tr>
-                            <td style="font-size: 43px;">🏎️</td>
+                            <td style="font-size: 43px;">{{#raceOver}}{{^fstUserVictory}}🎆{{/fstUserVictory}}{{/raceOver}} 🏎 {{#raceOver}}{{^fstUserVictory}}🎆{{/fstUserVictory}}{{/raceOver}}️</td>
                         </tr>
                         </tbody>
                 </table>
@@ -187,7 +221,7 @@
         <div class="text-center">
             <h2>Edit the Race</h2>
             <p class="lead text-muted">You may update, extend, and/or delete the race when in consensus with your competitor</p>
-            <a href="/race/update/{{race.id}}" class="btn btn-outline-secondary btn-lg mt-3"><i class="bi bi-pencil-square"></i> Edit Race</a>
+            <a href="/race/update/{{raceOverviewDto.id}}" class="btn btn-outline-secondary btn-lg mt-3"><i class="bi bi-pencil-square"></i> Edit Race</a>
         </div>
     </div>
 </section>
