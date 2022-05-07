@@ -28,6 +28,9 @@ var main = {
         $('#btn-delete-race').on('click', function () {
             _this.deleteRace();
         });
+        $('#btn-delete-user').on('click', function () {
+            _this.deleteUser();
+        });
 
     },
     save : function () {
@@ -181,6 +184,18 @@ var main = {
         }).done(function() {
             alert('You have successfully deleted the race.');
             window.location.href = '/';
+        });
+    },
+    deleteUser : function () {
+        var id = $('#userId').val();
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/user/'+id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+        }).done(function() {
+            alert('You have successfully deleted your account.');
+            window.location.href = '/logout';
         });
     },
     markErrorFields : function (response) { // credit: DongUk Lee

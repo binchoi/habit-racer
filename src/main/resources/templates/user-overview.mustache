@@ -29,7 +29,7 @@
     </div>
 </nav>
 
-<!-- intro and race stats section -->
+<!-- intro and driver stats section -->
 <section id="race-stats">
     <div class="container-lg my-5">
         <div class="row justify-content-center align-items-center">
@@ -63,7 +63,7 @@
     </div>
 </section>
 
-<!-- the race -->
+<!-- races  -->
 <section id="race" class="bg-light mt-3">
     <div class="container-lg">
         <div class="text-center">
@@ -141,39 +141,42 @@
     </div>
 </section>
 
-<!--<section id="actions" class="bg-light">-->
-<!--    <div class="container-lg">-->
-<!--        <div class="text-center">-->
-<!--            <h2>Edit the Race</h2>-->
-<!--            <p class="lead text-muted">You may update, extend, and/or delete the race when in consensus with your competitor</p>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
+<!-- delete account -->
+<section id="deleteAccount">
+    <div class="container-lg">
+        <div class="text-center">
+            <h4>Leaving Habit Racer?</h4>
+            <p class="lead text-muted">You may delete your account and all associated data at any time.</p>
+        </div>
+    </div>
+    <div class="row align-items-center justify-content-center text-center">
+        <div class="col-3">
+            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-user-modal" type="button">Delete</button>
+        </div>
+    </div>
+</section>
 
-<!-- modal -->
-<!--<div class="modal fade" id="chat-log-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="modal-title">Mailbox</h5>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <p>You can view all messages sent throughout the competition.</p>-->
-<!--                    <div class="container">-->
-<!--                        <div class="row justify-content-between">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<!-- delete modal -->
+<div class="modal fade" id="delete-user-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>All of your user information, posts, and races (created or joined) will be <b>irreversibly</b> deleted. Are you sure you wish to delete your account?</p>
+            </div>
+            <input type="hidden" id="userId" value="{{user.id}}">
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="btn-delete-user">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- contact -->
-<section id="contact">
+<section id="contact" class="bg-light">
     <div class="container-lg">
         <div class="text-center">
             <h2>Get in Touch</h2>
