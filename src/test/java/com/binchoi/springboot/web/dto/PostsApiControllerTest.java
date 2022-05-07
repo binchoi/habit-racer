@@ -226,7 +226,7 @@ public class PostsApiControllerTest {
                 .comment(comment+" - part 2")
                 .build());
 
-        String url = "http://localhost:" + port + "/api/v1/posts/all";
+        String url = "http://localhost:" + port + "/api/v1/posts";
 
         //when
         mvc.perform(get(url))

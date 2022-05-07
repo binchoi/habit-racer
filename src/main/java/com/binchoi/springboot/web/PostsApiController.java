@@ -41,8 +41,7 @@ public class PostsApiController {
         return id;
     }
 
-    // Misc
-    @GetMapping("/v1/posts/all")
+    @GetMapping("/v1/posts")
     public PostsResponseDto[] findAll() {
         return postsService.findAll();
     }
