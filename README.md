@@ -184,3 +184,29 @@ the error field causes the input fields to change shape because I added `input-g
 [2022-04-22 00:42:10.840] [d-IR48ENC1H][stdout]> Health check:
 [2022-04-22 00:42:10.840] [d-IR48ENC1H][stdout]> Health check connection failure. Retrying...
 ```
+* After receiving SSL certificate, I noticed that my Zero Downtime Deployment seems to be faulty
+as I witnessed nginx error screen during deployment (there was downtime)!
+  * upon further inspection using commands like `curl` to retrieve the localhost/profile, etc, 
+  I realized that I can no longer access the webservice using localhost from the ec2 machine.
+
+```
+[ec2-user@habit-racer ~]$ curl -s http://localhost/
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.20.0</center>
+</body>
+</html>
+[ec2-user@habit-racer ~]$ curl -s http://localhost/profile
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.20.0</center>
+</body>
+</html>
+```
+* Inquiring what localhost specifically refers to
+  * I understood it as the computer/machine I am working on
+  * 
