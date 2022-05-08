@@ -53,11 +53,10 @@ public class IndexController {
     public String raceView(@PathVariable Long id, Model model, @LoginUser SessionUser user) {
         RaceResponseDto race = raceService.findById(id);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
-
         Long fstUserId = race.getFstUserId();
         Long sndUserId = race.getSndUserId();
 
-        RaceOverviewDto raceOverviewDto = new RaceOverviewDto(
+        RaceOverviewDto raceOverview = new RaceOverviewDto(
                 userService.findById(fstUserId).getName(),
                 sndUserId!=null ? userService.findById(sndUserId).getName() : "TBD",
                 postsService.findByUserIdRaceId(fstUserId, id),
@@ -65,12 +64,10 @@ public class IndexController {
                 race,
                 raceTimeInfo.getDaysFromStart().intValue());
 
-        if (raceTimeInfo.getDaysUntilEnd()==0) model.addAttribute("raceOver", 1L);
-
         model.addAttribute("user", user);
         model.addAttribute("raceTimeInfo", raceTimeInfo);
         model.addAttribute("messageListResponseDto", postsService.findByRaceId(id));
-        model.addAttribute("raceOverviewDto", raceOverviewDto);
+        model.addAttribute("raceOverview", raceOverview);
         return "race-overview";
     }
 

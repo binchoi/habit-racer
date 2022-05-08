@@ -22,7 +22,7 @@ public class RaceOverviewDto {
     private Integer sndUserSuccessCount;
     private Integer fstUserSuccessPercent;
     private Integer sndUserSuccessPercent;
-    private List<Integer> fstUserVictory;
+    private Boolean fstUserVictory;
     private String winnerName;
     private String loserName;
     private Integer postDifference;
@@ -45,9 +45,9 @@ public class RaceOverviewDto {
         this.sndUserSuccessCount = sndUserPosts.size();
         this.fstUserSuccessPercent = fstUserSuccessCount*100 / daysFromStart;
         this.sndUserSuccessPercent = sndUserSuccessCount*100 / daysFromStart;
-        this.fstUserVictory = fstUserSuccessCount>sndUserSuccessCount ? Arrays.asList(1) : null;
-        this.winnerName = fstUserVictory!=null ? fstUserName : sndUserName;
-        this.loserName = fstUserVictory!=null ? sndUserName : fstUserName;
+        this.fstUserVictory = fstUserSuccessCount > sndUserSuccessCount;
+        this.winnerName = fstUserVictory ? fstUserName : sndUserName;
+        this.loserName = fstUserVictory ? sndUserName : fstUserName;
         this.postDifference = fstUserSuccessCount>sndUserSuccessCount ? fstUserSuccessCount-sndUserSuccessCount : sndUserSuccessCount-fstUserSuccessCount;
     }
 }
