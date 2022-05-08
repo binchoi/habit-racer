@@ -7,7 +7,7 @@ function find_idle_profile()
 
   if [ ${RESPONSE_CODE} -ge 400 ] # if greater than 400 (i.e. 40x/50x errors)
   then
-    CURRENT_PROFILE=real1
+    CURRENT_PROFILE=real2
   else
     CURRENT_PROFILE=$(curl -s http://localhost/profile)
   fi
