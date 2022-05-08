@@ -206,6 +206,8 @@ as I witnessed nginx error screen during deployment (there was downtime)!
 <hr><center>nginx/1.20.0</center>
 </body>
 </html>
+[ec2-user@habit-racer ~]$ curl -s -o /dev/null -w "%{http_code}" http://localhost/profile
+404
 ```
 * Inquiring what localhost specifically refers to
   * I understood it as the computer/machine I am working on
