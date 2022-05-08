@@ -40,7 +40,7 @@ below the form field in case of invalid value)
 * Race Update / Delete feature added..
 
 ## Next steps
-* change and check zdd
+* change and check zdd!
 * Write more tests for IndexController and APIs such that the test results can make me confident that things are working
   * figure out how to resolve the issue with mockmvc's incompatibility with OAuth2User 
     * cast error (may have to implement userdetails, may have to look into mock.mvc.perform.with (oauthlogin)
