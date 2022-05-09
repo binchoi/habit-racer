@@ -40,5 +40,6 @@ EN) This is a webservice that sprung from my own needs. Whether it be practicing
 - Spring JPA를 사용한 간단한 RDBMS/MariaDB 디자인 및 사용 경험
 - Spring Security를 통한 Attribute Based Access Control (ABAC) 구현
 - 유효성 체크 (i.e. Validation) 공통 모듈 생성을 통한 폼 내에서 graceful한 예외 처리
+- k6를 이용한 기본적인 성능/부하 테스트와 [결과 분석](https://www.overleaf.com/read/pwbsmxymfdgv) 
 - AWS 기반의 서비스 운영 경험
-- 이해하기 쉬운 코드의 중요성을 몸소 느낌
+- 이해하기 쉬운 코드의 중요성을 몸소 체험
