@@ -28,7 +28,7 @@ EN) This is a webservice that sprung from my own needs. Whether it be practicing
 
 # ⚙️ Architecture
 
-- `Spring MVC`
+- `MVC`
 
 # 🤚🏻 Part
 
