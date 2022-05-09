@@ -4,7 +4,7 @@
 
 # 📝 Summary
 
-KR) 실제로 제가 필요하다고 느껴서 제작하게 된 웹서비스입니다. 코딩 테스트 연습이든 운동이든 새로운 습관을 만드는 것이 어렵게 다가왔던 적이 많았는데, 이 외롭고 버거운 과정을 더욱 재미있고 몰입감 있게 변화시키기 위해 가족/친구들과 함께 경쟁하며 습관을 만들어갈 수 있는 해빗트레커를 구현하였습니다. 유저들이 지정한 (user-selected) 내기를 걸고 레이스를 진행하여 양 유저의 몰입도와 습관화 성공률을 한 층 더 높였습니다. 새로운 습관을 만드는 과정이 혼자만의 외로운 싸움처럼 느껴지지 않도록 레이스 내에서 메시지를 주고, 받을 수 있는 기능을 더하였습니다.
+KR) 실제로 제가 필요하다고 느껴서 제작하게 된 웹서비스입니다. 코딩 테스트 연습이든 운동이든 새로운 습관을 만드는 것이 어렵게 다가왔던 적이 많았는데, 이 외롭고 버거운 과정을 더욱 재미있고 몰입감 있게 변화시키기 위해 가족/친구들과 함께 경쟁하며 습관을 만들어갈 수 있는 해빗트레커를 구현하였습니다. 유저가 지정한 (user-selected) 내기를 걸고 레이스를 진행하여 유저들의 몰입도를 한 층 더 높이고 하여금 새로운 습관에 익숙해지는 과정이 하나의 게임처럼 느껴지게 하였습니다. 또한, 새로운 습관을 만드는 과정이 혼자만의 외로운 싸움처럼 느껴지지 않도록 레이스 내에서 메시지를 주고, 받을 수 있는 기능을 더하였습니다.
 
 EN) This is a webservice that sprung from my own needs. Whether it be practicing for coding interviews or exercising regularly, I found habit building to be an incredibly difficult and lonely journey. To transform this uphill battle into an immersive and interactive recreation, I created **HabitRacer** - a competitve habit tracker that allows users to compete with their friends and family members over user-selected wagers while building new habits together. Users create/join races and record their daily success whenever they successfully keep to their habit; the user that recorded more successes at the end of the race is crowned champion and claims the wager. For each race, the service provides race statistics and visualizes the progress of each driver on a race track to keep up the user's motivation!
 
@@ -28,7 +28,7 @@ EN) This is a webservice that sprung from my own needs. Whether it be practicing
 
 # ⚙️ Architecture
 
-- `Spring MVC`
+- `MVC`
 
 # 🤚🏻 Part
 
