@@ -43,3 +43,6 @@ EN) This is a webservice that sprung from my own needs. Whether it be practicing
 - k6를 이용한 기본적인 성능/부하 테스트와 [결과 분석](https://www.overleaf.com/read/pwbsmxymfdgv) 
 - AWS 기반의 서비스 운영 경험
 - 이해하기 쉬운 코드의 중요성을 몸소 체험
+
+# 📺 Demo Video
+[![demo-video](https://img.youtube.com/vi/sS9pXB-_6YA/0.jpg)](https://www.youtube.com/watch?v=sS9pXB-_6YA)
