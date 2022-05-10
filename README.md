@@ -35,7 +35,7 @@ EN) This is a webservice that sprung from my own needs. Whether it be practicing
 - **개인 프로젝트 (기획, 개발, 디자인 등)**
 
 # 🤔 Learned
-- Spring MVC 프레임워크을 이용하여 **MVC** 디자인 패턴 적용과 REST API 개발 경험
+- Spring MVC 프레임워크을 이용하여 MVC 디자인 패턴 적용과 REST API 개발 경험
 - 테스트 코드와 커버리지의 중요성을 경험하여 Test-Driven Development (TDD) 도입 그리고 그로 인한 생산성 증가 경험
 - Spring JPA를 사용한 간단한 RDBMS/MariaDB 디자인 및 사용 경험
 - Spring Security를 통한 Attribute Based Access Control (ABAC) 구현
