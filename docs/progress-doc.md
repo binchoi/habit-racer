@@ -226,6 +226,15 @@ List<Race> findByUserId(Long userId);
       will follow the sequential pattern. 
         * database allocates the ID and having deterministic control over it is impossible
       * therefore, preauthorize (i.e. )
+      * ... non-deterministically fails
 * performance testing features in a testing environment (with different database, using different privilege)
 * how does httpsession differentiate between the attributes `user` which is the same string value for each user when handling session information?
 * what should I prioritize -- unit or integration testing?
+* TRAVIS CI free tier ended -> Migrated to GitHub Actions for the following reasons
+  * I would have liked to try out Jenkins but that would require a separate server instance which would be costly
+  * GitHub Actions is mostly free :-)
+  * GitHub Actions is a service provided by GitHub which is the VC platform I am using (where my project is stored)
+    * therefore, it is less likely for bigger compatibility/interoperability errors to arise (or remain unresolved)
+  * It provides an intuitive interface that is similar to Travis CI (secret also permits environment variables for safety)
+  * from experience, it feels as fast as if not faster than TravisCI!
+  * Migration took only 1-2 hours total as the specifications/commands are very similar between the `.travis.yml` and `workflow/main.yml`
