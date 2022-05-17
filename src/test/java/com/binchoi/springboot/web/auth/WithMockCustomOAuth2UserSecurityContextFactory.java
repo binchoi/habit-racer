@@ -29,7 +29,7 @@ public class WithMockCustomOAuth2UserSecurityContextFactory implements WithSecur
         OAuth2User principal = new DefaultOAuth2User(
                 Stream.of(new OAuth2UserAuthority(customOAuth2User.role(), attributes)).collect(Collectors.toList()),
                 attributes,
-                customOAuth2User.name());
+                "name");
 
         OAuth2AuthenticationToken token = new OAuth2AuthenticationToken(
                 principal,

@@ -59,15 +59,12 @@ public class PostsApiControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private Race raceEntity;
+
     private MockMvc mvc;
 
     @Before
     public void setup() {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-
         // A race is required to post/put/delete/get posts
         String raceName = "The epic battle of two alpha baboons";
         String wager = "7 Tons of bananas and the position of alpha baboon";
@@ -76,14 +73,21 @@ public class PostsApiControllerTest {
         Long userId = 1L;
         String fstHabit = "To workout at least 10 minutes every day";
 
-        raceRepository.save(Race.builder()
+        raceEntity = Race.builder()
                 .raceName(raceName)
                 .wager(wager)
                 .startDate(start)
                 .endDate(end)
                 .fstUserId(userId)
                 .fstUserHabit(fstHabit)
-                .build());
+                .build();
+
+        raceRepository.save(raceEntity);
+
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
     }
 
     @After
@@ -96,9 +100,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_posted() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         Boolean isCompleted = true;
@@ -163,9 +166,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_can_be_updated() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         LocalDate date = start.plusDays(1);
@@ -243,9 +245,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_cannot_be_posted_without_comment() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         Boolean isCompleted = true;
@@ -271,9 +272,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_cannot_be_updated_without_comments() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         LocalDate date = start.plusDays(1);
@@ -307,9 +307,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_dating_before_race_StartDate_cannot_be_posted() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         Boolean isCompleted = true;
@@ -336,8 +335,7 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_dating_in_the_future_cannot_be_posted() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
+        Long raceId = raceEntity.getId();
 
         Long userId = 7L;
         Boolean isCompleted = true;
@@ -364,9 +362,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Duplicate_date_post_cannot_be_posted() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         LocalDate date = start.plusDays(1);
@@ -453,9 +450,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_cannot_be_updated_to_date_before_race_StartDate() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         LocalDate date = start.plusDays(1);
@@ -489,9 +485,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_cannot_be_updated_to_date_in_future() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         LocalDate date = start.plusDays(1);
@@ -525,9 +520,8 @@ public class PostsApiControllerTest {
     @WithMockUser(roles = "USER")
     public void Posts_cannot_be_updated_to_duplicate_date_entry() throws Exception {
         //given
-        Race entity = raceRepository.findAll().get(0);
-        Long raceId = entity.getId();
-        LocalDate start = entity.getStartDate();
+        Long raceId = raceEntity.getId();
+        LocalDate start = raceEntity.getStartDate();
 
         Long userId = 7L;
         LocalDate date = start.plusDays(1);

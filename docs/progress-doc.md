@@ -210,5 +210,22 @@ List<Race> findByUserId(Long userId);
 404
 ```
 * Inquiring what localhost specifically refers to
-    * I understood it as the computer/machine I am working on
-    * 
+  * I understood it as the computer/machine I am working on
+* problem with testing for OAuth2 secured & PreAuthorize secured services
+  * Created custom `WithMockCustomOAuth2User` which invokes
+    my custom implementation of `WithSecurityContextFactory` to produce and set the appropriate 
+    authentication token in the security context (which contains the oauth user prinicipal)
+  * dealing with problem of user's id being uncontrollable (as it is generated using `(strategy = GenerationType.IDENTITY)`)
+    * cannot flexibly set the MockOAuthUser's id as the attributes in the annotation must be constant...
+  * options include: 
+    * use different role 
+      * (-) integration testing is different real user scenario 
+    * fix the user id in the repository to a specified testing user id value
+      * difficult as the method for user id is (strategy = GenerationType.IDENTITY)
+      which means that even if I change the user entity's id value, when userRepository.save() is called the id in the repo 
+      will follow the sequential pattern. 
+        * database allocates the ID and having deterministic control over it is impossible
+      * therefore, preauthorize (i.e. )
+* performance testing features in a testing environment (with different database, using different privilege)
+* how does httpsession differentiate between the attributes `user` which is the same string value for each user when handling session information?
+* what should I prioritize -- unit or integration testing?

@@ -3,6 +3,7 @@ package com.binchoi.springboot.web.dto;
 import com.binchoi.springboot.domain.exception.CustomValidationException;
 import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.domain.race.RaceRepository;
+import com.binchoi.springboot.web.auth.WithMockCustomOAuth2User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -207,7 +208,7 @@ public class RaceApiControllerTest {
                 .andDo(print());
 
         //then
-        assertThat(raceRepository.findAll().isEmpty());
+        assertThat(raceRepository.findAll()).isEmpty();
 
     }
 
@@ -268,6 +269,69 @@ public class RaceApiControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fstUserHabit").value(fstHabit))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.sndUserHabit").value(sndHabit))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.endDate").value(endRevised.toString()));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void Race_can_be_updated() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = 1L;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        Long raceId = raceRepository.save(Race.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build()).getId();
+
+        LocalDate endRevised = end.plusMonths(1);
+        Long idSec = 2L;
+        String sndHabit = "To workout at least 60 minutes every day!";
+
+        RaceJoinRequestDto requestDto = RaceJoinRequestDto.builder()
+                .endDate(endRevised)
+                .sndUserId(idSec)
+                .sndUserHabit(sndHabit)
+                .build();
+
+        String url = "http://localhost:"+port+"/api/v1/race/join/"+raceId;
+
+        mvc.perform(put(url)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isOk());
+
+        RaceUpdateRequestDto updateRequestDto = RaceUpdateRequestDto.builder()
+                .raceName(raceName+"2")
+                .fstUserHabit(fstHabit+"2")
+                .sndUserHabit(sndHabit)
+                .wager(wager+"2")
+                .startDate(start)
+                .endDate(endRevised.plusMonths(1))
+                .build();
+
+        String updateUrl = "http://localhost:"+port+"/api/v1/race/"+raceId;
+
+        //when
+        mvc.perform(put(updateUrl)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(updateRequestDto)))
+                .andExpect(status().isOk());
+
+        //then
+        Race race = raceRepository.findAll().get(0);
+        assertThat(race.getRaceName()).isEqualTo(raceName+"2");
+        assertThat(race.getFstUserHabit()).isEqualTo(fstHabit+"2");
+        assertThat(race.getSndUserHabit()).isEqualTo(sndHabit);
+        assertThat(race.getWager()).isEqualTo(wager+"2");
+        assertThat(race.getEndDate()).isEqualTo(endRevised.plusMonths(1));
     }
 
     @Test
@@ -438,6 +502,13 @@ public class RaceApiControllerTest {
                 .andExpect(result -> assertThat(result.getResolvedException().getMessage())
                         .contains("Please state the habit you wish to build."));
     }
+
+//    @Test
+//    @WithMockCustomOAuth2User
+//    public void race_test() throws Exception {
+//        mvc.perform(get("/"))
+//                .andExpect(status().isOk());
+//    }
 
     @Test
     @WithMockUser(roles = "USER")
