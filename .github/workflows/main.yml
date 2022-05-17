@@ -1,36 +1,66 @@
-# This is a basic workflow to help you get started with Actions
+name: CI/CD with Github Actions and AWS (EC2, S3, CodeDeploy)
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push request events for the master branch
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # Set up the jdk
+      - name: Set up jdk
+        uses: actions/setup-java@v3.0.0
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+          cache: 'gradle'
+
+      # Granting execute permission for gradlew prior to build
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Build with Gradle
+        run: ./gradlew clean build #--no-daemon
+        shell: bash
+
+      # Compiles all necessary files and zips them (equivalent to 'before-deploy' step of Travis CI)
+      - name: Creating habit-racer.zip file (before-deploy)
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          mkdir -p before-deploy
+          cp scripts/*.sh before-deploy/
+          cp appspec.yml before-deploy/
+          cp build/libs/*.jar before-deploy/
+          cd before-deploy && zip -r before-deploy *
+          cd ../ && mkdir -p deploy
+          mv before-deploy/before-deploy.zip deploy/habit-racer.zip
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}         # stored in GitHub Repository Secret
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # stored in GitHub Repository Secret
+          aws-region: eu-central-1
+
+      - name: Upload habit-racer.zip to S3
+        run: aws s3 cp --region eu-central-1 ./deploy/habit-racer.zip s3://${{ secrets.S3_BUCKET_NAME }}/habit-racer.zip
+
+      - name: Create deployment to CodeDeploy
+        run: |
+          aws deploy create-deployment --application-name habit-racer \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name habit-racer-group \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=habit-racer.zip
