@@ -24,7 +24,7 @@ EN) This is a webservice that sprung from my own needs. Whether it be practicing
 
 # 🛠 Tech Stack
 
-`Java`, `Spring Boot`, `AWS` (`EC2`, `S3`, `RDS`, `Route53`, `CodeDeploy`), `MariaDB`, `TravisCI`, `Nginx`, `Spring Data JPA`,  `Gradle`, `k6`, `HTML5`, `Mustache`, `JUnit`
+`Java`, `Spring Boot`, `AWS` (`EC2`, `S3`, `RDS`, `Route53`, `CodeDeploy`), `MariaDB`, `GitHub Actions`, `Nginx`, `Spring Data JPA`,  `Gradle`, `k6`, `HTML5`, `Mustache`, `JUnit`
 
 # ⚙️ Architecture
 
