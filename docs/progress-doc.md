@@ -238,3 +238,10 @@ List<Race> findByUserId(Long userId);
   * It provides an intuitive interface that is similar to Travis CI (secret also permits environment variables for safety)
   * from experience, it feels as fast as if not faster than TravisCI!
   * Migration took only 1-2 hours total as the specifications/commands are very similar between the `.travis.yml` and `workflow/main.yml`
+  
+
+#### Lessons learned
+* Writing down my thoughts and ideas, as well as summarizing the situation and problem, has been a very effective strategy 
+for me when dealing with a programming problems. Writing the situation down questions your assumptions and allows you to be more
+free/open-thinking as to the various ways the problem can be approached. One such scenario where I experienced this is with the 
+the testing of Preauthorize

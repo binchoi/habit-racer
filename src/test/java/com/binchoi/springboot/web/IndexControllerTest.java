@@ -1,6 +1,8 @@
 package com.binchoi.springboot.web;
 
 import com.binchoi.springboot.config.auth.dto.SessionUser;
+import com.binchoi.springboot.domain.posts.Posts;
+import com.binchoi.springboot.domain.posts.PostsRepository;
 import com.binchoi.springboot.domain.race.Race;
 import com.binchoi.springboot.domain.race.RaceRepository;
 import com.binchoi.springboot.domain.user.Role;
@@ -55,13 +57,16 @@ public class IndexControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private PostsRepository postsRepository;
+
+    @Autowired
     private HttpSession httpSession;
 
     private MockMvc mvc;
 
     private static User userEntity;
 
-    private static final String TESTER_ID = "1";
+    private static final String TESTER_ID = "123";
 
     @Before
     public void setup() {
@@ -74,6 +79,8 @@ public class IndexControllerTest {
                     .build();
 
             userRepository.save(userEntity);
+            userRepository.updateTesterId(userEntity.getId(), Long.valueOf(TESTER_ID));
+            userEntity = userRepository.findById(Long.valueOf(TESTER_ID)).get();
         }
 
 //        assertThat(userEntity.getName()).isEqualTo("tester");
@@ -239,45 +246,45 @@ public class IndexControllerTest {
         assertThat(pageElements.stream().allMatch(pageContent::contains)).isTrue();
     }
 
-//    @Test
-//    @WithMockCustomOAuth2User(userId = TESTER_ID)
-//    public void update_race_page_loading() throws Exception {
-//        //given
-//        String raceName = "The epic battle of two alpha baboons";
-//        String wager = "7 Tons of bananas and the position of alpha baboon";
-//        LocalDate start = LocalDate.now();
-//        LocalDate end = LocalDate.now().plusMonths(1);
-//        Long id = userEntity.getId();
-//        String fstHabit = "To workout at least 10 minutes every day";
-//
-//        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
-//                .raceName(raceName)
-//                .wager(wager)
-//                .startDate(start)
-//                .endDate(end)
-//                .fstUserId(id)
-//                .fstUserHabit(fstHabit)
-//                .build();
-//
-//        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
-//
-//        List<String> pageElements = Arrays.asList(
-//                "You may update, delete, or extend the race.",
-//                "You may modify the race name",
-//                "You may not modify the start date"
-//        );
-//
-//        //when
-//        String pageContent = mvc.perform(get("/race/update/"+raceId)
-//                        .sessionAttr("user", new SessionUser(userEntity)))
-//        //then
-//                .andExpect(status().isOk())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        assertThat(pageElements.stream().allMatch(pageContent::contains)).isTrue();
-//    }
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void update_race_page_loading() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = userEntity.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+
+        List<String> pageElements = Arrays.asList(
+                "You may update, delete, or extend the race.",
+                "You may modify the race name",
+                "You may not modify the start date"
+        );
+
+        //when
+        String pageContent = mvc.perform(get("/race/update/"+raceId)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(pageElements.stream().allMatch(pageContent::contains)).isTrue();
+    }
 
     @Test
     @WithMockCustomOAuth2User(userId = TESTER_ID)
@@ -308,116 +315,243 @@ public class IndexControllerTest {
                 .andExpect(status().isForbidden());
     }
 
-    //    @Test
-    //    @WithMockCustomOAuth2User(userId = TESTER_ID)
-    //    public void user_profile_page_loading() throws Exception {
-    //        //given
-    //        List<String> userPageElements = Arrays.asList(
-    //                "<div class=\"display-5\">"+userEntity.getName()+"</div>",
-    //                "DRIVER STATS",
-    //                "<th scope=\"row\">Total Race Count</th>",
-    //                "Delete Account"
-    //        );
-    //
-    //        System.out.println(userEntity.getId() + "vs" + TESTER_ID); /// non-deterministic
-    //
-    //        //when
-    //        String pageContent = mvc.perform(get("/user/"+userEntity.getId())
-    //                .sessionAttr("user", new SessionUser(userEntity)))
-    //        //then
-    //                .andExpect(status().isOk())
-    //                .andReturn()
-    //                .getResponse()
-    //                .getContentAsString();
-    //
-    //        assertThat(userPageElements.stream().allMatch(pageContent::contains)).isTrue();
-    //    }
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void update_post_page_loading() throws Exception {
+        //given
+        Boolean isCompleted = true;
+        String comment = "take that loser / comment";
 
-//    @Test
-//    @WithMockCustomOAuth2User(userId = TESTER_ID)
-//    public void Race_overview_page_loading() throws Exception {
-//        //given
-//        String raceName = "The epic battle of two alpha baboons";
-//        String wager = "7 Tons of bananas and the position of alpha baboon";
-//        LocalDate start = LocalDate.now();
-//        LocalDate end = LocalDate.now().plusMonths(1);
-//        Long id = userEntity.getId();
-//        String fstHabit = "To workout at least 10 minutes every day";
-//
-//        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
-//                .raceName(raceName)
-//                .wager(wager)
-//                .startDate(start)
-//                .endDate(end)
-//                .fstUserId(id)
-//                .fstUserHabit(fstHabit)
-//                .build();
-//
-//        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
-//        String urlRaceOverview = "http://localhost:"+port+"/race/"+raceId;
-//
-//        //when
-//        String pageContent = mvc.perform(get(urlRaceOverview)
-//                .sessionAttr("user", new SessionUser(userEntity)))
-//        //then
-//                .andExpect(status().isOk())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        List<String> raceOverviewPageElements = Arrays.asList(raceName, wager, fstHabit, userEntity.getName(),
-//                "You can view all messages sent throughout the competition");
-//
-//        assertThat(raceOverviewPageElements.stream().allMatch(pageContent::contains)).isTrue();
-//    }
+        Long postId = postsRepository.save(Posts.builder()
+                .date(LocalDate.of(2020,1,1))
+                .isCompleted(isCompleted)
+                .userId(userEntity.getId())
+                .raceId(12345L)
+                .comment(comment)
+                .build()).getId();
 
-//    @Test
-//    @WithMockCustomOAuth2User(userId = TESTER_ID)
-//    public void Completed_race_overview_page_loading() throws Exception {
-//        //given
-//        String raceName = "The epic battle of two alpha baboons";
-//        String wager = "7 Tons of bananas and the position of alpha baboon";
-//        LocalDate start = LocalDate.of(2010,1,1);
-//        LocalDate end = LocalDate.of(2010,2,1);
-//        Long id = userEntity.getId();
-//        String fstHabit = "To workout at least 10 minutes every day";
-//
-//        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
-//                .raceName(raceName)
-//                .wager(wager)
-//                .startDate(start)
-//                .endDate(end)
-//                .fstUserId(id)
-//                .fstUserHabit(fstHabit)
-//                .build();
-//
-//        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
-//
-//        String urlRaceOverview = "http://localhost:"+port+"/race/"+raceId;
-//
-//        //when
-//        String pageContent = mvc.perform(get(urlRaceOverview)
-//                        .sessionAttr("user", new SessionUser(userEntity)))
-//        //then
-//                .andExpect(status().isOk())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        List<String> raceOverviewPageElements = Arrays.asList(raceName, wager,
-//                fstHabit, userEntity.getName(),
-//                "Congratulations on finishing the race!",
-//                "The curtain has come down on the epic battle '"+raceName+"'"
-//        );
-//
-//        List<String> ongoingRaceOverviewPageElements = Arrays.asList(
-//                "Have you completed your habit today?",
-//                "✨"
-//        );
-//
-//        assertThat(raceOverviewPageElements.stream().allMatch(pageContent::contains)).isTrue();
-//        assertThat(ongoingRaceOverviewPageElements.stream().noneMatch(pageContent::contains)).isTrue();
-//    }
+        List<String> pageElements = Arrays.asList(
+                "Make modifications to your previous progress record",
+                "Comment/Message for your competitor",
+                "The message will be displayed in the race overview page"
+        );
+
+        //when
+        String pageContent = mvc.perform(get("/posts/update/"+postId)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(pageElements.stream().allMatch(pageContent::contains)).isTrue();
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void forbidden_to_view_others_update_post_page() throws Exception {
+        //given
+        Boolean isCompleted = true;
+        String comment = "take that loser / comment";
+
+        Long postId = postsRepository.save(Posts.builder()
+                .date(LocalDate.of(2020,1,1))
+                .isCompleted(isCompleted)
+                .userId(userEntity.getId()+1)
+                .raceId(12345L)
+                .comment(comment)
+                .build()).getId();
+
+        //when
+        mvc.perform(get("/posts/update/"+postId)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Save_post_page_loading() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = userEntity.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+
+        String racePostUrl = "http://localhost:"+port+"/race/"+raceId+"/posts/save";
+
+        List<String> pageElements = Arrays.asList(
+                "Document your progress and send a motivational message to your fellow racer",
+                "Record your Daily Success",
+                "You may record your success of previous days. We trust your honesty"
+        );
+
+        //when
+        String pageContent = mvc.perform(get(racePostUrl)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(pageElements.stream().allMatch(pageContent::contains)).isTrue();
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Forbidden_to_view_other_race_post_page() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = userEntity.getId()+1;
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+        String racePostUrl = "http://localhost:"+port+"/race/"+raceId+"/posts/save";
+
+        //when
+        mvc.perform(get(racePostUrl)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void user_profile_page_loading() throws Exception {
+        //given
+        List<String> userPageElements = Arrays.asList(
+                "<div class=\"display-5\">"+userEntity.getName()+"</div>",
+                "DRIVER STATS",
+                "<th scope=\"row\">Total Race Count</th>",
+                "Delete Account"
+        );
+
+        System.out.println(userEntity.getId() + "vs" + TESTER_ID); /// non-deterministic
+
+        //when
+        String pageContent = mvc.perform(get("/user/"+userEntity.getId())
+                .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(userPageElements.stream().allMatch(pageContent::contains)).isTrue();
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Race_overview_page_loading() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = userEntity.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+        String urlRaceOverview = "http://localhost:"+port+"/race/"+raceId;
+
+        //when
+        String pageContent = mvc.perform(get(urlRaceOverview)
+                .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<String> raceOverviewPageElements = Arrays.asList(raceName, wager, fstHabit, userEntity.getName(),
+                "You can view all messages sent throughout the competition");
+
+        assertThat(raceOverviewPageElements.stream().allMatch(pageContent::contains)).isTrue();
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Completed_race_overview_page_loading() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.of(2010,1,1);
+        LocalDate end = LocalDate.of(2010,2,1);
+        Long id = userEntity.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+
+        String urlRaceOverview = "http://localhost:"+port+"/race/"+raceId;
+
+        //when
+        String pageContent = mvc.perform(get(urlRaceOverview)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<String> raceOverviewPageElements = Arrays.asList(raceName, wager,
+                fstHabit, userEntity.getName(),
+                "Congratulations on finishing the race!",
+                "The curtain has come down on the epic battle '"+raceName+"'"
+        );
+
+        List<String> ongoingRaceOverviewPageElements = Arrays.asList(
+                "Have you completed your habit today?",
+                "✨"
+        );
+
+        assertThat(raceOverviewPageElements.stream().allMatch(pageContent::contains)).isTrue();
+        assertThat(ongoingRaceOverviewPageElements.stream().noneMatch(pageContent::contains)).isTrue();
+    }
 
     @Test
     @WithMockCustomOAuth2User(userId = TESTER_ID)
@@ -460,4 +594,130 @@ public class IndexControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Join_race_page_loading() throws Exception {
+        //given
+        User anotherUser = User.builder()
+                .email("some-email@gmail.com")
+                .name("test-user")
+                .picture("https://get_my_picture.com")
+                .role(Role.USER)
+                .build();
+        userRepository.save(anotherUser);
+
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = anotherUser.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+
+        String joinRaceUrl = "http://localhost:"+port+"/race/join/"+raceId;
+
+        List<String> pageElements = Arrays.asList(
+                "You have been challenged by "+anotherUser.getName(),
+                raceName,
+                wager,
+                "You have the final say of when the race ends."
+        );
+
+        //when
+        String pageContent = mvc.perform(get(joinRaceUrl)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(pageElements.stream().allMatch(pageContent::contains)).isTrue();
+    }
+
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Forbidden_to_view_join_race_page_for_own_race() throws Exception {
+        //given
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = userEntity.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+
+        String joinRaceUrl = "http://localhost:"+port+"/race/join/"+raceId;
+
+        //when
+        mvc.perform(get(joinRaceUrl)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isForbidden());
+    }
+
+//    @Test
+//    @WithMockCustomOAuth2User(userId = TESTER_ID)
+//    public void Forbidden_to_view_join_race_page_for_full_race() throws Exception {
+//        //given
+//        User anotherUser = User.builder()
+//                .email("some-email@gmail.com")
+//                .name("test-user")
+//                .picture("https://get_my_picture.com")
+//                .role(Role.USER)
+//                .build();
+//
+//        userRepository.save(anotherUser);
+//
+//        String raceName = "The epic battle of two alpha baboons";
+//        String wager = "7 Tons of bananas and the position of alpha baboon";
+//        LocalDate start = LocalDate.now();
+//        LocalDate end = LocalDate.now().plusMonths(1);
+//        Long id = anotherUser.getId();
+//        String fstHabit = "To workout at least 10 minutes every day";
+//
+//        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+//                .raceName(raceName)
+//                .wager(wager)
+//                .startDate(start)
+//                .endDate(end)
+//                .fstUserId(id)
+//                .fstUserHabit(fstHabit)
+//                .build();
+//
+//        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
+//
+//        // fill the racer spots/vacancies
+//        raceRepository.findById(raceId).get().update(end, 321L, "some habit");
+//
+//        System.out.println(">>>"+raceRepository.findById(raceId).get().getSndUserId());
+//
+//        String joinRaceUrl = "http://localhost:"+port+"/race/join/"+raceId;
+//
+//        //when
+//        mvc.perform(get(joinRaceUrl)
+//                        .sessionAttr("user", new SessionUser(userEntity)))
+//        //then
+//                .andExpect(status().isForbidden());
+//    }
 }

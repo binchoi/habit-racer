@@ -204,8 +204,7 @@ public class RaceApiControllerTest {
 
         //when
         mvc.perform(delete(url))
-                .andExpect(status().isOk())
-                .andDo(print());
+                .andExpect(status().isOk());
 
         //then
         assertThat(raceRepository.findAll()).isEmpty();
