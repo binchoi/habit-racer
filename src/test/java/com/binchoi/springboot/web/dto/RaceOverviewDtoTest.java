@@ -114,7 +114,7 @@ public class RaceOverviewDtoTest {
         Long raceId = raceRepository.save(requestDto.toEntity()).getId();
         RaceResponseDto race = raceService.findById(raceId);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
-        Long sndUserId = raceRepository.findAll().get(0).getSndUserId();
+        Long sndUserId = raceRepository.findById(raceId).get().getSndUserId();
 
         //when
         RaceOverviewDto raceOverview = new RaceOverviewDto(
@@ -167,7 +167,7 @@ public class RaceOverviewDtoTest {
         Long raceId = raceRepository.save(requestDto.toEntity()).getId();
         RaceResponseDto race = raceService.findById(raceId);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
-        Long sndUserId = raceRepository.findAll().get(0).getSndUserId();
+        Long sndUserId = raceRepository.findById(raceId).get().getSndUserId();
 
         for (int i=1; i < 11; i++) {
             postsRepository.save(Posts.builder()
