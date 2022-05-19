@@ -78,9 +78,6 @@ public class RaceOverviewDtoTest {
             userRepository.save(userEntity);
         }
 
-        assertThat(userRepository.findAll().get(0).getName()).isEqualTo("tester");
-        assertThat(userRepository.findAll().get(0).getId()).isEqualTo(Long.valueOf(TESTER_ID));
-
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -114,7 +111,7 @@ public class RaceOverviewDtoTest {
         Long raceId = raceRepository.save(requestDto.toEntity()).getId();
         RaceResponseDto race = raceService.findById(raceId);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
-        Long sndUserId = raceRepository.findById(raceId).get().getSndUserId();
+        Long sndUserId = race.getSndUserId();
 
         //when
         RaceOverviewDto raceOverview = new RaceOverviewDto(
@@ -167,7 +164,7 @@ public class RaceOverviewDtoTest {
         Long raceId = raceRepository.save(requestDto.toEntity()).getId();
         RaceResponseDto race = raceService.findById(raceId);
         RaceTimeInfoDto raceTimeInfo = new RaceTimeInfoDto(race);
-        Long sndUserId = raceRepository.findById(raceId).get().getSndUserId();
+        Long sndUserId = race.getSndUserId();
 
         for (int i=1; i < 11; i++) {
             postsRepository.save(Posts.builder()
