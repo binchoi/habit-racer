@@ -245,3 +245,4 @@ List<Race> findByUserId(Long userId);
 for me when dealing with a programming problems. Writing the situation down questions your assumptions and allows you to be more
 free/open-thinking as to the various ways the problem can be approached. One such scenario where I experienced this is with the 
 the testing of Preauthorize
+* Don't be afraid to try out new technologies and skills (don't be overly protective of existing code). Do not fear.
