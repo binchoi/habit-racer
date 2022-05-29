@@ -63,8 +63,6 @@ public class RaceOverviewDtoTest {
 
     private static User userEntity;
 
-    private static final String TESTER_ID = "1";
-
     @Before
     public void setup() {
         if (userEntity==null) {

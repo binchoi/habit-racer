@@ -676,48 +676,48 @@ public class IndexControllerTest {
                 .andExpect(status().isForbidden());
     }
 
-//    @Test
-//    @WithMockCustomOAuth2User(userId = TESTER_ID)
-//    public void Forbidden_to_view_join_race_page_for_full_race() throws Exception {
-//        //given
-//        User anotherUser = User.builder()
-//                .email("some-email@gmail.com")
-//                .name("test-user")
-//                .picture("https://get_my_picture.com")
-//                .role(Role.USER)
-//                .build();
-//
-//        userRepository.save(anotherUser);
-//
-//        String raceName = "The epic battle of two alpha baboons";
-//        String wager = "7 Tons of bananas and the position of alpha baboon";
-//        LocalDate start = LocalDate.now();
-//        LocalDate end = LocalDate.now().plusMonths(1);
-//        Long id = anotherUser.getId();
-//        String fstHabit = "To workout at least 10 minutes every day";
-//
-//        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
-//                .raceName(raceName)
-//                .wager(wager)
-//                .startDate(start)
-//                .endDate(end)
-//                .fstUserId(id)
-//                .fstUserHabit(fstHabit)
-//                .build();
-//
-//        Long raceId = raceRepository.save(requestDto.toEntity()).getId();
-//
-//        // fill the racer spots/vacancies
-//        raceRepository.findById(raceId).get().update(end, 321L, "some habit");
-//
-//        System.out.println(">>>"+raceRepository.findById(raceId).get().getSndUserId());
-//
-//        String joinRaceUrl = "http://localhost:"+port+"/race/join/"+raceId;
-//
-//        //when
-//        mvc.perform(get(joinRaceUrl)
-//                        .sessionAttr("user", new SessionUser(userEntity)))
-//        //then
-//                .andExpect(status().isForbidden());
-//    }
+    @Test
+    @WithMockCustomOAuth2User(userId = TESTER_ID)
+    public void Forbidden_to_view_join_race_page_for_full_race() throws Exception {
+        //given
+        User anotherUser = User.builder()
+                .email("some-email@gmail.com")
+                .name("test-user")
+                .picture("https://get_my_picture.com")
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(anotherUser);
+
+        String raceName = "The epic battle of two alpha baboons";
+        String wager = "7 Tons of bananas and the position of alpha baboon";
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(1);
+        Long id = anotherUser.getId();
+        String fstHabit = "To workout at least 10 minutes every day";
+
+        RaceSaveRequestDto requestDto = RaceSaveRequestDto.builder()
+                .raceName(raceName)
+                .wager(wager)
+                .startDate(start)
+                .endDate(end)
+                .fstUserId(id)
+                .fstUserHabit(fstHabit)
+                .build();
+
+        Race entity = requestDto.toEntity();
+
+        // fill the racer spots/vacancies
+        entity.update(end, 321L, "some habit");
+
+        Long raceId = raceRepository.save(entity).getId();
+
+        String joinRaceUrl = "http://localhost:"+port+"/race/join/"+raceId;
+
+        //when
+        mvc.perform(get(joinRaceUrl)
+                        .sessionAttr("user", new SessionUser(userEntity)))
+        //then
+                .andExpect(status().isForbidden());
+    }
 }
